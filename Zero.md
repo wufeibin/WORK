@@ -61,35 +61,6 @@ examine(x)	//按字节打印某个地址中开始的值
 > * 线程栈：其他线程栈是在主线程的堆中通过mmap分配的，大小固定，默认为8M，可通过pthread_attr_setstacksize接口来设置线程栈的大小。所以每个线程栈空间都是独立的。
 
 
-* **ps** 显示某刻系统的进程信息
-* **top** 动态显示显示系统的进程信息  
-* **cat proc/500/maps** 查看进程的虚拟地址空间使用情况
-* **cat proc/500/status** 查看进程的状态信息
-* **cat proc/meminfo** 查看操作系统的内存使用情况
-
-```
-MemTotal:         171284 kB	//总物理内存大小
-MemFree:            6632 kB	//空闲物理内存大小
-Buffers:           10660 kB //文件的缓存的大小
-Cached:            83580 kB //高速缓存存储器的大小
-```
-* **free** 查看系统内存使用情况
-```
-             total       used       free     shared    buffers     cached
-Mem:     131916676  130603592    1313084    1539580    3569100   42805216
--/+ buffers/cache:   84229276   47687400
-
-total：总物理内存
-used：已使用物理内存
-free：未使用物理内存
-buffer/cache：缓存
-
-total = used1 + free1
-total = used2 + free2
-used1 - used2 = buffer + cache
-free2 - free1 = buffer + cache
-```
-
 Linux较Windows的内存管理区别：在linux中程序被关闭，占用的内存不会归还物理内存，而是用来做缓存。当物理内存有空闲时，优先使用物理内存（所以当使用 一段时间后，即使有很大内存也会被占用）。这样做的好处是，启动那些刚启动的程序，或是存取刚存取的数据，效率速度会比较快，适用于服务器的场景。
 
 
@@ -205,5 +176,5 @@ int main()
 - CXXFLAGS：C++语言编译器参数
 - LDFLAGS：链接器参数。(如:“ld”)
 
-# shell
+
 

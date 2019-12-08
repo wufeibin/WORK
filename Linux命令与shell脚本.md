@@ -10,6 +10,8 @@ grep [options] pattern [file]
 
 
 
+---
+
 * **ps** 显示某刻系统的进程信息
 * **top** 动态显示显示系统的进程信息  
 * **cat proc/500/maps** 查看进程的虚拟地址空间使用情况
