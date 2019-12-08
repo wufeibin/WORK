@@ -198,5 +198,12 @@ int main()
 ```
 
 # makefile
+
+命令参数的变量
+
+- CFLAGS：C 语言编译器参数
+- CXXFLAGS：C++语言编译器参数
+- LDFLAGS：链接器参数。(如:“ld”)
+
 # shell
 
