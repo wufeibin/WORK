@@ -504,13 +504,14 @@ xxxx_cast <type-id> (expression)
 > 用于修改类型的const或volatile属性
 
 * typeid运算符
-> #include <typeinfo.h>  
-> Base *p = new Derived();  
-> typeid(*p).name();    //指针所指对象类型名称  
+```
+#include <typeinfo.h>  
+Base *p = new Derived();  
+typeid(*p).name();    //指针所指对象类型名称  
+```
 
-# 模版
+
 # Effective C++
-
 1. 视 C++ 为一个语言联邦（C、Object-Oriented C++、Template C++、STL）
 2. 宁可以编译器替换预处理器（尽量以 `const`、`enum`、`inline` 替换 `#define`）
 3. 尽可能使用 const

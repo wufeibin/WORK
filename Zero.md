@@ -170,8 +170,12 @@ int main()
 
 # makefile
 
-命令参数的变量
+[跟我一起写Makefile](https://seisman.github.io/how-to-write-makefile/) 
 
+- @：不打印命令，只打印结果
+- $@：目标文件
+- $^：所有的依赖文件
+- $<：第一个依赖文件
 - CFLAGS：C 语言编译器参数
 - CXXFLAGS：C++语言编译器参数
 - LDFLAGS：链接器参数。(如:“ld”)
