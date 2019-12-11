@@ -123,7 +123,7 @@ Linux较Windows的内存管理区别：在linux中程序被关闭，占用的内
 
 死锁的危险始终存在，应该在程序编写的时候尽量减少死锁存在的范围。死锁发生的情况：  
 1. 忘记释放锁
-​```c++
+```c++
 void process()
 {
 	mutex1.enter();
@@ -132,7 +132,7 @@ void process()
 } 
 ```
 2. 单线程重复申请锁
-​```c++
+```c++
 void process()
 {
 	mutex1.enter();
@@ -186,7 +186,7 @@ void * ThreadProc(void *arg)	//线程执行体
 
 int main()
 {
-  /*
+	/*
 	int pthread_create(pthread_t *thread, const pthread_attr_t *attr, void *(*start_routine) (void *), void *arg);
 	thread：线程标识符的指针
 	attr：线程属性
