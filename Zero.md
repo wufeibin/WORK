@@ -142,8 +142,8 @@ void process()
 void func()
 {
 	mutex1.enter();
-  do_Something;
-  mutex1.leave();
+	do_Something;
+	mutex1.leave();
 }
 ```
 3. 多线程申请多把锁
@@ -151,18 +151,18 @@ void func()
 void process1()
 {
 	mutex1.enter();
-  mutex2.enter();
-  do_Something;
-  mutex2.leave();
-  mutex1.leave();
+	mutex2.enter();
+	do_Something;
+	mutex2.leave();
+	mutex1.leave();
 }
 void process2()
 {
 	mutex2.enter();
 	mutex1.enter();
-  do_Something;
-  mutex1.leave();
-  mutex2.leave();
+	do_Something;
+	mutex1.leave();
+	mutex2.leave();
 }
 ```
 
