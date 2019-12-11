@@ -1,4 +1,4 @@
-## grep 搜索数据
+### grep 搜索数据
 
 grep [options] pattern [file]
 
@@ -7,6 +7,12 @@ grep [options] pattern [file]
 - grep -n xxx file 显示行号
 - grep -c xxx file 显示匹配的行数
 - grep -e xxx -e yyy file 指定多个匹配模式，输出匹配xxx或yyy的行
+
+### find
+
+### awk
+
+### netstat
 
 
 
