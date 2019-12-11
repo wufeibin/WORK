@@ -4,12 +4,16 @@
 
 [跟我一起写Makefile](https://seisman.github.io/how-to-write-makefile/) 
 
+
+
 编译过程：
 
 1. 预处理：替换inclue内容，宏定义， gcc –E hello.c –o hello.i
 2. 编译：生成汇编代码，gcc –S hello.i –o hello.s
 3. 汇编：生成机器代码，gcc –c hello.s –o hello.o
 4. 链接：链接目标文件，gcc hello.o –o hello
+
+
 
 编译选项：`g++ -c hello.cpp -o hello.o  -O -g -L./libpath -llibname`
 
@@ -26,79 +30,48 @@
 
 
 
-make先找到makefile中的第一个目标文件，一层层去找文件的依赖关系，最终编译出第一个目标文件。
+> make先找到makefile中的第一个目标文件，一层层去找文件的依赖关系，最终编译出第一个目标文件。
 
 - @ 不打印命令，只打印结果
-
 - $@ 目标文件
-
 - $^ 所有的依赖文件
-
 - $< 第一个依赖文件
-
 - := 只能使用前面已定义的变量来赋值
-
 - ?= 赋值一个新的变量，若变量已定义则不处理
-
 - += 追加变量值
-
-- CFLAGS C 语言编译器参数
-
-- CXXFLAGS C++语言编译器参数
-
+- CFLAGS C编译器参数
+- CXXFLAGS C++编译器参数
 - LDFLAGS 链接器参数
-
 - strip函数，去掉字符串头尾的空字符
-
 - addprefix函数，给字符加前缀
 
 
 
 # GDB
 
-break file:line
+- break file:line
+- break function
+- break ... if ...	//设置条件断点
+- info breakpoints	//查看当前设置了哪些断点
+- delete breakpoints	//删除断点
+- enable/disable breakpoints	//启用/禁用断点
+- display		//跟踪查看某个变量，每次遇到断点都显示它的值
+- command	breakpoints ··· end	//为断点设置运行命令
+- run			//从头开始连续运行程序
+- continue	//从当前位置开始连续运行程序
+- next		//执行下一行语句
+- step		//执行下一行语句，若有函数调用则进入到函数中
+- finish		//运行到当前函数返回为止
+- backtrace	//查看各级函数调用及参数
+- t ..		//跳转到指定线程
+- f ..		//跳转到指定栈帧
+- info locals	//查看当前栈帧局部变量的值
+- info args	//查看当前函数入参的值
+- info r		//查看寄存器的值
+- print		//打印表达式的值
+- disassemble //打开该帧函数的反汇编代码
+- examine(x)	//按字节打印某个地址中开始的值
 
-break function
-
-break ... if ...	//设置条件断点
-
-info breakpoints	//查看当前设置了哪些断点
-
-delete breakpoints	//删除断点
-
-enable/disable breakpoints	//启用/禁用断点
-
-display		//跟踪查看某个变量，每次遇到断点都显示它的值
-
-command	breakpoints ··· end	//为断点设置运行命令
-
-run			//从头开始连续运行程序
-
-continue	//从当前位置开始连续运行程序
-
-next		//执行下一行语句
-
-step		//执行下一行语句，若有函数调用则进入到函数中
-
-finish		//运行到当前函数返回为止
-
-backtrace	//查看各级函数调用及参数
-
-t ..		//跳转到指定线程
-
-f ..		//跳转到指定栈帧
-
-info locals	//查看当前栈帧局部变量的值
-
-info args	//查看当前函数入参的值
-
-info r		//查看寄存器的值
-
-print		//打印表达式的值
-
-disassemble //打开该帧函数的反汇编代码
-
-examine(x)	//按字节打印某个地址中开始的值
 
 
 
