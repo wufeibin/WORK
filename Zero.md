@@ -2,7 +2,7 @@
 
 # Makefile
 
-[跟我一起写Makefile](https://seisman.github.io/how-to-write-makefile/) 
+[跟我一起写Makefile](https://github.com/seisman/how-to-write-makefile) 
 
 
 
@@ -15,7 +15,7 @@
 
 
 
-编译选项：`g++ -c hello.cpp -o hello.o  -O -g -L./libpath -llibname`
+编译选项：`g++ -c hello.cpp -g -O -Wall -L./libpath -llibname -o hello.o`
 
 - -o 指定目标文件名称
 - -c 生成目标文件
@@ -27,12 +27,20 @@
 - -l 指定链接的库名
 - -M 生成文件关联的信息
 - -share 生成共享目标文件
+- -fPIC 生成相对路径的代码，编译共享库时需要
+- -pipe 使用管道代替编译中的临时文件
 
 
 
-> make先找到makefile中的第一个目标文件，一层层去找文件的依赖关系，最终编译出第一个目标文件。
+make先找到makefile中的第一个目标文件，一层层去找文件的依赖关系，最终编译出第一个目标文件。
+```
+书写规则：依赖关系+命令
+targets : prerequisites
+    command
+```
 
 - @ 不打印命令，只打印结果
+- % 匹配到若干个字符，给%赋值。%.o:%.c，找出匹配的所有的.o和.c文件
 - $@ 目标文件
 - $^ 所有的依赖文件
 - $< 第一个依赖文件
@@ -42,7 +50,10 @@
 - CFLAGS C编译器参数
 - CXXFLAGS C++编译器参数
 - LDFLAGS 链接器参数
-- strip函数，去掉字符串头尾的空字符
+- .PHONY 伪目标，可开头声明一个all的伪目标，依赖多个目标，实现一次生成多个目标
+- include 引用其他Makefile
+- $(MAKE) -C subdir，进入subdir嵌套执行make命令
+- strip函数，去掉字符串头尾的空字符，合并中间的连续空字符为一个空字符
 - addprefix函数，给字符加前缀
 
 
