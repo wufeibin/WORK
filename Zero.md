@@ -3,7 +3,7 @@
 # Makefile
 
 [跟我一起写Makefile](https://github.com/seisman/how-to-write-makefile) 
-
+> make先找到makefile中的第一个目标文件，一层层去找target的依赖关系，执行command，最终编译出第一个目标文件。
 
 
 编译过程：
@@ -30,14 +30,7 @@
 - -fPIC 生成相对路径的代码，编译共享库时需要
 - -pipe 使用管道代替编译中的临时文件
 
-
-
-make先找到makefile中的第一个目标文件，一层层去找文件的依赖关系，最终编译出第一个目标文件。
-```
-书写规则：依赖关系+命令
-targets : prerequisites
-    command
-```
+makefile常见字符变量：
 
 - @ 不打印命令，只打印结果
 - % 匹配到若干个字符，给%赋值。%.o:%.c，找出匹配的所有的.o和.c文件
