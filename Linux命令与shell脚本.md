@@ -14,6 +14,7 @@ grep [options] pattern [file]
 
 ### netstat
 
+### tar
 
 
 ---
