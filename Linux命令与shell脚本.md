@@ -1,11 +1,8 @@
 # 一、Linux命令
 
 ### grep 搜索数据
-grep [options] pattern [path]
-
-- grep xxx path
-- grep -v xxx path 反向搜索，输出不匹配的行
 - grep -n xxx path 显示行号
+- grep -v xxx path 反向搜索，输出不匹配的行
 - grep -c xxx path 显示匹配的行数
 - grep -e xxx -e yyy path 指定多个匹配模式，输出匹配xxx或yyy的行
 
@@ -17,7 +14,7 @@ grep [options] pattern [path]
 - unzip -d /home xxx.zip
 
 ### gzip/gunzip 压缩/解压gz文件
-- gzip -c -r xxx >xxx.gz 保留源文件-c
+- gzip -c -r xxx >xxx.gz
 - gunzip -c xxx.gz >xxx
 
 ### tar 归档
@@ -25,14 +22,13 @@ grep [options] pattern [path]
 - tar -czvf xxx.tar.gz [path]
 
 ### tail 显示文件末尾内容 
-- tail -f file 循环显示文件末尾内容，查看日志
+- tail -f file 循环显示文件末尾内容
 
 ### ln 创建链接文件
 - ln -snf 生成文件的软连接
 
 ### du 查看目录的硬盘使用情况
-- du -h -c path 以易读格式输出-h，显示列出文件的总大小-c
-
+- du -h -c path 
 
 ### awk
 
