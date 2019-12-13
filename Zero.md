@@ -13,9 +13,9 @@
 3. 汇编：生成机器代码，gcc –c hello.s –o hello.o
 4. 链接：链接目标文件，gcc hello.o –o hello
 
+编译选项：
 
-
-编译选项：`g++ -c hello.cpp -g -O -Wall -L./libpath -llibname -o hello.o`
+`g++ -c hello.cpp -g -O -Wall -L./libpath -llibname -o hello.o`
 
 - -o 指定目标文件名称
 - -c 生成目标文件
@@ -30,7 +30,7 @@
 - -fPIC 生成相对路径的代码，编译共享库时需要
 - -pipe 使用管道代替编译中的临时文件
 
-makefile常见字符变量：
+常见字符：
 
 - @ 不打印命令，只打印结果
 - % 匹配到若干个字符，给%赋值。%.o:%.c，找出匹配的所有的.o和.c文件
