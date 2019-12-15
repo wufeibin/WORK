@@ -635,7 +635,7 @@ int main()
 	func2();
 }
 ```
-> gcc -c 1.c -o 1.o  
+> gcc -c 1.c -o 1.o
 > g++ main.cpp 1.o
 
 ---

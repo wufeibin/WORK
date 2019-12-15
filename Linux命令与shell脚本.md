@@ -30,9 +30,17 @@
 ### du 查看目录的硬盘使用情况
 - du -h -c path 
 
+### netstat 查看占用端口的进程
+
+- netstat -anp
+
+### nm 查看文件中的符号
+
 ### awk
 
-### netstat
+## sed
+
+
 
 ### 内存相关命令
 
