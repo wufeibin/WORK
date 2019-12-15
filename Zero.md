@@ -7,12 +7,6 @@
 >
 > 线程是资源调度的独立单位
 
-## fork
-
-```
-
-```
-
 - 进程之间的通信方式
   - 管道（PIPE）
   - 信号量（Semaphore）
@@ -21,7 +15,45 @@
   - 共享内存（Shared Memory）
   - 套接字（Socket）
 
-## pthread
+## 进程控制
+
+
+- fork/vfork 创建子进程
+- exec族函数 将当前进程替换为新进程
+- wait/waitpid 等待获取子进程状态的改变
+- exit 终止进程
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+int main(void)
+{
+	pid_t	pid;
+	pid	= fork();
+	if(pid < 0) {
+		perror("fork failed");
+		exit(1);
+	}else if(pid == 0) {
+		printf("This is in child progress\n");
+		char *const argv[] ={"exec_call", NULL};
+		execv("./exec_call", argv);	//执行exec_call新程序
+	}
+	else {
+		printf("This is in parent progress\n");
+		int stat_val;
+		waitpid(pid, &stat_val, 0);
+		if ( WIFEXITED(stat_val) ){
+			printf("Child exited with code %d\n", WEXITSTATUS(stat_val) );		
+		}
+	}
+	return 0;
+}
+```
+
+## 线程创建
 
 ```c
 #include <cstdio>
@@ -57,7 +89,7 @@ int main()
 		return 0;
 	}
 	
-	if(pthread_join(tpid, NULL))	//等待线程释放
+	if(pthread_join(tpid, NULL))	//阻塞等待线程释放
 		return -1;
 
 	return 0;
@@ -105,6 +137,8 @@ void process2()
 }
 ```
 
+
+
 # Linux内存
 
 - Linux虚拟内存分布（高地址-低地址，内核空间：1G、用户空间：3G）
@@ -143,6 +177,48 @@ Linux较Windows的内存管理区别：在linux中程序被关闭，占用的内
 - **查找** select * from table1 where field1 like ’%value1%’
 
 ## MongoDB
+
+[MongoDB API](https://api.mongodb.com/cplusplus/current/annotated.html)
+
+- 连接数据库
+
+```
+conn.connect(DATABSE_IP +":"+ DATABSE_PORT),errmsg)
+```
+
+- 插入
+
+```
+BSONObj p = BSONObjBuilder().append("ID", "1").append("Words", "Hello World").obj();
+conn.insert(DATABASE_NAME+"."+COLLECTION_NAME, p);
+```
+
+- 更新
+
+```
+bool upsert = false; // update, if not exist, insert.
+bool updateMulti = false; // update multi
+BSONObj updateQuery = BSONObjBuilder().append("ID", "1").obj();
+BSONObj updateData = BSONObjBuilder().append("Words", "This is MongoDB C++ Driver").obj();
+con.update(DATABASE_NAME+"."+COLLECTION_NAME, updateQuery, updateData, upsert, updateMulti);
+```
+
+- 删除
+
+```
+bool deleteOne = true; // delete only one record after selected. otherwise, delete all selected records.
+BSONObj deleteQuery = BSONObjBuilder().append("ID", "1").obj();
+con.remove(DATABASE_NAME+"."+COLLECTION_NAME, deleteQuery, deleteOne);
+```
+
+- 查询
+
+```
+auto_ptr<DBClientCursor> dc = con.query(DATABASE_NAME+"."+COLLECTION_NAME);
+return dc;
+```
+
+
 
 
 
