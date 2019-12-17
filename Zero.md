@@ -312,6 +312,9 @@ g++ -c main.cpp -L./libpath -lhello
 - git命令
 
 ```
+工作目录 ----add/rm----> 缓存区 ----commit----> 本地仓库 ----push----> 远程仓库
+工作目录 <----checkout---- 缓存区 <-------- 本地仓库 <----pull/fetch---- 远程仓库
+
 git clone
 git branch 查看分支
 git branch <name> 创建分支
