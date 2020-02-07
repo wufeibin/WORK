@@ -220,7 +220,7 @@ const char cs[] = "123456789";
 string s8(cs, 8);//复制cs前3个字符到string中
 string s9(s8, 6);//复制s8前4个字符到string中
 string s10(s8, 2, 5);//复制s8下标2开始的5个字符到string中。若超出s8长度，则抛出out_of_range异常
-//2、操作
+//2、常见操作
 string str("abcdefg");
 string str2("ABCDEFG");
 str.empty();
@@ -241,8 +241,7 @@ str.replace(2, 3, "sssss");//替换：删除第2个字符后的3个字符，替�
 string str3("hello world");
 string str4("HELLO world");
 string::size_type pos;
-pos = str3.find("l");//查找str3中第一次出现'l'的位置的下标值，没有则返回string:npos
-pos = str3.find("lo");
+pos = str3.find("ll");//查找str3中第一次出现'll'的位置的下标值，没有则返回string:npos
 pos = str3.rfind("l");//查找str3中最后一次出现'l'的位置的下标值，没有则返回string:npos
 str3.compare(str4);//比较
 str3.compare(6, 5, str4);//从位置6开始的5个字符 与 str4 进行比较
@@ -273,9 +272,9 @@ for(int i = 0; i < vec1.size(); i++)//下标法
 {
     cout << vec1[i];
 }
-for(vector<char>::const_iterator iterator = vec1.begin(); iterator != vec1.end(); iterator++)//迭代器法
+for(vector<char>::const_iterator iter = vec1.begin(); iter != vec1.end(); iter++)//迭代器法
 {
-    cout << *iterator;
+    cout << *iter;
 }
 ```
 

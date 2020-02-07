@@ -214,8 +214,6 @@ return dc;
 
 
 
-
-
 # Makefile
 
 [跟我一起写Makefile](https://github.com/seisman/how-to-write-makefile) 
@@ -304,28 +302,42 @@ g++ -c main.cpp -L./libpath -lhello
 
 # Git
 
-[Git教程](https://www.liaoxuefeng.com/wiki/896043488029600)
+[Git教程](https://github.com/luotf/Git/blob/master/Git%E6%95%99%E7%A8%8B.md)
 
 - Git属于分布式版本控制系统，而SVN属于集中式。集中式版本控制只有中心服务器拥有一份代码，而分布式版本控制每个电脑上都有一份完整代码。GitHub就是中心服务器，用来交换每个用户的修改。
-- Git仓库和GitHub中心服务器仓库的传输通过SSH加密。工作区的.ssh目录下有id_rsa(私钥)和id_rsa.pus(公钥)两个文件，将公钥内容复制到GitHub的SSH Keys中用于传输。
-- 新建一个仓库后，当前目录就成了工作区，工作区下有一个隐藏目录.git，它属于Git的版本库。Git版本库有一个称为Stage暂存区和History版本库。History版本库中存有所有的分支，使用一个HEAD指针指向当前分支。
-- git命令
+- Git仓库和GitHub中心服务器仓库的传输通过SSH加密。主目录中的.ssh目录下有id_rsa(私钥)和id_rsa.pus(公钥)两个文件，将公钥内容复制到GitHub的SSH Keys中用于传输。
+- 工作流：新建一个仓库后，当前目录就成了**工作目录**，工作目录下有一个隐藏目录.git，它属于Git的版本库。Git版本库有一个称为Stage**暂存区**和History**版本库**。History版本库中存有所有的分支，使用一个HEAD指针指向当前分支。
+
+- Git命令
 
 ```
 工作目录 ----add/rm----> 缓存区 ----commit----> 本地仓库 ----push----> 远程仓库
-工作目录 <----checkout---- 缓存区 <-------- 本地仓库 <----pull/fetch---- 远程仓库
+工作目录 <----checkout---- 缓存区 <-------- 本地仓库 <----pull---- 远程仓库
 
-git clone
+git init 创建当前目录新仓库
+git clone git@github.com:wufeibin/WORK.git 克隆创建仓库
 git branch 查看分支
 git branch <name> 创建分支
 git branch -d <name> 删除分支
 git checkout <name> 切换分支
-git add
-git commit
-git reset
-git pull
-git push
-git merge 合并某分支到当前分支
+git checkout -b <name> 创建并切换分支
+git checkout -- <filename> 回退替换工作目录的文件
+git status 查看仓库状态
+git diff <filename>
+git diff <source_branch> <target_branch>
+git add <filename>
+git commit -m "xxxx"
+git log
+git reset HEAD <filename> 回退缓存区的修改至工作目录
+git reset --hard HEAD^ 回退至上个版本
+git reset --hard <id> 回退至某个版本
+git reset --hard origin/master
+git pull 更新本地仓库
+git pull origin <branch>
+git push 推送改动至远端仓库
+git push origin <branch>
+
+git fetch origin
+git merge <branch> 合并某分支到当前分支
 ```
 
-# 
