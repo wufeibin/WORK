@@ -1,4 +1,4 @@
-简介&安装
+# 简介&安装
 
 > Python的定位是简单优雅。Python提供了完善的基础库以及大量的第三方库，有丰富的社区资源。
 >
@@ -72,7 +72,7 @@ else:
 
 
 
-#数据结构
+# 数据结构
 
 - 列表List
 
@@ -119,7 +119,7 @@ s.remove(4)
 
 
 
-# 函数
+# 函数&模块
 
 ```python
 g_num = 0
@@ -152,8 +152,6 @@ person('Adam', 45, gender='M', job='Engineer')
 
 
 
-# 模块
-
 ```python
 import sys	# 导入sys模块后，变量sys指向该模块，就可以访问sys模块
 for i in sys.argv:
@@ -183,7 +181,7 @@ __version__ = '0.1'
 
 
 
-# 面向对象
+# 类
 
 ```python
 class SchoolMember:
@@ -241,9 +239,7 @@ SchoolMember.get_toalNum()
 
 
 
-# IO操作
-
-- 文件
+# 文件
 
 ```python
 f = open('1.txt', 'a+')  # 如果没有特别指定，启用默认的阅读(r)模式
