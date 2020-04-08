@@ -1,10 +1,13 @@
 # 一、Linux命令
 
 ### grep 搜索数据
-- grep -n xxx path 显示行号
-- grep -v xxx path 反向搜索，输出不匹配的行
-- grep -c xxx path 显示匹配的行数
-- grep -e xxx -e yyy path 指定多个匹配模式，输出匹配xxx或yyy的行
+- grep -n xxx file 显示行号
+- grep -v xxx file 反向搜索，输出不匹配的行
+- grep -c xxx file 显示匹配的行数
+- grep -A 2 xxx file 显示匹配内容和后2行
+- grep -B 2 xxx file 显示匹配内容和前2行
+- grep -C 2 xxx file 显示匹配内容和前后2行
+- grep -e xxx -e yyy file, grep -E 'xxx|yyy' file, egrep 'xxx|yyy' file 或匹配
 
 ### find 递归查找文件
 - find [path] -name "file"
