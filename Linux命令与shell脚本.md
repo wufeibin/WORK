@@ -72,3 +72,179 @@ total = used2 + free2
 used1 - used2 = buffer + cache
 free2 - free1 = buffer + cache
 ```
+
+
+
+# 二、Shell脚本
+
+- 用分号将多个命令串起来执行
+- echo -n ，不换行显示
+- 将命令输出赋给变量：`` 或 $()
+- date +%y%m%d
+- 输出重定向：将命令的结果输出到文件，而不是标准输出
+  - \> 写入覆盖文件
+  - \>> 追加到文件末尾
+  - 永久重定向 exec 1>abc.txt
+- 管道：| 将一个命令的输出作为另外一个命令的输入
+- 退出码：exit 1、查看退出码：echo $？
+- 数值比较
+- 字符串比较
+- 文件
+- 布尔运算符 
+  - [ condition1 ] && [ condition2 ]
+  - [ condition1 ] || [ condition2 ]
+
+- if
+
+```
+#!bin/bash
+str="yyy"
+if [ $str = "xxx" ]; then
+    echo "xxx"
+elif [ $str = "yyy" ]; then
+    echo "yyy"
+else
+    echo "zzz"
+fi
+```
+
+- case
+
+```
+#!bin/bash
+case $1 in
+jack | lisa)
+    echo "Welcome, $1"
+    echo "Please";;
+mike)
+    echo "xxx";;
+james)
+    echo "yyy";;
+*)
+    echo "zzz";;
+esac
+```
+
+- for
+
+```
+#!/bin/bash
+for file in `pwd`/*
+do
+    echo "file : $file"
+done
+
+for (( a=1, b=10; a <= 10; a++, b-- ))
+do
+    echo "$a - $b"
+done
+```
+
+- while
+
+```
+var=10
+while [ $var -gt 0 ]
+do
+    echo $var
+    var=$[ $var - 1 ]
+done
+```
+
+- until
+
+```
+var=10
+until [ $var -eq 0 ]
+do
+    echo $var
+    var=$[ $var - 1 ]
+done
+```
+
+- break | continue
+- 函数
+
+```
+function name {
+	commands
+}
+
+name() {
+	commands
+}
+```
+
+
+
+- sed：流编辑器
+
+```
+echo this is xxx | sed 's/xxx/yyy/'
+
+sed -e 's/brown/green/; s/dog/cat/' data.txt
+
+$ cat script.sed 
+s/brown/green/ 
+s/fox/elephant/ 
+s/dog/cat/
+$ sed -f script.sed data.txt	从文件读取大量sed命令
+```
+
+- awk｜gawk
+
+```
+awk '{print $1}' data.txt
+awk -F: '{print $1}' data.txt		-F指定分隔符[:]
+
+$ echo "My name is Rich" | gawk '{$4="Christine"; print $0}'
+My name is Christine
+```
+
+
+
+```
+#!/bin/bash
+
+function option1 {
+    echo "option 1"
+}
+
+echo "Tool Menu"
+PS3="Please choose your option: "
+select option in "Option1" "Option2" "Option3" "Test" "Exit"
+do
+    case $option in
+        "Option1")
+            option1;;
+        "Option2")
+            echo "option 2";;
+        "Option3")
+            echo "option 3";;
+        "Test")
+            echo pwd = `pwd`;;
+        "Exit")
+            break ;;
+        *)
+            echo "invalid option"
+            break ;;
+    esac
+done
+
+```
+
+
+
+```
+拷贝查找到的文件
+find ./ -name "file" -exec cp {} dir 
+
+拷贝所有va容器日志
+docker ps -a | grep va_frame | awk '{docker exec -ti cp -fr $1:/Log/vcm/va/run ./}'
+
+搜集所有va容器的任务id相关日志
+docker ps -a | grep va_frame | awk '{docker exec -ti $1 find /Log/vcm/va/run -name ".log" | xargs zgrep "taskid" > /Log/vcm/va/run/taskid_$1.log; docker mv $1:/Log/vcm/va/run/taskid_$1.log ./}'
+```
+
+
+
