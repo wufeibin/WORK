@@ -1,5 +1,8 @@
 [TOC]
 
+> GitHub搜索：
+>
+> in:name/readme/description 关键词 language:python star:>1000 fork:>500 pushed:>2020-1-1 
 
 # Linux进程&线程
 
@@ -248,157 +251,6 @@ Linux较Windows的内存管理区别：在linux中程序被关闭，占用的内
 
 
 
-# 数据库
-
->数据库是按照数据结构来组织、存储和管理数据的仓库。
->
->虽然也可以将数据存储在文件中，但是在文件中读写数据速度相对较慢，所以使用关系型数据库管理系统（RDBMS）来存储和管理大数据量。
->
->关系数据库管理系统特点：数据以表格的形式出现；每行为各种记录名称；每列为记录名称所对应的数据域；许多行和列组成一张表单；若干的表单组成database。
-
-## SQL语句
-
-> SQL(Structured Query Language) 是用于访问和处理数据库的标准的计算机语言。大小写不敏感。
-
-- 创建数据库 create database <dbname>
-- 删除数据库 drop database <dbname>
-- 创建表 create table <tablename>(...)
-- 删除表 drop table <tablenme>
-- **插入** insert into table1(field1,field2) values(value1,value2)
-- **删除** delete from table1 where 范围
-- **更新** update table1 set field1=value1 where 范围
-- **查找** select * from table1 where field1 like ’%value1%’
-
-## MongoDB
-
-[MongoDB API](https://api.mongodb.com/cplusplus/current/annotated.html)
-
-- 连接数据库
-
-```
-conn.connect(DATABSE_IP +":"+ DATABSE_PORT),errmsg)
-```
-
-- 插入
-
-```
-BSONObj p = BSONObjBuilder().append("ID", "1").append("Words", "Hello World").obj();
-conn.insert(DATABASE_NAME+"."+COLLECTION_NAME, p);
-```
-
-- 更新
-
-```
-bool upsert = false; // update, if not exist, insert.
-bool updateMulti = false; // update multi
-BSONObj updateQuery = BSONObjBuilder().append("ID", "1").obj();
-BSONObj updateData = BSONObjBuilder().append("Words", "This is MongoDB C++ Driver").obj();
-con.update(DATABASE_NAME+"."+COLLECTION_NAME, updateQuery, updateData, upsert, updateMulti);
-```
-
-- 删除
-
-```
-bool deleteOne = true; // delete only one record after selected. otherwise, delete all selected records.
-BSONObj deleteQuery = BSONObjBuilder().append("ID", "1").obj();
-con.remove(DATABASE_NAME+"."+COLLECTION_NAME, deleteQuery, deleteOne);
-```
-
-- 查询
-
-```
-auto_ptr<DBClientCursor> dc = con.query(DATABASE_NAME+"."+COLLECTION_NAME);
-return dc;
-```
-
-
-
-# Makefile
-
-[跟我一起写Makefile](https://github.com/seisman/how-to-write-makefile) 
-
-> make先找到makefile中的第一个目标文件，一层层去找target的依赖关系，执行command，最终编译出第一个目标文件。
-
-编译过程：
-
-1. 预处理：替换inclue内容，宏定义， gcc –E hello.c –o hello.i
-2. 编译：生成汇编代码，gcc –S hello.i –o hello.s
-3. 汇编：生成机器代码，gcc –c hello.s –o hello.o
-4. 链接：链接目标文件，gcc hello.o –o hello
-
-编译选项：
-
-- -o 指定目标文件名称
-- -c 生成目标文件
-- -g 生成编译信息
-- -O 优化生成代码
-- -Wall 生成所有告警信息
-- -I 指定额外的头文件搜素路径
-- -L 指定额外的库搜索路径
-- -l 指定链接的库名
-- -M 生成文件关联的信息
-- -share 生成共享目标文件
-- -fPIC 生成位置独立的代码，编译共享库时需要
-- -pipe 使用管道代替编译中的临时文件
-
-```
-//静态库编译
-g++ -c hello.cpp
-ar -crv libhello.a hello.o
-//动态库编译
-g++ -fPIC -share -o libhello.so helo.cpp
-//静态库、动态库使用
-g++ -c main.cpp -L./libpath -lhello
-```
-
-常见字符：
-
-- @ 不打印命令，只打印结果
-- % 匹配到若干个字符，给%赋值。%.o:%.c，找出匹配的所有的.o和.c文件
-- $@ 目标文件
-- $^ 所有的依赖文件
-- $< 第一个依赖文件
-- := 只能使用前面已定义的变量来赋值
-- ?= 赋值一个新的变量，若变量已定义则不处理
-- += 追加变量值
-- CFLAGS C编译器参数
-- CXXFLAGS C++编译器参数
-- LDFLAGS 链接器参数
-- .PHONY 伪目标，可开头声明一个all的伪目标，依赖多个目标，实现一次生成多个目标
-- include 引用其他Makefile
-- $(MAKE) -C subdir，进入subdir嵌套执行make命令
-- strip函数，去掉字符串头尾的空字符，合并中间的连续空字符为一个空字符
-- addprefix函数，给字符加前缀
-
-
-
-# GDB
-
-- break file:line
-- break function
-- break ... if ...	//设置条件断点
-- info breakpoints	//查看当前设置了哪些断点
-- delete breakpoints	//删除断点
-- enable/disable breakpoints	//启用/禁用断点
-- display		//跟踪查看某个变量，每次遇到断点都显示它的值
-- command	breakpoints ··· end	//为断点设置运行命令
-- run			//从头开始连续运行程序
-- continue	//从当前位置开始连续运行程序
-- next		//执行下一行语句
-- step		//执行下一行语句，若有函数调用则进入到函数中
-- finish		//运行到当前函数返回为止
-- backtrace	//查看各级函数调用及参数
-- t ..		//跳转到指定线程
-- f ..		//跳转到指定栈帧
-- info locals	//查看当前栈帧局部变量的值
-- info args	//查看当前函数入参的值
-- info r		//查看寄存器的值
-- print		//打印表达式的值
-- disassemble //打开该帧函数的反汇编代码
-- examine(x)	//按字节打印某个地址中开始的值
-
-
-
 # Git
 
 [Git教程](https://github.com/luotf/Git/blob/master/Git%E6%95%99%E7%A8%8B.md)
@@ -440,3 +292,67 @@ git fetch origin
 git merge <branch> 合并某分支到当前分支
 ```
 
+
+
+# RESTful
+[RESTful API 设计规范](https://github.com/godruoyi/restful-api-specification)
+
+
+RESTful架构，就是目前最流行的一种互联网软件架构。它结构清晰、符合标准、易于理解、扩展方便，所以正得到越来越多网站的采用。REST，即Representational State Transfer，表现层状态转化。如果一个架构符合REST原则，就称它为RESTful架构。
+
+
+
+**1.资源（Resources）**: **每种资源对应一个特定的URI(统一资源定位符),URI为每一个资源的地址或独一无二的识别符;**
+
+**2.表现层（Representation）**:**把"资源"具体呈现出来的形式，叫做它的"表现层"**,URI只代表"资源"的位置。它的具体表现形式，应该在HTTP请求的头信息中用**Accept**和**Content-Type**字段指定，这两个字段才是对"表现层"的描述。
+
+**3.状态转化（State Transfer）**:客户端想要操作服务器，必须通过某种手段，让服务器端发生"状态转化"。而这种转化是建立在表现层之上的，所以就是"表现层状态转化"。客户端用到的手段就是HTTP协议里面，四个表示操作方式的动词：**GET、POST、PUT、DELETE**。它们分别对应四种基本操作：**GET用来获取资源，POST用来新建资源（也可以用于更新资源），PUT用来更新资源，DELETE用来删除资源。**
+
+**总结:**
+
+- 每一个URI代表一种资源；
+- 客户端和服务器之间，传递这种资源的某种表现层；
+- 客户端通过四个HTTP动词，对服务器端资源进行操作，实现"表现层状态转化"。
+
+
+
+对于资源的具体操作类型，由HTTP动词表示。 常用的HTTP动词有下面五个
+
+> GET（SELECT）：从服务器取出资源（一项或多项）。 
+>  POST（CREATE）：在服务器新建一个资源。
+>  PUT（UPDATE）：在服务器更新资源（客户端提供改变后的完整资源）。
+>  PATCH（UPDATE）：在服务器更新资源（客户端提供改变的属性）。
+>  DELETE（DELETE）：从服务器删除资源。
+
+还有两个不常用的HTTP动词。
+
+> HEAD：获取资源的元数据。
+>  OPTIONS：获取信息，关于资源的哪些属性是客户端可以改变的。
+
+下面是一些例子。
+
+> GET /zoos：列出所有动物园
+>  POST /zoos：新建一个动物园
+>  GET /zoos/ID：获取某个指定动物园的信息
+>  PUT /zoos/ID：更新某个指定动物园的信息（提供该动物园的全部信息）
+>  PATCH /zoos/ID：更新某个指定动物园的信息（提供该动物园的部分信息）
+>  DELETE /zoos/ID：删除某个动物园
+>  GET /zoos/ID/animals：列出某个指定动物园的所有动物
+>  DELETE /zoos/ID/animals/ID：删除某个指定动物园的指定动物
+
+针对不同操作，服务器向用户返回的结果应该符合以下规范。
+
+> GET /collection：返回资源对象的列表（数组）
+> GET /collection/resource：返回单个资源对象
+> POST /collection：返回新生成的资源对象
+> PUT /collection/resource：返回完整的资源对象
+> PATCH /collection/resource：返回完整的资源对象
+> DELETE /collection/resource：返回一个空文档
+
+
+
+# POCO
+
+https://github.com/pocoproject/poco
+
+https://pocoproject.org/docs/index.html

@@ -206,48 +206,7 @@ My name is Christine
 
 
 
-```
-#!/bin/bash
 
-function option1 {
-    echo "option 1"
-}
-
-echo "Tool Menu"
-PS3="Please choose your option: "
-select option in "Option1" "Option2" "Option3" "Test" "Exit"
-do
-    case $option in
-        "Option1")
-            option1;;
-        "Option2")
-            echo "option 2";;
-        "Option3")
-            echo "option 3";;
-        "Test")
-            echo pwd = `pwd`;;
-        "Exit")
-            break ;;
-        *)
-            echo "invalid option"
-            break ;;
-    esac
-done
-
-```
-
-
-
-```
-拷贝查找到的文件
-find ./ -name "file" -exec cp {} dir 
-
-拷贝所有va容器日志
-docker ps -a | grep va_frame | awk '{docker exec -ti cp -fr $1:/Log/vcm/va/run ./}'
-
-搜集所有va容器的任务id相关日志
-docker ps -a | grep va_frame | awk '{docker exec -ti $1 find /Log/vcm/va/run -name ".log" | xargs zgrep "taskid" > /Log/vcm/va/run/taskid_$1.log; docker mv $1:/Log/vcm/va/run/taskid_$1.log ./}'
-```
 
 
 
