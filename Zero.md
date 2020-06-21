@@ -356,3 +356,23 @@ RESTful架构，就是目前最流行的一种互联网软件架构。它结构�
 https://github.com/pocoproject/poco
 
 https://pocoproject.org/docs/index.html
+
+
+
+# 视频编解码
+
+视频编码就是指通过特定的压缩技术，将某个视频格式文件转换成另一种视频格式文件的方式。
+
+视频封装格式：把编码后的音视频数据以一定格式封装到一个容器，封装格式有 MKV、AVI、TS 等 
+
+视频编码格式：
+
+- MPEG 【MPEG-2 、 MPEG-4】
+- H.26X 【H.263 、 H.264/AVC 、 H.265/IEVC】
+
+视频解码后的格式（原始数据格式）：YUV
+
+- NV12与YV12视频格式，是YUV的主要格式
+
+图片格式：PNG格式、JPEG格式、TIFF格式、BMP格式、GIF格式
+
