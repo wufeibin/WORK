@@ -20,11 +20,12 @@
 ### tail 显示文件末尾内容 
 
 - tail -f file 【循环显示文件末尾内容】
+- tail -n 10 【显示文件末尾n行内容】
 
 ### tar 归档
 
-- tar -xzvf xxx.tar.gz 
-- tar -czvf xxx.tar.gz [path]
+- tar -xzvf xxx.tar.gz -C [path] 【解压缩文件】
+- tar -czvf xxx.tar.gz [file] 【打包压缩文件】
 
 ### zip/unzip 压缩/解压zip文件
 - zip -r xxx.zip ./*
@@ -49,9 +50,6 @@
 ### ldd 查看程序/库依赖的共享库列表
 - ldd -r xxx.so 【-r选项，数据对象和函数的重定位】
 
-
-### 
-
 ### xargs 
 
 - find . -name "1.txt" | xargs ls 【与管道配合使用，将标准输出转化为参数】
@@ -62,7 +60,7 @@
 - sed 's/xxx/yyy/' file 【替换文本中的字符串】
 - sed 's/xxx/yyy/g' file 【/g 替换每一行中的所有匹配】
 - sed -n 's/xxx/yyy/p' file 【-n选项和p命令一起使用，只打印那些发生替换的行】
-- sed -e 's/brown/green/p; s/dog/cat/' file 【-e选项，同一行里执行多条命令】
+- sed -e 's/brown/green/; s/dog/cat/' file 【-e选项，同一行里执行多条命令】
 - sed -f script.sed file
 
 ### awk
@@ -104,19 +102,6 @@ total = used + free
 
 # 二、Shell脚本
 
-- 用分号将多个命令串起来执行
-- 将命令输出赋给变量：`` 或 $()
-- date +%y%m%d
-- 输出重定向：将命令的结果输出到文件，而不是标准输出
-  - \> 写入覆盖文件
-  - \>> 追加到文件末尾
-  - 永久重定向 exec 1>abc.txt
-- 管道：| 将一个命令的输出作为另外一个命令的输入
-- 退出码：exit 1、查看退出码：echo $？
-- 布尔运算符
-  - [ condition1 ] && [ condition2 ]
-  - [ condition1 ] || [ condition2 ]
-
 | 数值比较  |              |
 | --------- | ------------ |
 | n1 -eq n2 | n1等于n2     |
@@ -125,7 +110,10 @@ total = used + free
 | n1 -gt n2 | n1大于n2     |
 | n1 -le n2 | n1小于等于n2 |
 | n1 -lt n2 | n1小于n2     |
-| **字符串比较** |                 |
+
+
+| 字符串比较  |              |
+| --------- | ------------ |
 | str1 = str2  | str1和str2相同  |
 | str1 != str2 | str1和str2不同  |
 | str1 < str2  | str1比str2小    |
@@ -133,20 +121,18 @@ total = used + free
 | -n str1      | str1的长度不为0 |
 | -z str1      | str1的长度为0   |
 
-文件比较
--d file 检查file是否存在并是一个目录
 
--e file 检查file是否存在
+| 文件比较 |                              |
+| -------- | ---------------------------- |
+| -e file  | 检查file是否存在             |
+| -f file  | 检查file是否存在并是一个文件 |
+| -d file  | 检查file是否存在并是一个目录 |
+| -r file  | 检查file是否存在并可读       |
+| -s file  | 检查file是否存在并非空       |
+| -w file  | 检查file是否存在并可写       |
+| -x file  | 检查file是否存在并可执行     |
 
--f file 检查file是否存在并是一个文件
-
--r file 检查file是否存在并可读
-
--s file 检查file是否存在并非空
-
--w file 检查file是否存在并可写
-
--x file 检查file是否存在并可执行
+ 
 
 
 - if | case
@@ -223,4 +209,15 @@ name() {
 }
 ```
 
-
+- 用分号将多个命令串起来执行
+- 将命令输出赋给变量：`` 或 $()
+- date +%y%m%d
+- 输出重定向：将命令的结果输出到文件，而不是标准输出
+  - \> 写入覆盖文件
+  - \>> 追加到文件末尾
+  - 永久重定向 exec 1>abc.txt
+- 管道：| 将一个命令的输出作为另外一个命令的输入
+- 退出码：exit 1、查看退出码：echo $？
+- 布尔运算符
+  - [ condition1 ] && [ condition2 ]
+  - [ condition1 ] || [ condition2 ]
