@@ -44,10 +44,10 @@
 
 - netstat -anp
 
-### nm 查看文件中的符号
+### nm 查看目标文件的符号表
 
 ### ldd 查看程序/库依赖的共享库列表
-
+- ldd -r xxx.so 【-r选项，数据对象和函数的重定位】
 
 
 ### 
@@ -65,7 +65,7 @@
 - sed -e 's/brown/green/p; s/dog/cat/' file 【-e选项，同一行里执行多条命令】
 - sed -f script.sed file
 
-### awk|gawk
+### awk
 
 - awk 'BEGIN{ commands } pattern{ commands } END{ commands }'
   - 第一步：执行`BEGIN{ commands }`语句
@@ -132,6 +132,22 @@ total = used + free
 | str1 > str2  | str1比str2大    |
 | -n str1      | str1的长度不为0 |
 | -z str1      | str1的长度为0   |
+
+文件比较
+-d file 检查file是否存在并是一个目录
+
+-e file 检查file是否存在
+
+-f file 检查file是否存在并是一个文件
+
+-r file 检查file是否存在并可读
+
+-s file 检查file是否存在并非空
+
+-w file 检查file是否存在并可写
+
+-x file 检查file是否存在并可执行
+
 
 - if | case
 
