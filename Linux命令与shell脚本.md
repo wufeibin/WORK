@@ -47,8 +47,14 @@
 
 ### nm 查看目标文件的符号表
 
-### ldd 查看程序/库依赖的共享库列表
+### ldd 查看程序/库依赖的共享库
 - ldd -r xxx.so 【-r选项，数据对象和函数的重定位】
+
+### readelf 查看elf目标文件信息
+
+- readelf -sD xxx.so 【查看elf文件的动态符号表】
+
+### objdump 查看目标文件的构成
 
 ### xargs 
 
