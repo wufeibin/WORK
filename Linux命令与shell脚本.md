@@ -209,15 +209,163 @@ name() {
 }
 ```
 
-- 用分号将多个命令串起来执行
-- 将命令输出赋给变量：`` 或 $()
-- date +%y%m%d
-- 输出重定向：将命令的结果输出到文件，而不是标准输出
-  - \> 写入覆盖文件
-  - \>> 追加到文件末尾
-  - 永久重定向 exec 1>abc.txt
-- 管道：| 将一个命令的输出作为另外一个命令的输入
-- 退出码：exit 1、查看退出码：echo $？
-- 布尔运算符
-  - [ condition1 ] && [ condition2 ]
-  - [ condition1 ] || [ condition2 ]
+
+
+**内置变量**
+
+- $0：脚本文件名称
+
+- $1：第1个位置参数
+
+- $#：位置参数个数
+
+- $@/*：所有的位置参数
+
+- $?：退出状态码
+
+- $PATH：可执行文件的搜索路径
+
+- $PWD：当前工作目录
+
+
+
+
+# 三、Shell实例
+
+- 菜单脚本
+
+```shell
+#!/bin/bash
+
+function option1 {
+    echo "option 1"
+}
+
+echo "Tool Menu"
+PS3="Please choose your option: "
+select option in "Option1" "Option2" "Option3" "Test" "Exit"
+do
+    case $option in
+        "Option1")
+            option1;;
+        "Option2")
+            echo "option 2";;
+        "Option3")
+            echo "option 3";;
+        "Test")
+            echo pwd = `pwd`;;
+        "Exit")
+            break ;;
+        *)
+            echo "invalid option"
+            break ;;
+    esac
+done
+```
+
+- 输入一个数字，运行对应的一个命令。
+
+```shell
+#!/bin/bash
+echo "1:date; 2:ls 3:who 4:pwd"
+read -p "Please input a number: " n
+if [ -z "$n" ]
+then
+    echo "请输入一个纯数字,范围1-4."
+    exit
+fi
+
+case $n in 
+    1)
+      date
+      ;;
+    2)
+      ls
+      ;;
+    3)
+      who
+      ;;
+    4)
+      pwd
+      ;;
+    *)
+      echo "请输入1-4的数字"
+      ;;
+esac
+```
+
+- 以 2017-12-20.log 格式每日生成一个文件，并删除一年以前的文件。
+
+```shell
+#!/bin/bash
+#时间格式：date +%F、date +%y%m%d、date +%Y-%m-%d-%H-%M-%S
+d=`date +%F` #将命令输出赋给变量：`` 或 $()
+dir=/data/logs/disklog
+if [ ! -d $dir ]
+then
+    mkdir -p $dir
+fi
+df -h > $dir/$d.log #输出重定向，写入覆盖文件：>；追加到文件末尾：>> 
+find $dir/ -mtime +365 |xargs rm
+```
+
+- 找到/123目录下所有后缀名为.txt的文件，打包压缩为123.tar.gz
+
+```shell
+#!/bin/bash
+find /123/ -type f -name "*.txt" > /tmp/txt.list
+tar -czvf 123.tar.gz `cat /tmp/txt.bak.list |xargs`
+```
+
+- 把一个文本文档的前5行中包含字母的行删除掉，同时把6到10行中的全部字母删除掉。
+
+```shell
+#!/bin/bash
+sed -n '1,5'p 1.txt |sed '/[a-zA-Z]/d' #把一个文本文档的前5行中包含字母的行删除掉
+sed '1,5d' 1.txt |sed '1,5s/[a-zA-Z]//g' ##把6到10行中的全部字母删除掉。
+```
+
+- 当时间是0点和12点时，需要将目录/data/log/下的文件全部清空，而其他时间统计每个文件的大小，一个文件一行，输出到一个按日期和时间为名字的日志里。
+
+```shell
+#!/bin/bash
+dir=/tmp/log_stat
+t=`date +%d%H`
+t1=`date +%H`
+logdir=/data/log
+
+[ -d $dir ] || mkdir $dir #或运算符，同-o
+[ -f $dir/$t.log ] && rm -f $dir/$t.log #与运算符，同-a
+
+if [ $t == "00" -o $t1 == "12" ]
+then
+    for f in `find $logdir/ -type f`
+    do
+			> $f
+    done
+else
+    for f in `find $logdir/ -type f`
+    do
+			du -sh $f >> $dir/$t.log
+    done
+fi
+```
+
+- 把文本里面每三行内容合并到一行
+
+```shell
+#!/bin/bash
+n=1
+cat $1 |while read line #逐行遍历
+do
+    n1=$[$n%3]
+    if [ $n1 -eq 0 ]
+    then
+			echo "$line"
+    else
+			echo -n "$line " #不换行
+    fi
+    	n=$[$n+1]
+done
+```
+
