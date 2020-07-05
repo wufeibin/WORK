@@ -237,23 +237,19 @@ name() {
 ```shell
 #!/bin/bash
 
-function option1 {
-    echo "option 1"
-}
-
 echo "Tool Menu"
 PS3="Please choose your option: "
 select option in "Option1" "Option2" "Option3" "Test" "Exit"
 do
     case $option in
         "Option1")
-            option1;;
+            echo "option 1";;
         "Option2")
             echo "option 2";;
         "Option3")
-            echo "option 3";;
+            ls;;
         "Test")
-            echo pwd = `pwd`;;
+            pwd;;
         "Exit")
             break ;;
         *)
@@ -341,12 +337,12 @@ if [ $t == "00" -o $t1 == "12" ]
 then
     for f in `find $logdir/ -type f`
     do
-			> $f
+      > $f
     done
 else
     for f in `find $logdir/ -type f`
     do
-			du -sh $f >> $dir/$t.log
+      du -sh $f >> $dir/$t.log
     done
 fi
 ```
@@ -361,11 +357,11 @@ do
     n1=$[$n%3]
     if [ $n1 -eq 0 ]
     then
-			echo "$line"
+      echo "$line"
     else
-			echo -n "$line " #不换行
+      echo -n "$line " #不换行
     fi
-    	n=$[$n+1]
+      n=$[$n+1]
 done
 ```
 
