@@ -5,12 +5,16 @@
 ### grep 搜索数据
 
 - grep -n xxx file 【显示行号】
+- grep -r xxx path 【递归查找目录文件】
 - grep -v xxx file 【反向搜索，输出不匹配的行】
+- grep -w xxx file 【显示全词匹配的行】
 - grep -c xxx file 【显示匹配的行数】
+- grep -l xxx * 【显示匹配的文件名】
 - grep -A 2 xxx file 【显示匹配内容和后2行】
 - grep -B 2 xxx file 【显示匹配内容和前2行】
 - grep -C 2 xxx file 【显示匹配内容和前后2行】
 - grep -e xxx -e yyy file, grep -E 'xxx|yyy' file, egrep 'xxx|yyy' file 【或匹配】
+- grep   '2020-08-3[0-9]' file
 
 ### find 递归查找文件
 - find [path] -name file
@@ -68,6 +72,7 @@
 - sed -n 's/xxx/yyy/p' file 【-n选项和p命令一起使用，只打印那些发生替换的行】
 - sed -e 's/brown/green/; s/dog/cat/' file 【-e选项，同一行里执行多条命令】
 - sed -f script.sed file
+- sed -n '/2020-08-30-15-38-[0-9]/,/2020-08-30-15-50-[0-9]/p' file 【,选项，选定行范围】
 
 ### awk
 
@@ -271,12 +276,14 @@ done
 #!/bin/bash
 echo "1:date; 2:ls 3:who 4:pwd"
 read -p "Please input a number: " n
+echo ${n:=1}	# 默认值为1
 if [ -z "$n" ]
 then
     echo "请输入一个纯数字,范围1-4."
     exit
 fi
 
+${n=1}
 case $n in 
     1)
       date
