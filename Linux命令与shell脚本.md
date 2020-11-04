@@ -111,6 +111,8 @@ total = used + free
 
 
 
+
+
 # 二、Shell脚本
 
 | 数值比较  |              |
@@ -241,7 +243,7 @@ name() {
 
 
 
-# 三、Shell实例
+## Shell实例
 
 - 菜单脚本
 
