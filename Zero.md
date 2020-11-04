@@ -376,3 +376,8 @@ https://pocoproject.org/docs/index.html
 
 图片格式：PNG格式、JPEG格式、TIFF格式、BMP格式、GIF格式
 
+
+# Nginx
+- Nginx 配置详解：https://www.runoob.com/w3cnote/nginx-setup-intro.html
+- Nginx 反向代理与负载均衡详解：https://www.runoob.com/w3cnote/nginx-proxy-balancing.html
+
