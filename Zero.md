@@ -1,5 +1,19 @@
 [TOC]
 
+
+
+- **C/C++**
+- **Python & Shell**
+- **Linux**：多线程、《UNIX环境编程》、《Linux高性能服务器编程》
+- **网络**
+- **数据结构与算法**
+- **数据库**：SQL、MySQL、MongoDB、GaussDB
+- **设计模式**：单一职责原则、里氏替换原则、依赖倒置原则、接口隔离原则、最少知道原则、开闭原则
+- **编译调试**：Makefile、编译链接、GDB、CoreDump、《程序员的自我修养》
+- **开源组件**：Kafka、ZooKeeper、Nginx、CURL、OpenCV、FFmpeg
+- **工具**：Git、Svn、Docker、WireSha
+
+
 > GitHub搜索：
 >
 > in:name/readme/description 关键词 language:python star:>1000 fork:>500 pushed:>2020-1-1 
