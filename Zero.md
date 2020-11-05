@@ -12,7 +12,7 @@
 - **编译调试**：Makefile、编译链接、GDB、CoreDump、《程序员的自我修养》
 - **开源组件**：Kafka、ZooKeeper、Nginx、CURL、OpenCV、FFmpeg
 - **工具**：Git、Svn、Docker、WireSha
-
+- **新技术概念**：云、分布式、大数据
 
 > GitHub搜索：
 >
