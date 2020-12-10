@@ -225,6 +225,7 @@ string str("abcdefg");
 string str2("ABCDEFG");
 str.empty();
 str.size();//str中的字符的个数：7
+str.length();//字符串使用与size()作用相同
 str[2];//str中第2个字符的引用：c（从0计起）
 if(str == str2) cout << "str and str2 is equal" << endl;
 str + str2;
