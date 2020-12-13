@@ -1,6 +1,8 @@
 [TOC]
 
-# const
+# 一、C++基础
+
+## const
 
 1. 修饰变量，说明该变量不可以被改变。
 2. 修饰指针，分为指向常量的指针和指针常量。
@@ -8,99 +10,79 @@
 4. 修饰成员函数，说明该成员函数内不能修改成员变量。
 
 ```cpp
-class A
-{
+class A {
 public:
-    A() : a(0) { };
-    A(int x) : a(x) { };        // 初始化列表
+	A() : a(0) {};
+	A(int x) : a(x) {}; // 初始化列表
 
-    // const可用于对重载函数的区分
-    int getValue();             // 普通成员函数
-    int getValue() const;       // 常成员函数，不得修改类中的任何数据成员的值
+	// const可用于对重载函数的区分
+	int getValue(); // 普通成员函数
+	int getValue() const; // 常成员函数，不得修改类中的任何数据成员的值
     
 private:
-    const int a;                // 常对象成员，只能在初始化列表赋值
+	const int a; // 常对象成员，只能在初始化列表赋值
 };
 
-void function()
-{
-    // 对象（不允许将普通引用或指针绑定到const对象，防止通过引用修改对象）
-    A b;                        // 普通对象，可以调用全部成员函数、更新常成员变量
-    const A a;                  // 常对象，只能调用常成员函数
-    const A *p = &a;            // 常指针
-    const A &q = a;             // 常引用
+void function() {
+	// 对象（不允许将普通引用或指针绑定到const对象，防止通过引用修改对象）
+	A b; // 普通对象，可以调用全部成员函数、更新常成员变量
+	const A a; // 常对象，只能调用常成员函数
+	const A *p = &a; // 常指针
+	const A &q = a; // 常引用
 
-    // 指针
-    char greeting[] = "Hello";
-    char* p1 = greeting;                // 指针变量，指向字符数组变量
-    const char* p2 = greeting;          // 指针变量，指向字符数组常量（常用）
-    char* const p3 = greeting;          // 常指针，指向字符数组变量
-    const char* const p4 = greeting;    // 常指针，指向字符数组常量
+	// 指针
+	char greeting[] = "Hello";
+	char* p1 = greeting; // 指针变量，指向字符数组变量
+	const char* p2 = greeting; // 指针变量，指向字符数组常量（常用）
+	char* const p3 = greeting; // 常指针，指向字符数组变量
+	const char* const p4 = greeting; // 常指针，指向字符数组常量
 }
 
 // 函数入参
-void function1(const int Var);           // 传递过来的参数在函数内不可变
-void function2(const char* Var);         // 参数指针所指内容为常量
-void function3(char* const Var);         // 参数指针为常指针
-void function4(const int& Var);          // 引用参数在函数内为常量
+void function1(const int Var); // 传递过来的参数在函数内不可变
+void function2(const char* Var); // 参数指针所指内容为常量
+void function3(char* const Var); // 参数指针为常指针
+void function4(const int& Var); // 引用参数在函数内为常量
 
 // 函数返回值
-const int function5();      // 返回一个常数
-const int* function6();     // 返回一个指向常量的指针变量，使用：const int *p = function6();
-int* const function7();     // 返回一个指向变量的常指针，使用：int* const p = function7();
+const int function5(); // 返回一个常数
+const int* function6(); // 返回一个指向常量的指针变量，使用：const int *p = function6();
+int* const function7(); // 返回一个指向变量的常指针，使用：int* const p = function7();
 ```
 
 
-# static
+## static
 
 1. **静态变量**：main函数运行前，在数据段分配内存，未经初始化的静态变量会被程序自动初始化为0。
 2. **静态函数**：表明函数的作用范围，仅在定义该函数的文件内才能使用。
 3. **静态成员变量**：无论有多少个类对象，静态数据成员在内存中只有一份拷贝，由所有该类的对象共享，可以直接使用类名加作用域运算符(::)直接访问。只能在类中声明，在类外进行定义和初始化，默认初始化为0。
 4. **静态成员函数**：静态成员函数只能访问静态数据成员和静态成员函数。静态成员函数属于类，不属于任意一个类对象。静态成员函数没有 this 指针，可以使用 <类名>::<函数名> 访问，也可由类对象使用(./->)访问。
 
+## sizeof、strlen
 
-# malloc、new
+- sizeof运算符：查询对象或数据类型的大小，返回size_t常量。
+- strlen函数：统计字符串的长度。字符串的长度由终止空字符确定，不包括终止空字符本身。
 
-* malloc是C语言的标准库函数，申请一块内存，返回void*指针。
-* new是C++运算符，申请一块内存，构造对象，并返回该对象的指针。
-```
-int *p1 = (int *)malloc(sizeof(int) * 5);
-free(p1);
-p1 = NULL;
-int *p2 = new int[5];
-delete []p2;
-p2 = NULL;
-
-Base *pb1 = new Base;
-Base *pb2 = new Base();
-Base *pb3 = new Base(1);
-delete pb1;
-delete pb2;
-delete pb3;
-```
-
-# sizeof、strlen
-```
+```c
 char str[10] = "123456";
 char *pc = str;
 char *ps = "1234";
-//sizeof运算符：查询对象或数据类型的大小，返回size_t常量。
-cout << "sizeof(str)=" << sizeof(str) << endl;  //sizeof(数组名) 数组的大小，10
-cout << "sizeof(pc)=" << sizeof(pc) << endl;    //sizeof(数组指针) 指针大小，4
-//strlen函数：统计字符串的长度。字符串的长度由终止空字符确定，不包括终止空字符本身。
-cout << "strlen(str)=" << strlen(str) << endl;  //6
-cout << "strlen(pc)=" << strlen(pc) << endl;    //6
-cout << "strlen(ps)=" << strlen(ps) << endl;    //4
-cout << "strlen(abc)=" << strlen("abc") << endl;    //3
+
+cout << "sizeof(str)=" << sizeof(str) << endl; //sizeof(数组名) 数组的大小，10
+cout << "sizeof(pc)=" << sizeof(pc) << endl; //sizeof(数组指针) 指针大小，4
+
+cout << "strlen(str)=" << strlen(str) << endl; //6
+cout << "strlen(pc)=" << strlen(pc) << endl; //6
+cout << "strlen(ps)=" << strlen(ps) << endl; //4
 ```
 
-# 字符串拷贝
+## 字符串拷贝
+
 ```
-typedef struct student
-{
-    char  name[16];
-    int   age;
-}STUDENT;
+typedef struct student {
+    char name[16];
+    int age;
+} STUDENT;
 STUDENT stu1;
 STUDENT stu2[5];
 char pc1[10];
@@ -114,7 +96,7 @@ memset(stu2, 0, sizeof(STUDENT)*5);
 memset(pc1, 0, sizeof(pc1));
 
 2、memcpy
-原型：void * memcpy (void *dest, const void *src, size_t num); 复制src所指的内存内容的前num个字节到dest所指的内存地址上，不会因为遇到“\0”而结束。
+原型：void *memcpy(void *dest, const void *src, size_t num); 复制src所指的内存内容的前num个字节到dest所指的内存地址上，不会因为遇到“\0”而结束。
 返回值：返回dest指针。注意返回的指针类型是void*，使用时一般要进行强制类型转换。
 注意点：dest指针要分配足够的空间，>=num个字节。可用于很多数据类型的复制。
 memcpy(pc1, pc2, 5);
@@ -126,7 +108,7 @@ memcpy(pc1, pc2, 5);
 strcpy(pc1, pc2);
 
 4、strncpy
-原型：char * strncpy(char *dest, const char *src, size_t n);将参数src字符串前n个字节拷贝至参数dest所指的地址，遇到'\0'拷贝完就就结束。长度n超出源字符串长度部分会填0。
+原型：char *strncpy(char *dest, const char *src, size_t n);将参数src字符串前n个字节拷贝至参数dest所指的地址，遇到'\0'拷贝完就就结束。长度n超出源字符串长度部分会填0。
 返回值：返回dest指针
 strncpy(pc1, pc2, 4);
 pc1[sizeof(pc1)-1] = '\0';
@@ -140,50 +122,179 @@ sprintf(pc1, "%s", "aaaa");
 snprintf(pc1, sizeof(pc1), "%s", "bbb");
 ```
 
+## 类型转换
 
-# C++类特性
+1. C风格的强制转换
+
+   ```
+   TypeName b = (TypeName)a;
+   ```
+
+2. C++ 四种强制转换类型函数
+
+- **const_cast**：用于修改类型的const属性
+  - 常量指针/引用被转化成非常量的指针/引用，并且仍然指向原来的对象。
+  - const_cast一般用于修改指针。如const char *p形式。
+
+* **static_cast**：和C语言风格强制转换的效果一样，没有运行时类型检查来保证转换的安全性。
+  * 用于类层次间的上下行转换，下行转换没有运行时类型检测，不安全。（下行类型转换：基类指针转换成派生类指针 ）
+  * 用于基本数据类型之间的转换，转换的安全性需要开发者来维护。
+  * C++任何的隐式转换都是使用static_cast来实现。
+
+* **dynamic_cast**：用于类层次间的上下行转换，下行转换有运行时类型检测，转换失败则返回NULL，比static_cast更安全，最为常用。
+
+  ```c++
+  Base *pBase = new Base();
+  pBase->print();
+  Sub *pSub = dynamic_cast<Sub*>(pBase);
+  if (pSub != nullptr) {
+  	pSub->print();
+  }
+  
+  // typeid操作符，运行时类型识别
+  #include <typeinfo.h>  
+  Base *p = new Derived();  
+  typeid(*p).name();    //指针所指对象类型名称  
+  ```
+
+* **reinterpret_cast**：常用于指针类型和整形之间的转换
+
+  ```c++
+  int *ptr = new int(222);
+  uint32_t ptr_addr = reinterpret_cast<uint32_t>(ptr);
+  ```
+
+## extern
+
+> 定义只能一次，声明可以多次。
+
+1. 修饰全局变量
+```c
+// 在一个源文件中声明定义全局变量（下面3种形式都可行），在使用的源文件（或包含的头文件）中声明全局变量后，即可使用。
+extern int i; // 声明
+extern int i = 0; // 声明并定义
+int i; // 声明并定义
+int i = 0; // 声明并定义
+```
+
+2. 修饰全局函数
+```c
+// 函数定义和声明的区别是有无函数体，所以定义和声明时可省略extern。
+// 在一个源文件中声明定义了全局函数，在使用的源文件（或包含的头文件）中声明全局函数（通常加上extern）后，即可使用。
+(extern) void func() { // 声明并定义
+	printf("hello\n");
+}
+(extern) void func();	// 声明
+```
+
+
+3. `extern "C"` 链接指示符：如果要在一个cpp源文件中要使用一个C的函数，需要告诉编译器使用C语言的方式进行编译和链接。 `gcc -c 1.c -o 1.o` 、`g++ main.cpp 1.o`
+```c
+//1.h
+#ifdef  __cplusplus（__cplusplus是C++中定义的宏，使用后的头文件可兼容c/cpp文件）
+extern "C" {
+#endif
+	void func1();
+	void func2();
+#ifdef  __cplusplus
+}
+#endif
+```
+```c
+//1.c
+#include "1.h"
+void func1(){};
+void func2(){};
+```
+```c
+//main.cpp
+#include "1.h"
+int main() {
+	func1();
+	func2();
+}
+```
+
+## 补充
+
+-  malloc/free、new/delete
+
+  * malloc是C语言的标准库函数，申请一块内存，返回void*指针。
+  * new是C++运算符，申请一块内存，构造对象，并返回该对象的指针。
+- 指针和引用
+
+  * 引用是对象的别名，不占用内存空间，必须初始化且不能修改。（有时理解为const指针）
+  * 指针是一个对象，存放的是一个地址，来操作地址上的对象。
+- 结构体内存对齐规则
+
+  * 第一个数据成员存储offset=0位置，之后每个成员的起始地址需从自己大小的整数倍开始存储。
+  * 结构体作成员，以内部的最大基本类型的整数倍地址开始存储。
+  * 联合体作成员，以内部的最大基本类型作为size。
+  * 结构体的总大小，是内部最宽基本类型的整数倍，不足要补齐。
+-  do {...} while(0) 作用：帮助定义复杂的宏函数；通过break替换goto，控制程序流。
+- volatile 关键字声明的变量，每次访问时都必须从内存中取出值。没有被 volatile 修饰的变量，可能由于编译器的优化，从CPU寄存器中取值，使用 volatile 告诉编译器不应对这样的对象进行优化。
+- inline内联函数相当于宏，在编译期将函数体复制到调用处，但比宏多了类型检测，具有函数的特性。一方面提高了运行效率，另一方面会造成代码膨胀，适用于短小且频繁调用的函数。
+- 如果表达式既有带符号类型又有无符号类型，带符号类型会自动地转换成无符号类型。
+
+
+
+
+
+# 二、C++类
 
 * **构造函数**、**析构函数**、**拷贝构造**、**赋值**函数是每个类的最基本函数。每个类只有一个析构函数和赋值函数，可以有多个构造函数（包含一个拷贝构造函数和其他的普通构造函数）。对于一个类，编译器会自动产生四个缺省的函数（无参构造、拷贝构造、析构、赋值）。
-    * 如果一个类没有显式地定义构造函数，编译器会隐式地合成一个默认构造函数。合成的默认构造函数只适合简单的类。如`Base b;`调用了默认构造函数。
-    * 类对象的数据成员是在析构函数执行体之后的隐含阶段被销毁的
-    * 非内部数据类型的成员对象（类对象），应采用初始化表方式初始化，提高效率。
-    * 拷贝构造函数是在对象被创建时调用，而赋值函数只能被存在的对象调用。
-    ```c
-    String a(“hello”);
-    String b(“world”);
-    String c = a; // 调用了拷贝构造函数，最好写成 c(a);
-    c = b; // 调用了赋值函数 
-    ```
-    * 内置类型之间定义了几种自动转换规则，同样的也能为类类型定义隐式转换规则。如果类的构造函数只有一个实参，则它实际上定义了转换为此类类型的**隐式转换**机制。  
-    ```c
-    //比如一个类的构造函数只接受一个int参数，那么就定义了从int类型向这个类隐式转换的规则。在需要用到这个类类型的地方，可以用int类型替换，不需要显式转换。
-    //构造函数默认能够发生隐式自动转换。可以在构造函数声明时在前面加explicit抑制隐式转换。
-    构造函数：CString(int size){...}
-    CString A = 10;
-    等同于：(构造函数的隐式转换)
-    CString temp(10);
-    CString A = temp;
-    ```
+
+  * 如果一个类没有显式地定义构造函数，编译器会隐式地合成一个默认构造函数。合成的默认构造函数只适合简单的类。如`Base b;`调用了默认构造函数。
+  * 类对象的数据成员是在析构函数执行体之后的隐含阶段被销毁的
+  * 非内部数据类型的成员对象（类对象），应采用初始化表方式初始化，提高效率。
+  * 拷贝构造函数是在对象被创建时调用，而赋值函数只能被存在的对象调用。
+
+  ```c
+  String a(“hello”);
+  String b(“world”);
+  String c = a; // 调用了拷贝构造函数，最好写成 c(a);
+  c = b; // 调用了赋值函数 
+  ```
+
+  * 内置类型之间定义了几种自动转换规则，同样的也能为类类型定义隐式转换规则。如果类的构造函数只有一个实参，则它实际上定义了转换为此类类型的**隐式转换**机制。  
+
+  ```c
+  //比如一个类的构造函数只接受一个int参数，那么就定义了从int类型向这个类隐式转换的规则。在需要用到这个类类型的地方，可以用int类型替换，不需要显式转换。
+  //构造函数默认能够发生隐式自动转换。可以在构造函数声明时在前面加explicit抑制隐式转换。
+  构造函数：CString(int size){...}
+  CString A = 10;
+  等同于：(构造函数的隐式转换)
+  CString temp(10);
+  CString A = temp;
+  ```
+
 * 通过访问说明符public/private/protect，来达到访问控制，加强封装性。
+
 * 友元：友元函数、友元类。类可以通过访问其他类的非公有成员，友元特性会破坏封装。
-    ```c
-    class A
-    {
-        //B可以访问A
-        friend void B::func();
-        friend class B;
-    }
-    ```
+
+  ```c
+  class A {
+      //B可以访问A
+      friend void B::func();
+      friend class B;
+  }
+  ```
+  
 * **函数重载**：同个作用域内，函数名相同，形参列表不同。
+
 * **函数覆盖**：派生类虚函数与基类虚函数的函数名和形参相同。
+
 * **函数隐藏**：派生类函数与基类函数同名，又不是多态的覆盖，则会隐藏屏蔽基类函数。
 
-**虚函数**：C++中虚函数的作用是实现了运行时多态的机制。关于多态，简而言之就是用基类指针指向其派生类对象，然后通过基类指针调用派生类的成员函数。 
+## 虚函数
+
+C++中虚函数的作用是实现了运行时多态的机制。关于多态，简而言之就是用基类指针指向其派生类对象，然后通过基类指针调用派生类的成员函数。 
 
 * 如果一个类有虚函数，或者继承的类有虚函数，则这个类对应一(n)个虚函数表，类中有一(n)个虚函数表指针。虚函数表中存放着所有虚函数的地址，在编译时就确定。（虚表存放在只读数据段）
 * 每个派生类对象的内存空间中都有该类的虚表指针和所有成员变量。虚表指针在调用构造函数的函数体执行前被赋值指向虚表。当我们用指针来调用虚函数时，先通过虚表指针找到虚函数表，然后根据虚函数在虚表中的偏移找到对应的函数地址。
 * 继承过程中的虚表，基类的虚函数地址都会被覆盖成派生类的虚函数地址。
 * 如果是单一继承，则只有一个虚表指针，虚表中存放基类和派生类的虚函数地址。如果是n重继承，则有n个虚表指针，第一个虚表存放基类和派生类的虚函数地址，其它虚表存放派生类的虚函数地址。
+
 ```c
 //通过对象的地址来取得虚函数表的地址
 Base b;
@@ -196,19 +307,25 @@ pFun();
 ```
 
 * 成员函数不在类对象的内存空间中，成员函数本质上是一个包含指向具体对象this指针的普通函数。this指针是一个隐含于非静态成员函数中的特殊指针，它指向调用该成员函数的那个对象。
-* inline内联函数相当于宏，在编译期将函数体复制到调用处，但比宏多了类型检测，具有函数的特性。一方面提高了运行效率，另一方面会造成代码膨胀，适用于短小且频繁调用的函数。
 
-# STL容器
-[STL文档](https://github.com/huihut/interview/tree/master/STL)
-> * 容器的定义：容器就是一些特定类型对象的集合。在数据存储上，有一种对象类型，它可以持有其它对象或指向其它对像的指针，这种对象类型就叫做容器。很简单，容器就是保存其它对象的对象，当然这是一个朴素的理解，这种“对象”还包含了一系列处理“其它对象”的方法。
-> * 顺序容器：是一种各元素之间有顺序关系的线性表，是一种线性结构的可序群集。顺序性容器中的每个元素均有固定的位置，除非用删除或插入的操作改变这个位置。顺序容器的元素排列次序与元素值无关，而是由元素添加到容器里的次序决定。
->    * 包含：string、vector(动态数组)、list（双向链表）、forward_list（单向链表）、array（固定数组）、deque（双端队列）
-> * 关联容器：关联式容器是非线性的树结构，更准确的说是二叉树结构。各元素之间没有严格的物理上的顺序关系，也就是说元素在容器中并没有保存元素置入容器时的逻辑顺序。但是关联式容器提供了另一种根据元素特点排序的功能，这样迭代器就能根据元素的特点“顺序地”获取元素。元素是有序的集合，默认在插入的时候按升序排列。
->    * 包含：map（映射）、set（集合）、multimap（多重映射）、multiset（多重集合）。
 
-* string
+
+# 三、C++标准库
+
+> C++ STL（标准模板库）是一套功能强大的 C++ 模板类，提供了通用的模板类和函数，这些模板类和函数可以实现多种流行和常用的算法和数据结构，如向量、链表、队列、栈。
+>
+> C++ 标准模板库的核心包括以下三个组件：容器、算法、迭代器
+
+- 容器定义：容器就是一些特定类型对象的集合。在数据存储上，有一种对象类型，它可以持有其它对象或指向其它对象的指针，这种对象类型就叫做容器。容器就是保存其它对象的对象，这种对象还包含了一系列处理其它对象的方法。
+
+- **顺序容器**：是一种各元素之间有顺序关系的线性表，是一种线性结构的可序群集。顺序性容器中的每个元素均有固定的位置，除非用删除或插入的操作改变这个位置。顺序容器的元素排列次序与元素值无关，而是由元素添加到容器里的次序决定。包含：string（只含字符的vector）、vector（动态数组）、list（双向链表）、forward_list（单向链表）、array（固定数组）、deque（双端队列）
+
+- **关联容器**：关联式容器是非线性的树结构，更准确的说是二叉树结构。各元素之间没有严格的物理上的顺序关系，也就是说元素在容器中并没有保存元素置入容器时的逻辑顺序。但是关联式容器提供了另一种根据元素特点排序的功能，这样迭代器就能根据元素的特点“顺序地”获取元素。元素是有序的集合，默认在插入的时候按升序排列。包含：map（映射）、set（集合）、multimap（多重映射）、multiset（多重集合）。
+
+## string
+
 ```c++
-//1、定义与初始化
+// 1、定义与初始化
 string s1;//默认初始化，一个空字符串
 string s2("s2");
 string s3 = "s3";
@@ -217,69 +334,69 @@ string s5 = string(5, 's');
 string s6(s5);
 string s7 = s5;
 const char cs[] = "123456789";
-string s8(cs, 8);//复制cs前3个字符到string中
-string s9(s8, 6);//复制s8前4个字符到string中
-string s10(s8, 2, 5);//复制s8下标2开始的5个字符到string中。若超出s8长度，则抛出out_of_range异常
-//2、常见操作
+string s8(cs, 8); // 复制cs前3个字符到string中
+string s9(s8, 6); // 复制s8前4个字符到string中
+string s10(s8, 2, 5); // 复制s8下标2开始的5个字符到string中。若超出s8长度，则抛出out_of_range异常
+// 2、常见操作
 string str("abcdefg");
 string str2("ABCDEFG");
 str.empty();
-str.size();//str中的字符的个数：7
-str.length();//字符串使用与size()作用相同
-str[2];//str中第2个字符的引用：c（从0计起）
+str.size(); // str中的字符的个数：7
+str.length(); // 字符串使用与size()作用相同
+str[2]; // str中第2个字符的引用：c（从0计起）
 if(str == str2) cout << "str and str2 is equal" << endl;
 str + str2;
 str = str2;
-str.substr(0,3);//abcd（返回一个子string）
-str.substr(4);//efg
-str.insert(5, 6, '!');//在str的第5个字符后插入6个'!'
-str.erase(4, 2);//在str的第4个字符后删除2个字符
+str.substr(0,3); // abcd（返回一个子string）
+str.substr(4); // efg
+str.insert(5, 6, '!'); // 在str的第5个字符后插入6个'!'
+str.erase(4, 2); // 在str的第4个字符后删除2个字符
 const char *cp = "123456789";
-str.assign(cp, 3);//赋值
-str.append("abcd");//添加
-str.replace(2, 3, "sssss");//替换：删除第2个字符后的3个字符，替换成"sssss"
-//3、搜索
+str.assign(cp, 3); // 赋值
+str.append("abcd"); // 添加
+str.replace(2, 3, "sssss"); // 替换：删除第2个字符后的3个字符，替换成"sssss"
+// 3、算法
 string str3("hello world");
 string str4("HELLO world");
 string::size_type pos;
-pos = str3.find("ll");//查找str3中第一次出现'll'的位置的下标值，没有则返回string:npos
-pos = str3.rfind("l");//查找str3中最后一次出现'l'的位置的下标值，没有则返回string:npos
-str3.compare(str4);//比较
-str3.compare(6, 5, str4);//从位置6开始的5个字符 与 str4 进行比较
-str3.compare(6, 5, str4, 6, 5);//从位置6开始的5个字符 与 str4从位置6开始的5个字符 进行比较
+pos = str3.find("ll"); // 查找str3中第一次出现'll'的位置的下标值，没有则返回string:npos
+pos = str3.rfind("l"); // 查找str3中最后一次出现'l'的位置的下标值，没有则返回string:npos
+str3.compare(str4); // 比较
+str3.compare(6, 5, str4); // 从位置6开始的5个字符 与 str4 进行比较
+str3.compare(6, 5, str4, 6, 5); // 从位置6开始的5个字符 与 str4从位置6开始的5个字符 进行比较
 ```
 
-* vector
+## vector
+
 ```c++
-//1、定义与初始化
-vector<char> vec;//默认初始化，vec1为空
+// 1、定义与初始化
+vector<char> vec; // 默认初始化，vec1为空
 vector<char> vec1 = {'h', 'e', 'l', 'l', 'o'};
 vector<char> vec2(vec1);
 vector<char> vec3(vec1.begin(),vec1.end());
-vector<char> vec4(10);//10个值为0的元素
-vector<char> vec5(10,'c');//10个值为'c'的元素
-vector<string> vec6(10,"null");//10个值为null的元素
-vector<string> vec7(10,"hello");//10个值为hello的元素
-//2、常见操作
+vector<char> vec4(10); // 10个值为0的元素
+vector<char> vec5(10,'c'); // 10个值为'c'的元素
+vector<string> vec6(10,"null"); // 10个值为null的元素
+vector<string> vec7(10,"hello"); // 10个值为hello的元素
+// 2、常见操作
 vec1.empty();
 vec1.size();
-vec1.erase(vec1.begin(),vec1.end());    //删除begin、end之间的元素
-vec1.clear();   //清空元素
-vec1.push_back('c');//尾部插入元素
-vec1.pop_back();//尾部删除元素
-vec1.insert(vec1.end(),5,'v');    //在end位置插入5个值为v的元素
-//3、遍历搜索
-for(int i = 0; i < vec1.size(); i++)//下标法
-{
-    cout << vec1[i];
+vec1.erase(vec1.begin(),vec1.end()); // 删除begin、end之间的元素
+vec1.clear(); // 清空元素
+vec1.push_back('c'); // 尾部插入元素
+vec1.pop_back(); // 尾部删除元素
+vec1.insert(vec1.end(),5,'v'); // 在end位置插入5个值为v的元素
+// 3、遍历
+for(int i = 0; i < vec1.size(); i++) {
+	cout << vec1[i];
 }
-for(vector<char>::const_iterator iter = vec1.begin(); iter != vec1.end(); iter++)//迭代器法
-{
-    cout << *iter;
+for(vector<char>::const_iterator iter = vec1.begin(); iter != vec1.end(); iter++) {
+	cout << *iter;
 }
 ```
 
-* list
+## list
+
 ```c++
 //1、定义与初始化
 list<char> lst1;
@@ -298,47 +415,43 @@ lst1.pop_back();
 lst1.insert(lst1.begin(), 3, 'c');//从指定位置插入3个值为c的元素
 lst1.reverse();//反转
 lst1.sort();//排序
-//3、遍历搜索
-for(list<char>::const_iterator iter = lst1.begin(); iter != lst1.end(); iter++)
-{
+//3、遍历
+for(list<char>::const_iterator iter = lst1.begin(); iter != lst1.end(); iter++) {
     //cout << *iter;
 }
 ```
 
-* map
-```c++
-map类型通常被称为关联数组，map容器是键值对（key-value）的容器。与正常数组不同之处在于其下标不是整数，而是一个关键字key值。对于迭代器，可以修改value值，不能修改key值。
-map会根据key值自动排序。key值需要支持<操作符。
-map与multimap差别仅仅在于multiple允许一个键对应多个值。
+## map
 
-//1、定义与初始化
-map<int, string> map1;//空map，key值为int型，value值为string型。
-//2、常见操作
+> map类型通常被称为关联数组，map容器是键值对（key-value）的容器。与正常数组不同之处在于其下标不是整数，而是一个关键字key值。对于迭代器，可以修改value值，不能修改key值。
+> map会根据key值自动排序。key值需要支持<操作符。
+> map与multimap差别仅仅在于multiple允许一个键对应多个值。
+
+```c++
+// 1、定义与初始化
+map<int, string> map1; // 空map，key值为int型，value值为string型。
+// 2、常见操作
 map1.empty();
 map1.size();
 map1.clear();
-//成功插入一对键值，返回bool为true，iterator指向插入的key值。已经存在，则返回false，且value值不变。
-map1.insert({1, "Monday"});
+map1.insert({1, "Monday"}); // 成功插入一对键值，返回bool为true，iterator指向插入的key值。已经存在，则返回false，且value值不变。
 map1.insert(pair<int, string>(2, "Tuesday"));
 map1.insert(make_pair(3, "Wednesday"));
 map1.insert(map<int, string>::value_type(4, "Thursday"));
 
-string str = map1[1];   //根据key值取得value
+string str = map1[1]; //下标操作，根据key值取得value
 
-map<int, string>::iterator it = map1.find(1);//返回指向key值的迭代器，若不存在则返回超出末端迭代器。
-if(it != map1.end())
-{
+map<int, string>::iterator it = map1.find(1); // 返回指向key值的迭代器，若不存在则返回超出末端迭代器。
+if(it != map1.end()) {
     //对查找到的数据处理
 }
-map1.erase(it);//删除迭代器指向的数据
-map1.erase(2);//根据key值删除value
+map1.erase(it); // 删除迭代器指向的数据
+map1.erase(2); // 根据key值删除value
 
-//3、遍历
-for(map<int, string>::const_iterator it = map1.begin(); it!=map1.end(); it++)
-{
+// 3、遍历
+for (map<int, string>::const_iterator it = map1.begin(); it!=map1.end(); it++) {
     cout << it->second << endl;
-    if(it->second == "aaa")
-    {
+    if (it->second == "aaa") {
         it = map1.erase(it);    //方法一：erase会返回it下一个元素的迭代器
         map1.erase(it++);       //方法二：先把参数传给erase函数，再执行it++，然后执行erase
         map1.erase(it);         //错误方法：执行完erase后，it就是一个非法指针，无法继续使用。
@@ -346,59 +459,58 @@ for(map<int, string>::const_iterator it = map1.begin(); it!=map1.end(); it++)
 }
 ```
 
-* set
-```c++
-set的含义是集合，它是一个有序的容器，里面的元素都是排序好的。set容器的每个键都只能对应一个元素。
-当想知道一个值是否存在，set是最有用的。
+## set
 
+> set的含义是集合，它是一个有序的容器，里面的元素都是排序好的。set容器的每个键都只能对应一个元素。当想知道一个值是否存在，set是最有用的。
+
+```c++
 set<string> set1 = {"111", "222"};
 set1.insert("aaa");//添加元素
 set1.count("aaa");//返回key值为aaa的元素数量
 set<string>::iterator it = set1.find("aaa");//返回指向元素值为aaa的指针；不存在则返回指针set.end()
-if(it != set1.end())
-{
+if (it != set1.end()) {
     cout << "find aaa" << endl;
 }
 ```
 
-* bitset
+## bitset
 
-bitset是一种高效位集合操作容器。bitset是一种非标准STL容器，可以认为是容器，但并不满足容器的所有要求。
+> bitset是一种高效位集合操作容器。bitset是一种非标准STL容器，可以认为是容器，但并不满足容器的所有要求。
+
 ```c++
-//bitset定义和初始化
-bitset<16> b1;              //b有16位，每位都为0
-bitset<13> b2(0xbfff);      //1111111111111 b是unsigned long型的低n位的拷贝。b比初始值小，初始值的高位被丢弃。
-bitset<20> b3(0xbfff);      //00001011111111111111 b比初始值大，b的高位被置为0。
+// bitset定义和初始化
+bitset<16> b1; // b有16位，每位都为0
+bitset<13> b2(0xbfff); // 1111111111111 b是unsigned long型的低n位的拷贝。b比初始值小，初始值的高位被丢弃。
+bitset<20> b3(0xbfff); // 00001011111111111111 b比初始值大，b的高位被置为0。
 string s("1111111100000000");
-bitset<16> b4(s);           //1111111100000000 b是string对象s中含有的位串的副本
-bitset<16> b5("111000");    //0...0111000
-bitset<16> b6(s, 6, 4);     //0...01100 b是s中从位置pos开始的n个位的副本
+bitset<16> b4(s); // 1111111100000000 b是string对象s中含有的位串的副本
+bitset<16> b5("111000"); // 0...0111000
+bitset<16> b6(s, 6, 4); // 0...01100 b是s中从位置pos开始的n个位的副本
 
-//bitset操作
-b1.any();   //b中是否存在置位（1）
-b1.all();   //b中是否全部置位
-b1.none();  //b中是否不存在置位
+// bitset操作
+b1.any(); //b中是否存在置位（1）
+b1.all(); //b中是否全部置位
+b1.none(); //b中是否不存在置位
 b1.count(); //b中置位的位数
-b1.size();  //b的位数
-b1[3];      //访问b中位置3的位
+b1.size(); //b的位数
+b1[3]; //访问b中位置3的位
 b1.test(3); //若b中位置3置位，返回true
-b1.set(3);  //对位置3置位
-b1.set();   //对所有位置位
-b1.reset(3);//对位置3复位
+b1.set(3); //对位置3置位
+b1.set(); //对所有位置位
+b1.reset(3); //对位置3复位
 b1.reset(); //对所有位复位
 b1.flip(3); //改变位置3位状态
-b1.flip();  //改变所有位状态
+b1.flip(); //改变所有位状态
 ```
 
-# 智能指针
+## 智能指针
 1. 智能指针的设计思想
-```
-void remodel(std::string & str)
-{
+```c
+void remodel(std::string & str) {
     std::string * ps = new std::string(str);
     ...
     if (weird_thing())
-        throw exception();//当出现异常时，delete将不被执行，因此将导致内存泄露。 
+        throw exception(); // 当出现异常时，delete将不被执行，因此将导致内存泄露。 
     str = *ps; 
     delete ps;
     return;
@@ -414,104 +526,44 @@ void remodel(std::string & str)
 * 智能指针类都有一个explicit构造函数，以指针作为参数。因此不能自动将指针转换为智能指针对象，必须显式调用：
 ```cpp
 double *p_reg = new double;
-shared_ptr<double> pshared = p_reg;       // not allowed (implicit conversion)
-shared_ptr<double> pshared(p_reg);        // allowed (explicit conversion)
+shared_ptr<double> pshared = p_reg; // not allowed (implicit conversion)
+shared_ptr<double> pshared(p_reg); // allowed (explicit conversion)
 ```
 * 对于智能指针都要避免一点：不能将delete作用于非堆的内存  
 
-```cpp
-//使用例子
-#include <iostream>
-#include <string>
-#include <memory>
-
-class report
-{
-private:
-    std::string str;
-public:
-     report(const std::string s) : str(s) {
-          std::cout << "Object created.\n";
-     }
-     ~report() {
-          std::cout << "Object deleted.\n";
-     }
-     void comment() const {
-     	std::cout << str << "\n";
-     }
-};
-
-int main() {
-{
-	std::auto_ptr<report> ps(new report("using auto ptr"));
-	ps->comment();
-}
-
-{
-	std::shared_ptr<report> ps(new report("using shared ptr"));
-	ps->comment();
-}
-
-{
-	std::unique_ptr<report> ps(new report("using unique ptr"));
-	ps->comment();
-}
-return 0;
-}
-```
-
-3. shared_ptr
+3. **shared_ptr**
 
 允许多个share_ptr指针指向同个对象。每个share_ptr有一个关联的计数器，称为**引用计数**。  
 当拷贝一个share_ptr，计数器会递增；  
 当一个share_ptr被赋新值或share_ptr被销毁，计数器会递减；  
 当一个share_ptr的计数器为0时，它就会自动释放所管理的对象。  
 
-4. unique_ptr
+4. **unique_ptr**
 
-```
-//unique_ptr独占所指对象
-//当程序试图将一个 unique_ptr 赋值给另一个时，如果源 unique_ptr 是个临时右值，编译器允许这么做；如果源 unique_ptr 将存在一段时间，编译器将禁止这么做。
+```c++
+// unique_ptr独占所指对象
+// 当程序试图将一个 unique_ptr 赋值给另一个时，如果源 unique_ptr 是个临时右值，编译器允许这么做；如果源 unique_ptr 将存在一段时间，编译器将禁止这么做。
 auto_ptr<string> p1(new string ("auto"));
 auto_ptr<string> p2;
-p2 = p1;			//p2接管string对象的所有权后，p1是空指针。再使用p1会内存崩溃
+p2 = p1; // p2接管string对象的所有权后，p1是空指针。再使用p1会内存崩溃
 unique_ptr<string> pu1(new string ("hello world"));
 unique_ptr<string> pu2;
-pu2 = pu1;			//编译器会禁止报错
+pu2 = pu1; // 编译器会禁止报错
 unique_ptr<string> pu3;
-pu3 = unique_ptr<string>(new string ("You"));   //允许
+pu3 = unique_ptr<string>(new string ("You")); // 允许
 ```
-5. auto_ptr
-```
+5. **auto_ptr**
+```c++
 string *p = new string("aaaa")
 auto_ptr<string> p1(p);
 auto_ptr<string> p2;
-p2 = p1;    //p1将所有权赋给p2，p1变成NULL指针，若访问会异常，所以auto_ptr被摒弃。
+p2 = p1; // p1将所有权赋给p2，p1变成NULL指针，若访问会异常，所以auto_ptr被摒弃。
 ```
 
 
-# 类型转换
-类型转换运算符：static_cast、dynamic_cast、reinterpret_cast、const_cast  
-xxxx_cast <type-id> (expression)
-* static_cast
-> 用于基本类型之间的转换  
-> 用于类层次间的上下行转换，下行转换没有运行时类型检测，不安全。（下行类型转换：基类指针转换成派生类指针 ）
-* dynamic_cast
-> 用于类层次间的上下行转换，下行转换有运行时类型检测，转换失败则返回NULL，比static_cast更安全。
-* reinterpret_cast
-> 用于指针类型和整形之间的转换
-* const_cast
-> 用于修改类型的const或volatile属性
 
-* typeid运算符
-```
-#include <typeinfo.h>  
-Base *p = new Derived();  
-typeid(*p).name();    //指针所指对象类型名称  
-```
+# 四、Effective C++
 
-
-# Effective C++
 1. 视 C++ 为一个语言联邦（C、Object-Oriented C++、Template C++、STL）
 2. 宁可以编译器替换预处理器（尽量以 `const`、`enum`、`inline` 替换 `#define`）
 3. 尽可能使用 const
@@ -567,122 +619,3 @@ typeid(*p).name();    //指针所指对象类型名称
 53. 不要轻忽编译器的警告
 54. 让自己熟悉包括 TR1 在内的标准程序库（TR1，C++ Technical Report 1，C++11 标准的草稿文件）
 55. 让自己熟悉 Boost（准标准库）
-
----
-**extern**关键字：定义只能一次，声明可以多次。
-1. 全局变量 
-> 常见用法：在一个源文件中声明定义全局变量（下面3种形式都可行），在使用的源文件（或包含的头文件）中声明全局变量后，即可使用。
-```
-extern int i;		声明
-extern int i = 0;	声明并定义
-int i;				声明并定义
-int i = 0;			声明并定义
-```
-
-2. 全局函数
-> 函数定义和声明的区别是有无函数体，所以定义和声明时可省略extern。  
-常见用法：在一个源文件中声明定义了全局函数，在使用的源文件（或包含的头文件）中声明全局函数（通常加上extern）后，即可使用。
-```
-(extern) void func()	声明并定义
-{
-	printf("hello\n");
-}
-(extern) void func();	声明
-```
-
-
-3. extern "C" 链接指示符
-> 如果要在一个cpp源文件中要使用一个C的函数，需要告诉编译器使用C语言的方式进行编译和链接。  
-
-**常见使用1**
-```c
-//1.c
-void func(){};
-```
-```c
-//main.cpp
-extern "C" void func();
-int main()
-{
-	func();
-}
-```
-
-**常见使用2**
-```c
-//1.h
-#ifdef  __cplusplus（__cplusplus是C++中定义的宏，使用后的头文件可兼容c/cpp文件）
-extern "C" {
-#endif
-	void func1();
-	void func2();
-#ifdef  __cplusplus
-}
-#endif
-```
-```c
-//1.c
-#include "1.h"
-void func1(){};
-void func2(){};
-```
-```c
-//main.cpp
-#include "1.h"
-int main()
-{
-	func1();
-	func2();
-}
-```
-> gcc -c 1.c -o 1.o
-> g++ main.cpp 1.o
-
----
-
-volatile 关键字声明的变量，每次访问时都必须从内存中取出值（没有被 volatile 修饰的变量，可能由于编译器的优化，从CPU寄存器中取值）。所以使用 volatile 告诉编译器不应对这样的对象进行优化。
-
----
-主机字节序又叫 CPU 字节序，其不是由操作系统决定的，而是由 CPU 指令集架构决定的。
-
-数据存放到内存，都是由低地址到高地址。32 位整数 `0x12345678` 是从起始位置为 `0x00` 的地址开始存放，则：
-
-内存地址 | 0x00 | 0x01 | 0x02 | 0x03
----|---|---|---|---
-大端|12|34|56|78
-小端|78|56|34|12
-
-* 大端：先存储高位字节数据  ARM、IBM大型机
-* 小端：先存储低位字节数据  Intel
-
----
-堆栈打印
-```
-#include <execinfo.h>
-void *buffer[16];
-char **string;
-int nptr = backtrace(buffer, 16);
-string = backtrace_symbols(buffer, 16);
-for(int i = 0; i < nptr; i++)
-    printf("%s\n", string[i]);
-```
-
----
-do{...}while(0)作用
-
-* 帮助定义复杂的宏函数
-* 通过break替换goto，控制程序流。
-
----
-结构体内存对齐规则
-
-* 第一个数据成员存储offset=0位置，之后每个成员的起始地址需从自己大小的整数倍开始存储。
-* 结构体作成员，以内部的最大基本类型的整数倍地址开始存储。
-* 联合体作成员，以内部的最大基本类型作为size。
-* 结构体的总大小，是内部最宽基本类型的整数倍，不足要补齐。
-
----
-指针和引用
-
-* 引用是对象的别名，不占用内存空间，必须初始化且不能修改。（有时理解为const指针）
-* 指针是一个对象，存放的是一个地址，来操作地址上的对象。

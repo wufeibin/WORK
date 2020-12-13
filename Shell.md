@@ -21,7 +21,7 @@
 - find [path] -type f -name "*.txt" 【f 普通文件，d 目录】
 - find . -type f -name "*.txt" -exec printf "File: %s\n" {} \;
 
-### tail 显示文件末尾内容 
+### tail 显示文件末尾内容
 
 - tail -f file 【循环显示文件末尾内容】
 - tail -n 10 【显示文件末尾n行内容】
@@ -43,7 +43,8 @@
 - ln -snf 【生成文件的软连接】
 
 ### du 查看目录的硬盘使用情况
-- du -h -c path 
+- du -h -c path
+- du -sh *
 
 ### netstat 查看网络端口
 
@@ -60,7 +61,7 @@
 
 ### objdump 查看目标文件的构成
 
-### xargs 
+### xargs 配合管道｜使用
 
 - find . -name "1.txt" | xargs ls 【与管道配合使用，将标准输出转化为参数】
 
