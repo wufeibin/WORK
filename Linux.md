@@ -1,8 +1,7 @@
 # Linux进程&线程
 
->  进程是资源分配的独立单位
->
->  线程是资源调度的独立单位
+- 进程是资源分配的独立单位
+- 线程是资源调度的独立单位
 
 
 
@@ -29,24 +28,22 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-int main()
-{
+int main() {
 	pid_t pid;
 	pid = fork();
-	if(pid < 0) {
+	if (pid < 0) {
 		perror("fork failed");
 		exit(1);
-	}else if(pid == 0) {
+	} else if (pid == 0) {
 		printf("This is in child progress\n");
-		char *const argv[] ={"exec_call", NULL};
-		execv("./exec_call", argv);	//执行exec_call新程序
-	}
-	else {
+		char *const argv[] = {"exec_call", NULL};
+		execv("./exec_call", argv);	// 执行exec_call新程序
+	} else {
 		printf("This is in parent progress\n");
 		int stat_val;
 		waitpid(pid, &stat_val, 0);
-		if ( WIFEXITED(stat_val) ){
-			printf("Child exited with code %d\n", WEXITSTATUS(stat_val) );		
+		if (WIFEXITED(stat_val)) {
+			printf("Child exited with code %d\n", WEXITSTATUS(stat_val));		
 		}
 	}
 	return 0;
@@ -63,18 +60,15 @@ int main()
 #include <pthread.h>
 using namespace std;
 
-void * ThreadProc(void *arg)	//线程执行体
-{
+void * ThreadProc(void *arg) { // 线程执行体
 	int c = *((int*)arg);
-	while(c < 10)
-	{
+	while (c < 10) {
 		cout << c++ << endl;
 		sleep(1);
 	}
 }
 
-int main()
-{
+int main() {
 	/*
 	int pthread_create(pthread_t *thread, const pthread_attr_t *attr, void *(*start_routine) (void *), void *arg);
 	thread：线程标识符的指针，attr：线程属性，start_routine：线程运行函数地址，arg：运行函数入参
@@ -82,12 +76,11 @@ int main()
 	pthread_t tpid;
 	int arg = 1;
 	int ret = pthread_create(&tpid, NULL, ThreadProc, (void *)&arg);
-	if(ret != 0)
-	{
+	if (ret != 0) {
 		cout << "pthread_create error" << endl;
 		return 0;
 	}
-	if(pthread_join(tpid, NULL))	//阻塞等待线程释放
+	if (pthread_join(tpid, NULL))	// 阻塞等待线程释放
 		return -1;
 
 	return 0;
@@ -103,12 +96,12 @@ int main()
 * **信号量**：一个特殊类型的变量
 
 ```c
-//二元信号量：一个线程独占访问的资源。
-//多元信号量：一个初始值为N的信号量允许被N个线程并发访问。
+// 二元信号量：一个线程独占访问的资源。
+// 多元信号量：一个初始值为N的信号量允许被N个线程并发访问。
 int sem_init (sem_t *sem, int pshared, unsigned int value);
-int sem_wait(sem_t *sem);	//阻塞等待信号量，当信号量值大于0时，信号量减1，向下执行。
+int sem_wait(sem_t *sem);	// 阻塞等待信号量，当信号量值大于0时，信号量减1，向下执行。
 int sem_trywait(sem_t *sem);
-int sem_post(sem_t *sem);	//释放信号量，信号量值加1。
+int sem_post(sem_t *sem);	// 释放信号量，信号量值加1。
 int sem_getvalue(sem_t *sem, int *sval)
 int sem_destroy(sem_t *sem);
 ```
@@ -129,9 +122,9 @@ int pthread_mutex_destroy(pthread_mutex_t *mutex);
 * **读写锁**：读写锁有三种状态：自由、共享、独占。
 
 ```c
-//自由状态下（无读者写者），能以共享/独占方式获取（被读/被写）。
-//共享状态下（被读），能以共享方式再被获取（被读）。 
-//独占状态下（被写），不能被获取。
+// 自由状态下（无读者写者），能以共享/独占方式获取（被读/被写）。
+// 共享状态下（被读），能以共享方式再被获取（被读）。 
+// 独占状态下（被写），不能被获取。
 #include<pthread.h>
 pthread_rwlock_t rwlock;
 int pthread_rwlock_init(pthread_rwlock_t *rwlock, const pthread_rwlockattr_t *attr);
@@ -160,12 +153,9 @@ int pthread_cond_destroy(pthread_cond_t *cond);
 ```
 
 ```c
-void *product(void *arg)
-{
-  while(1)
-  {
-    if(需要生产)
-    {
+void *product(void *arg) {
+  while(1) {
+    if (需要生产) {
       pthread_mutex_lock(&lock);
       push_node(data);
       pthread_mutex_unlock(&lock);
@@ -174,24 +164,21 @@ void *product(void *arg)
     sleep(1);
   }
 }
-void *consumer(void *arg)
-{
+
+void *consumer(void *arg) {
   data_type data;
-  while(1)
-  {
+  while(1) {
     pthread_mutex_lock(&lock);
-    while(-1 == pop_node(&data));   //为空
-    {
-      pthread_cond_wait(&cond,&lock); //阻塞等待，解锁；唤醒执行，加锁。
+    while(-1 == pop_node(&data)) { // 为空
+      pthread_cond_wait(&cond,&lock); // 阻塞等待，解锁；唤醒执行，加锁。
     }
-    func(data);  //执行业务
+    func(data); // 执行业务
     pthread_mutex_unlock(&lock);
     sleep(1);
   }
 }
 
-int main()
-{
+int main() {
   pthread_cond_t cond;
   pthread_cond_init(&cond,NULL);
   pthread_t tid1,tid2;
@@ -214,16 +201,14 @@ int main()
 3. 多线程申请多把锁
 
 ```c++
-void process1()
-{
+void process1() {
 	mutex1.enter();
 	mutex2.enter();
 	do_Something;
 	mutex2.leave();
 	mutex1.leave();
 }
-void process2()
-{
+void process2() {
 	mutex2.enter();
 	mutex1.enter();
 	do_Something;

@@ -191,7 +191,7 @@ int i = 0; // 声明并定义
 3. `extern "C"` 链接指示符：如果要在一个cpp源文件中要使用一个C的函数，需要告诉编译器使用C语言的方式进行编译和链接。 `gcc -c 1.c -o 1.o` 、`g++ main.cpp 1.o`
 ```c
 //1.h
-#ifdef  __cplusplus（__cplusplus是C++中定义的宏，使用后的头文件可兼容c/cpp文件）
+#ifdef  __cplusplus // __cplusplus是C++中定义的宏，使用后的头文件可兼容c/cpp文件
 extern "C" {
 #endif
 	void func1();

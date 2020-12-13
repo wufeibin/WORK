@@ -1,5 +1,3 @@
-[TOC]
-
 # Git
 
 [Git教程](https://github.com/luotf/Git/blob/master/Git%E6%95%99%E7%A8%8B.md)
