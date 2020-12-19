@@ -98,7 +98,7 @@ total = used + free
 - mount -t type device directory
 - umount device
 
-### df 查看挂在设备磁盘使用情况
+### df 查看挂载设备磁盘使用情况
 
 - df -h
 
