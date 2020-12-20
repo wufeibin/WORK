@@ -1,99 +1,187 @@
-# Linux进程&线程
+# 一、Linux进程&线程
 
-- 进程是资源分配的独立单位
-- 线程是资源调度的独立单位
+进程是程序执行时的一个实例，即它是程序已经执行到何种程度的数据结构的汇集。从内核的观点看，进程的目的就是担当分配系统资源（CPU时间、内存等）的基本单位。
 
+线程是进程的一个执行流，是CPU调度和分派的基本单位，它是比进程更小的能独立运行的基本单位。一个进程由几个线程组成（拥有很多相对独立的执行流的用户程序共享应用程序的大部分数据结构），线程与同属一个进程的其他的线程共享进程所拥有的全部资源。
 
+进程有独立的地址空间，一个进程崩溃后，在保护模式下不会对其它进程产生影响，而线程只是一个进程中的不同执行路径。线程有自己的堆栈和局部变量，但线程没有单独的地址空间，一个线程死掉就等于整个进程死掉，所以多进程的程序要比多线程的程序健壮，但在进程切换时，耗费资源较大，效率要差一些。但对于一些要求同时进行并且又要共享某些变量的并发操作，只能用线程，不能用进程。
 
-## 进程控制
-
-> 进程之间的通信方式：
->
-> - 管道（PIPE）
-> - 信号量（Semaphore）
-> - 信号（Signal）
-> - 消息队列（Message Queue）
-> - 共享内存（Shared Memory）
-> - 套接字（Socket）
+> "进程是资源分配的最小单位，线程是程序执行的最小单位"
 
 
-- fork/vfork 创建子进程
-- exec族函数 将当前进程替换为新进程
-- wait/waitpid 等待获取子进程状态的改变
-- exit 终止进程
+
+## 1.1 进程
+
+正常情况下，子进程是通过父进程创建的，子进程的结束和父进程的运行是一个异步过程，即父进程永远无法预测子进程到底什么时候结束。 当一个进程完成它的工作终止之后，它的父进程需要调用wait()或者waitpid()系统调用取得子进程的终止状态。
 
 ```c
+1、fork/vfork // 创建子进程
+2、exec族函数 // 将当前进程替换为新进程
+3、wait/waitpid // 等待获取子进程状态的改变
+4、exit // 终止进程
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-int main() {
-	pid_t pid;
-	pid = fork();
-	if (pid < 0) {
-		perror("fork failed");
-		exit(1);
-	} else if (pid == 0) {
-		printf("This is in child progress\n");
-		char *const argv[] = {"exec_call", NULL};
-		execv("./exec_call", argv);	// 执行exec_call新程序
-	} else {
-		printf("This is in parent progress\n");
-		int stat_val;
-		waitpid(pid, &stat_val, 0);
-		if (WIFEXITED(stat_val)) {
-			printf("Child exited with code %d\n", WEXITSTATUS(stat_val));		
-		}
-	}
-	return 0;
+int main(int argc, char *argv[]) {
+    pid_t pid;
+    pid = fork();
+    if (pid < 0) {
+        perror("fork failed");
+        exit(1);
+    } else if (pid == 0) {
+        printf("This is in child progress\n");
+        char *const argv[] = {"exec_call", NULL};
+        execv("./exec_call", argv);	// 执行exec_call新程序
+    } else {
+        printf("This is in parent progress\n");
+        int stat_val;
+        waitpid(pid, &stat_val, 0);
+        if (WIFEXITED(stat_val)) {
+            printf("Child exited with code %d\n", WEXITSTATUS(stat_val));		
+        }
+    }
+    return 0;
 }
 ```
 
+###孤儿进程
 
+一个父进程退出，而它的一个或多个子进程还在运行，那么那些子进程将成为孤儿进程。孤儿进程将被init进程(进程号为1)所收养，并由init进程对它们完成状态收集工作。由于孤儿进程会被init进程给收养，所以孤儿进程不会对系统造成危害。
 
-## 线程创建
+### 僵尸进程
+
+一个进程使用fork创建子进程，如果子进程退出，而父进程并没有调用wait或waitpid获取子进程的状态信息，那么子进程的进程描述符仍然保存在系统中，这种进程称之为僵死进程。如果要消灭系统中大量的僵死进程，只需要将其父进程杀死，此时所有的僵死进程就会编程孤儿进程，从而被init所收养，这样init就会释放所有的僵死进程所占有的资源，从而结束僵死进程。
+
+在每个进程退出的时候，内核释放该进程所有的资源，包括打开的文件，占用的内存等。 但是仍然为其保留一定的信息（进程号、退出状态、运行时间t等），直到父进程通过wait / waitpid来取时才释放。 如果进程不调用wait / waitpid的话， 那么保留的那段信息就不会释放，其进程号就会一直被占用，但是系统所能使用的进程号是有限的，如果大量的产生僵死进程，将因为没有可用的进程号而导致系统不能产生新的进程，此即为僵尸进程的危害，应当避免。
+
+### 守护进程
+
+一个守护进程的父进程是init进程，因为它真正的父进程在fork出子进程后就先于子进程exit退出了，所以它是一个由init继承的孤儿进程。
+
+Linux Daemon（守护进程）是运行在后台的一种特殊进程。它独立于控制终端并且周期性地执行某种任务或等待处理某些发生的事件。Linux系统的大多数服务器就是通过守护进程实现的。常见的守护进程包括系统日志进程syslogd、 web服务器httpd、邮件服务器sendmail和数据库服务器mysqld等。守护进程一般在系统启动时开始运行，除非强行终止，否则直到系统关机都保持运行。守护进程经常以超级用户（root）权限运行，因为它们要使用特殊的端口（1-1024）或访问某些特殊的资源。
 
 ```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+#include <unistd.h>
+#include <sys/param.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
+// 守护进程初始化函数
+void init_daemon()
+{
+    pid_t pid;
+    if ((pid = fork()) == -1) {
+        printf("Fork error !\n");
+        exit(1);
+    }
+    if (pid != 0) {
+        exit(0);        // 父进程退出
+    }
+
+    setsid();           // 子进程开启新会话，并成为会话首进程和组长进程
+    if ((pid = fork()) == -1) {
+        printf("Fork error !\n");
+        exit(-1);
+    }
+    if (pid != 0) {
+        exit(0);        // 结束第一子进程，第二子进程不再是会话首进程
+    }
+    chdir("/tmp");      // 改变工作目录
+    umask(0);           // 重设文件掩码
+    for (int i = 0; i < getdtablesize(); ++i) {
+       close(i);        // 关闭打开的文件描述符
+    }
+    return;
+}
+
+int main(int argc, char *argv[]) {
+    int fp;
+    time_t t;
+    char buf[] = {"This is a daemon:  "};
+    char *datetime;
+    int len = 0;
+
+    init_daemon(); // 初始化 Daemon 进程
+    while (1) {
+        if (-1 == (fp = open("/tmp/daemon.log", O_CREAT|O_WRONLY|O_APPEND, 0600))) {
+          printf("Open file error !\n");
+          exit(1);
+        }
+        len = strlen(buf);
+        write(fp, buf, len);
+        t = time(0);
+        datetime = asctime(localtime(&t));
+        len = strlen(datetime);
+        write(fp, datetime, len);
+        close(fp);
+        sleep(60); // 每隔一分钟记录运行状态
+    }
+    return 0;
+}
+// 注：也利用库函数daemon()创建守护进程
+```
+
+### 进程间通信
+
+进程之间的通信方式：管道（PIPE）、信号量（Semaphore）、信号（Signal）、消息队列（Message Queue）、共享内存（Shared Memory）、套接字（Socket）
+
+
+
+## 1.2 线程
+
+**资源消耗**：多个线程之间使用相同的地址空间，共享大部分数据，启动一个线程所花费的空间远远小于启动一个进程所花费的空间，线程间彼此切换所需的时间也远远小于进程间切换所需要的时间。**通信机制**：线程之间共享数据空间，所以一个线程的数据可以直接为其它线程所用，快捷且方便。
+
+```c
+1、int pthread_create(pthread_t *thread, const pthread_attr_t *attr, void *(*start_routine) (void *), void *arg); // 创建一个线程。thread：线程标识符的指针，attr：线程属性，start_routine：线程运行函数地址，arg：运行函数入参
+2、int pthread_join(pthread_t tid, void ** status); // 等待某个线程退出
+3、pthread_t pthread_self(void); // 返回当前线程的ID
+4、int pthread_detach(pthread_t tid); // 指定线程变为分离状态。变为分离状态的线程，如果线程退出，它的所有资源将全部释放；而不是分离状态，线程必须保留它的线程ID、退出状态，直到其它线程对它调用了pthread_join。
+5、void pthread_exit(void *status); // 终止线程
+
 #include <cstdio>
 #include <iostream>
 #include <pthread.h>
 using namespace std;
 
 void * ThreadProc(void *arg) { // 线程执行体
-	int c = *((int*)arg);
-	while (c < 10) {
-		cout << c++ << endl;
-		sleep(1);
-	}
+    int c = *((int*)arg);
+    while (c < 10) {
+        cout << c++ << endl;
+        sleep(1);
+    }
 }
 
 int main() {
-	/*
-	int pthread_create(pthread_t *thread, const pthread_attr_t *attr, void *(*start_routine) (void *), void *arg);
-	thread：线程标识符的指针，attr：线程属性，start_routine：线程运行函数地址，arg：运行函数入参
-	*/
-	pthread_t tpid;
-	int arg = 1;
-	int ret = pthread_create(&tpid, NULL, ThreadProc, (void *)&arg);
-	if (ret != 0) {
-		cout << "pthread_create error" << endl;
-		return 0;
-	}
-	if (pthread_join(tpid, NULL))	// 阻塞等待线程释放
-		return -1;
+    pthread_t tpid;
+    int arg = 1;
+    int ret = pthread_create(&tpid, NULL, ThreadProc, (void *)&arg);
+    if (ret != 0) {
+        cout << "pthread_create error" << endl;
+        return 0;
+    }
+    if (pthread_join(tpid, NULL))
+        return -1;
 
-	return 0;
+    return 0;
 }
 ```
 
 
 
-## 线程同步
+## 1.3 线程互斥&同步
 
-一个线程在访问资源未结束时，其他线程不能访问资源。在多线程编程时，要解决数据访问的同步与互斥，最常见的方法是锁，这时可能会引入死锁的问题。死锁指的是，两个（以上）线程在执行过程中，因争夺资源而造成一种互相等待的现象，若无外部处理，将会无限等待下去。死锁本质上就是一个线程在请求锁的时候，永远也请求不到。
+一个线程在访问资源未结束时，其他线程不能访问资源。在多线程编程时，要解决数据访问的互斥与同步，最常见的方法是加锁。
 
-* **信号量**：一个特殊类型的变量
+### 信号量
+一个特殊类型的变量
 
 ```c
 // 二元信号量：一个线程独占访问的资源。
@@ -106,44 +194,47 @@ int sem_getvalue(sem_t *sem, int *sval)
 int sem_destroy(sem_t *sem);
 ```
 
-* **互斥量/锁**：与二元信号量很相似。区别是互斥量由哪个线程获取，那个线程就负责释放。
+### 互斥量/锁
+
+与二元信号量很相似。区别是互斥量由哪个线程获取，那个线程就负责释放。
 
 ```c
-#include<pthread.h>
-pthread_mutex_t mutex;
 int pthread_mutex_init(pthread_mutex_t *mutex, const pthread_mutex_attr_t *mutexattr);
 int pthread_mutex_lock(pthread_mutex_t *mutex);
 int pthread_mutex_trylock(pthread_mutex_t *mutex);
-int pthread_mutex_timedlock(pthread_mutex_t * mutex,const struct timespec * tsptr);
+int pthread_mutex_timedlock(pthread_mutex_t * mutex,const struct timespec *tsptr);
 int pthread_mutex_unlock(pthread_mutex_t *mutex);
 int pthread_mutex_destroy(pthread_mutex_t *mutex);
 ```
 
-* **读写锁**：读写锁有三种状态：自由、共享、独占。
+### 读写锁
+
+读写锁有三种状态：自由、共享、独占。
 
 ```c
 // 自由状态下（无读者写者），能以共享/独占方式获取（被读/被写）。
 // 共享状态下（被读），能以共享方式再被获取（被读）。 
 // 独占状态下（被写），不能被获取。
-#include<pthread.h>
-pthread_rwlock_t rwlock;
 int pthread_rwlock_init(pthread_rwlock_t *rwlock, const pthread_rwlockattr_t *attr);
 int pthread_rwlock_rdlock(pthread_rwlock_t *rwlock);
 int pthread_rwlock_wrlock(pthread_rwlock_t *rwlock);
-int pthread_rwlock_timedrdlock(pthread_rwlock_t * rwlock, const struct timespec * abstime);
-int pthread_rwlock_timedwrlock(pthread_rwlock_t * rwlock, const struct timespec * abstime);
+int pthread_rwlock_timedrdlock(pthread_rwlock_t * rwlock, const struct timespec *abstime);
+int pthread_rwlock_timedwrlock(pthread_rwlock_t * rwlock, const struct timespec *abstime);
 int pthread_rwlock_tryrdlock(pthread_rwlock_t *rwlock);
 int pthread_rwlock_trywrlock(pthread_rwlock_t *rwlock);
 int pthread_rwlock_unlock(pthread_rwlock_t *rwlock);
 int pthread_rwlock_destroy(pthread_rwlock_t *rwlock);
 ```
 
-* **递归锁**：也叫可重入锁，同一个线程可以多次获取同一个递归锁，不会产生死锁。
-* **条件变量**：阻塞线程，避免线程不断轮训，类似于一个栅栏。一个条件变量可以被多个线程等待，当条件变量被唤醒，所有的线程可以一起恢复执行。
+### 递归锁
+
+也叫可重入锁，同一个线程可以多次获取同一个递归锁，不会产生死锁。
+
+### 条件变量
+
+阻塞线程，避免线程不断轮训，类似于一个栅栏。一个条件变量可以被多个线程等待，当条件变量被唤醒，所有的线程可以一起恢复执行。
 
 ```c
-#include <pthread.h>
-pthread_cond_t cond;
 int pthread_cond_init(pthread_cond_t *cond, pthread_condattr_t *cond_attr);
 int pthread_cond_wait(pthread_cond_t *cond, pthread_mutex_t *mutex);
 int pthread_cond_timewait(pthread_cond_t *cond, pthread_mutex *mutex, const timespec *abstime);
@@ -153,73 +244,74 @@ int pthread_cond_destroy(pthread_cond_t *cond);
 ```
 
 ```c
+pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
+data_type data;
+
 void *product(void *arg) {
-  while(1) {
-    if (需要生产) {
-      pthread_mutex_lock(&lock);
-      push_node(data);
-      pthread_mutex_unlock(&lock);
-      pthread_cond_signal(&cond);
+    while(1) {
+        if (需要生产) {
+            pthread_mutex_lock(&lock);
+            push_node(data);
+            pthread_mutex_unlock(&lock);
+            pthread_cond_signal(&cond);
+        }
+        sleep(1);
     }
-    sleep(1);
-  }
 }
 
 void *consumer(void *arg) {
-  data_type data;
-  while(1) {
-    pthread_mutex_lock(&lock);
-    while(-1 == pop_node(&data)) { // 为空
-      pthread_cond_wait(&cond,&lock); // 阻塞等待，解锁；唤醒执行，加锁。
+    while(1) {
+        pthread_mutex_lock(&lock);
+        while(-1 == pop_node(&data)) { // 为空
+            pthread_cond_wait(&cond, &lock); // 阻塞等待，解锁；唤醒执行，加锁。
+        }
+        func(data); // 执行业务
+        pthread_mutex_unlock(&lock);
+        sleep(1);
     }
-    func(data); // 执行业务
-    pthread_mutex_unlock(&lock);
-    sleep(1);
-  }
 }
 
 int main() {
-  pthread_cond_t cond;
-  pthread_cond_init(&cond,NULL);
-  pthread_t tid1,tid2;
-  pthread_create(&tid1,NULL,product,NULL);
-  pthread_create(&tid2,NULL,consumer,NULL);
-  pthread_join(tid1,NULL);
-  pthread_join(tid2,NULL);
-  pthread_cond_destroy(&cond);
-  return 0;
+    pthread_t tid1, tid2;
+    pthread_create(&tid1, NULL, product, NULL);
+    pthread_create(&tid2, NULL, consumer, NULL);
+    pthread_join(tid1, NULL);
+    pthread_join(tid2, NULL);
+    return 0;
 }
 ```
 
+### 死锁
 
+死锁指的是，两个（以上）线程在执行过程中，因争夺资源而造成一种互相等待的现象，若无外部处理，将会无限等待下去。死锁本质上就是一个线程在请求锁的时候，永远也请求不到。死锁的危险始终存在，应该在程序编写的时候尽量减少死锁存在的范围。
 
-
-死锁的危险始终存在，应该在程序编写的时候尽量减少死锁存在的范围。死锁发生的情况：  
-
-1. 忘记释放锁
-2. 单线程重复申请锁
-3. 多线程申请多把锁
+- 死锁发生的情况：  1、忘记释放锁；2、单线程重复申请锁；3、多线程申请多把锁，造成相互等待；
 
 ```c++
 void process1() {
-	mutex1.enter();
-	mutex2.enter();
-	do_Something;
-	mutex2.leave();
-	mutex1.leave();
+    mutex1.enter(); // 步骤1
+    mutex2.enter(); // 步骤3
+    do_Something;
+    mutex2.leave();
+    mutex1.leave();
 }
 void process2() {
-	mutex2.enter();
-	mutex1.enter();
-	do_Something;
-	mutex1.leave();
-	mutex2.leave();
+    mutex2.enter(); // 步骤2
+    mutex1.enter(); // 步骤4
+    do_Something;
+    mutex1.leave();
+    mutex2.leave();
 }
 ```
 
+- 死锁问题排查：
 
 
-# Linux内存
+
+
+
+# 二、Linux内存
 
 - Linux虚拟内存分布（高地址-低地址，内核空间：1G、用户空间：3G）
   - 栈：函数局部变量空间，一般为8M。
