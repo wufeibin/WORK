@@ -12,30 +12,29 @@
 ```cpp
 class A {
 public:
-	A() : a(0) {};
-	A(int x) : a(x) {}; // 初始化列表
+    A() : a(0) {};
+    A(int x) : a(x) {}; // 初始化列表
 
-	// const可用于对重载函数的区分
-	int getValue(); // 普通成员函数
-	int getValue() const; // 常成员函数，不得修改类中的任何数据成员的值
-    
+    // const可用于对重载函数的区分
+    int getValue(); // 普通成员函数
+    int getValue() const; // 常成员函数，不得修改类中的任何数据成员的值
 private:
-	const int a; // 常对象成员，只能在初始化列表赋值
+    const int a; // 常对象成员，只能在初始化列表赋值
 };
 
 void function() {
-	// 对象（不允许将普通引用或指针绑定到const对象，防止通过引用修改对象）
-	A b; // 普通对象，可以调用全部成员函数、更新常成员变量
-	const A a; // 常对象，只能调用常成员函数
-	const A *p = &a; // 常指针
-	const A &q = a; // 常引用
+    // 对象（不允许将普通引用或指针绑定到const对象，防止通过引用修改对象）
+    A b; // 普通对象，可以调用全部成员函数、更新常成员变量
+    const A a; // 常对象，只能调用常成员函数
+    const A *p = &a; // 常指针
+    const A &q = a; // 常引用
 
-	// 指针
-	char greeting[] = "Hello";
-	char* p1 = greeting; // 指针变量，指向字符数组变量
-	const char* p2 = greeting; // 指针变量，指向字符数组常量（常用）
-	char* const p3 = greeting; // 常指针，指向字符数组变量
-	const char* const p4 = greeting; // 常指针，指向字符数组常量
+    // 指针
+    char greeting[] = "Hello";
+    char* p1 = greeting; // 指针变量，指向字符数组变量
+    const char* p2 = greeting; // 指针变量，指向字符数组常量（常用）
+    char* const p3 = greeting; // 常指针，指向字符数组变量
+    const char* const p4 = greeting; // 常指针，指向字符数组常量
 }
 
 // 函数入参
@@ -144,7 +143,7 @@ snprintf(pc1, sizeof(pc1), "%s", "bbb");
   pBase->print();
   Sub *pSub = dynamic_cast<Sub*>(pBase);
   if (pSub != nullptr) {
-  	pSub->print();
+      pSub->print();
   }
   
   // typeid操作符，运行时类型识别
@@ -183,7 +182,7 @@ int i = 0; // 声明并定义
 // 函数定义和声明的区别是有无函数体，所以定义和声明时可省略extern。
 // 在一个源文件中声明定义了全局函数，在使用的源文件（或包含的头文件）中声明全局函数（通常加上extern）后，即可使用。
 (extern) void func() { // 声明并定义
-	printf("hello\n");
+    printf("hello\n");
 }
 (extern) void func();	// 声明
 ```
@@ -195,8 +194,8 @@ int i = 0; // 声明并定义
 #ifdef  __cplusplus // __cplusplus是C++中定义的宏，使用后的头文件可兼容c/cpp文件
 extern "C" {
 #endif
-	void func1();
-	void func2();
+    void func1();
+    void func2();
 #ifdef  __cplusplus
 }
 #endif
@@ -211,8 +210,8 @@ void func2(){};
 //main.cpp
 #include "1.h"
 int main() {
-	func1();
-	func2();
+    func1();
+    func2();
 }
 ```
 
@@ -390,10 +389,10 @@ vec1.pop_back(); // 尾部删除元素
 vec1.insert(vec1.end(),5,'v'); // 在end位置插入5个值为v的元素
 // 3、遍历
 for(int i = 0; i < vec1.size(); i++) {
-	cout << vec1[i];
+    cout << vec1[i];
 }
 for(vector<char>::const_iterator iter = vec1.begin(); iter != vec1.end(); iter++) {
-	cout << *iter;
+    cout << *iter;
 }
 ```
 
@@ -479,18 +478,6 @@ if (it != set1.end()) {
 
 ## 智能指针
 1. 智能指针的设计思想
-```c
-void remodel(std::string & str) {
-    std::string * ps = new std::string(str);
-    ...
-    if (weird_thing())
-        throw exception(); // 当出现异常时，delete将不被执行，因此将导致内存泄露。 
-    str = *ps; 
-    delete ps;
-    return;
-}
-```
-
 * 我们不能保证申请的内存被正确释放，所以需要使用智能指针来管理。使用智能指针可以很大程度上的避免这个问题，因为智能指针就是一个类，当超出了类的作用域时，类会自动调用析构函数，析构函数会自动释放资源。
 * 智能指针通过类模板将基本类型指针封装为类对象指针，并在析构函数里编写delete语句删除指针指向的内存空间，这样内存也被自动释放了。
 

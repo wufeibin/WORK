@@ -1,4 +1,387 @@
-# 一、Linux进程&线程
+# 一、Linux命令
+
+[Linux命令大全](https://man.linuxde.net/)
+
+### grep 搜索数据
+
+- grep -n xxx file 【显示行号】
+- grep -r xxx path 【递归查找目录文件】
+- grep -v xxx file 【反向搜索，输出不匹配的行】
+- grep -w xxx file 【显示全词匹配的行】
+- grep -c xxx file 【显示匹配的行数】
+- grep -l xxx * 【显示匹配的文件名】
+- grep -A 2 xxx file 【显示匹配内容和后2行】
+- grep -B 2 xxx file 【显示匹配内容和前2行】
+- grep -C 2 xxx file 【显示匹配内容和前后2行】
+- grep -e xxx -e yyy file, grep -E 'xxx|yyy' file, egrep 'xxx|yyy' file 【或匹配】
+- grep   '2020-08-3[0-9]' file
+
+### find 递归查找文件
+
+- find [path] -name file
+- find [path] -type f -name "*.txt" 【f 普通文件，d 目录】
+- find . -type f -name "*.txt" -exec printf "File: %s\n" {} \;
+
+### tar 归档
+
+- tar -xzvf xxx.tar.gz -C [path] 【解压缩文件】
+- tar -czvf xxx.tar.gz [file] 【打包压缩文件】
+
+### zip/unzip 压缩/解压zip文件
+
+- zip -r xxx.zip ./*
+- unzip -d /home xxx.zip
+
+### gzip/gunzip 压缩/解压gz文件
+
+- gzip -c -r xxx >xxx.gz
+- gunzip -c xxx.gz >xxx
+
+### ln 创建链接文件
+
+- ln -snf file ln_file
+
+### netstat 查看网络端口
+
+- netstat -anp
+
+### nm 查看目标文件的符号表
+
+### ldd 查看程序/库依赖的共享库
+
+- ldd -r xxx.so 【-r选项，数据对象和函数的重定位】
+
+### readelf 查看elf目标文件信息
+
+- readelf -sD xxx.so 【查看elf文件的动态符号表】
+
+### objdump 查看目标文件的构成
+
+### xargs 配合管道｜使用
+
+- find . -name "1.txt" | xargs ls 【与管道配合使用，将标准输出转化为参数】
+
+### sed 流编辑器
+
+- echo this is xxx | sed 's/xxx/yyy/'
+- sed 's/xxx/yyy/' file 【替换文本中的字符串】
+- sed 's/xxx/yyy/g' file 【/g 替换每一行中的所有匹配】
+- sed -n 's/xxx/yyy/p' file 【-n选项和p命令一起使用，只打印那些发生替换的行】
+- sed -e 's/brown/green/; s/dog/cat/' file 【-e选项，同一行里执行多条命令】
+- sed -f script.sed file
+- sed -n '/2020-08-30-15-38-[0-9]/,/2020-08-30-15-50-[0-9]/p' file 【,选项，选定行范围】
+
+### awk
+
+- awk 'BEGIN{ commands } pattern{ commands } END{ commands }'
+  - 第一步：执行`BEGIN{ commands }`语句
+  - 第二步：从文件或标准输入逐行读取，执行`pattern{ commands }`语句
+  - 第三步：执行`END{ commands }`语句
+
+- echo -e "A line 1\nA line 2" | awk 'BEGIN{ print "Start" } { print; print $1 } END{ print "End" }'
+  - $0 整行内容
+  - $n 第n个字段
+  - NF 字段数
+
+- awk -F: '{print $1}' data.txt 【-F指定分隔符 : 】
+
+### top 查看系统的实时进程运行情况
+
+### mount/umount 挂载存储媒体
+
+- mount -t type device directory
+- umount device
+
+### df 查看挂载设备磁盘使用情况
+
+- df -h
+
+### du 查看目录的硬盘使用情况
+
+- du -ch path
+- du -sh *
+
+### 其他实用命令
+
+- cat -n file 【按行号查看文件】
+- tail -f file 【循环显示文件末尾内容】
+- tail -n 10 file 【显示文件末尾10行内容】
+- head -n 10 file 【显示文件起始10行内容】
+- more file
+- less file
+
+
+
+# 二、Shell脚本
+
+| 数值比较  |              |
+| --------- | ------------ |
+| n1 -eq n2 | n1等于n2     |
+| n1 -ne n2 | n1不等于n2   |
+| n1 -ge n2 | n1大于等于n2 |
+| n1 -gt n2 | n1大于n2     |
+| n1 -le n2 | n1小于等于n2 |
+| n1 -lt n2 | n1小于n2     |
+
+
+| 字符串比较   |                 |
+| ------------ | --------------- |
+| str1 = str2  | str1和str2相同  |
+| str1 != str2 | str1和str2不同  |
+| str1 < str2  | str1比str2小    |
+| str1 > str2  | str1比str2大    |
+| -n str1      | str1的长度不为0 |
+| -z str1      | str1的长度为0   |
+
+
+| 文件比较 |                              |
+| -------- | ---------------------------- |
+| -e file  | 检查file是否存在             |
+| -f file  | 检查file是否存在并是一个文件 |
+| -d file  | 检查file是否存在并是一个目录 |
+| -r file  | 检查file是否存在并可读       |
+| -s file  | 检查file是否存在并非空       |
+| -w file  | 检查file是否存在并可写       |
+| -x file  | 检查file是否存在并可执行     |
+
+ 
+
+
+- if | case
+
+```
+#!bin/bash
+str="yyy"
+if [ $str = "xxx" ]; then
+    echo "xxx"
+elif [ $str = "yyy" ]; then
+    echo "yyy"
+else
+    echo "zzz"
+fi
+```
+
+```
+#!bin/bash
+case $1 in
+jack | lisa)
+    echo "Welcome, $1"
+    echo "Please";;
+mike)
+    echo "xxx";;
+james)
+    echo "yyy";;
+*)
+    echo "zzz";;
+esac
+```
+
+- for | while | until | break | continue
+
+```
+#!/bin/bash
+for file in `pwd`/*
+do
+    echo "file : $file"
+done
+
+for (( a=1, b=10; a <= 10; a++, b-- ))
+do
+    echo "$a - $b"
+done
+```
+
+```
+var=10
+while [ $var -gt 0 ]
+do
+    echo $var
+    var=$[ $var - 1 ]
+done
+```
+
+```
+var=10
+until [ $var -eq 0 ]
+do
+    echo $var
+    var=$[ $var - 1 ]
+done
+```
+
+- function
+
+```
+function name {
+	commands
+}
+
+name() {
+	commands
+}
+```
+
+
+
+**内置变量**
+
+- $0：脚本文件名称
+
+- $1：第1个位置参数
+
+- $#：位置参数个数
+
+- $@/*：所有的位置参数
+
+- $?：退出状态码
+
+- $PATH：可执行文件的搜索路径
+
+- $PWD：当前工作目录
+
+
+
+
+### Shell实例
+
+- 菜单脚本
+
+```shell
+#!/bin/bash
+
+echo "Tool Menu"
+PS3="Please choose your option: "
+select option in "Option1" "Option2" "Option3" "Test" "Exit"
+do
+    case $option in
+        "Option1")
+            echo "option 1";;
+        "Option2")
+            echo "option 2";;
+        "Option3")
+            ls;;
+        "Test")
+            pwd;;
+        "Exit")
+            break ;;
+        *)
+            echo "invalid option"
+            break ;;
+    esac
+done
+```
+
+- 输入一个数字，运行对应的一个命令。
+
+```shell
+#!/bin/bash
+echo "1:date; 2:ls 3:who 4:pwd"
+read -p "Please input a number: " n
+echo ${n:=1}	# 默认值为1
+if [ -z "$n" ]
+then
+    echo "请输入一个纯数字,范围1-4."
+    exit
+fi
+
+${n=1}
+case $n in 
+    1)
+      date
+      ;;
+    2)
+      ls
+      ;;
+    3)
+      who
+      ;;
+    4)
+      pwd
+      ;;
+    *)
+      echo "请输入1-4的数字"
+      ;;
+esac
+```
+
+- 以 2017-12-20.log 格式每日生成一个文件，并删除一年以前的文件。
+
+```shell
+#!/bin/bash
+#时间格式：date +%F、date +%y%m%d、date +%Y-%m-%d-%H-%M-%S
+d=`date +%F` #将命令输出赋给变量：`` 或 $()
+dir=/data/logs/disklog
+if [ ! -d $dir ]
+then
+    mkdir -p $dir
+fi
+df -h > $dir/$d.log #输出重定向，写入覆盖文件：>；追加到文件末尾：>> 
+find $dir/ -mtime +365 |xargs rm
+```
+
+- 找到/123目录下所有后缀名为.txt的文件，打包压缩为123.tar.gz
+
+```shell
+#!/bin/bash
+find /123/ -type f -name "*.txt" > /tmp/txt.list
+tar -czvf 123.tar.gz `cat /tmp/txt.bak.list |xargs`
+```
+
+- 把一个文本文档的前5行中包含字母的行删除掉，同时把6到10行中的全部字母删除掉。
+
+```shell
+#!/bin/bash
+sed -n '1,5'p 1.txt |sed '/[a-zA-Z]/d' #把一个文本文档的前5行中包含字母的行删除掉
+sed '1,5d' 1.txt |sed '1,5s/[a-zA-Z]//g' ##把6到10行中的全部字母删除掉。
+```
+
+- 当时间是0点和12点时，需要将目录/data/log/下的文件全部清空，而其他时间统计每个文件的大小，一个文件一行，输出到一个按日期和时间为名字的日志里。
+
+```shell
+#!/bin/bash
+dir=/tmp/log_stat
+t=`date +%d%H`
+t1=`date +%H`
+logdir=/data/log
+
+[ -d $dir ] || mkdir $dir #或运算符，同-o
+[ -f $dir/$t.log ] && rm -f $dir/$t.log #与运算符，同-a
+
+if [ $t == "00" -o $t1 == "12" ]
+then
+    for f in `find $logdir/ -type f`
+    do
+      > $f
+    done
+else
+    for f in `find $logdir/ -type f`
+    do
+      du -sh $f >> $dir/$t.log
+    done
+fi
+```
+
+- 把文本里面每三行内容合并到一行
+
+```shell
+#!/bin/bash
+n=1
+cat $1 |while read line #逐行遍历
+do
+    n1=$[$n%3]
+    if [ $n1 -eq 0 ]
+    then
+      echo "$line"
+    else
+      echo -n "$line " #不换行
+    fi
+      n=$[$n+1]
+done
+```
+
+
+
+# 三、进程&线程
 
 进程是程序执行时的一个实例，即它是程序已经执行到何种程度的数据结构的汇集。从内核的观点看，进程的目的就是担当分配系统资源（CPU时间、内存等）的基本单位。
 
@@ -10,7 +393,7 @@
 
 
 
-## 1.1 进程
+## 3.1 进程
 
 正常情况下，子进程是通过父进程创建的，子进程的结束和父进程的运行是一个异步过程，即父进程永远无法预测子进程到底什么时候结束。 当一个进程完成它的工作终止之后，它的父进程需要调用wait()或者waitpid()系统调用取得子进程的终止状态。
 
@@ -47,7 +430,7 @@ int main(int argc, char *argv[]) {
 }
 ```
 
-###孤儿进程
+### 孤儿进程
 
 一个父进程退出，而它的一个或多个子进程还在运行，那么那些子进程将成为孤儿进程。孤儿进程将被init进程(进程号为1)所收养，并由init进程对它们完成状态收集工作。由于孤儿进程会被init进程给收养，所以孤儿进程不会对系统造成危害。
 
@@ -135,7 +518,7 @@ int main(int argc, char *argv[]) {
 
 
 
-## 1.2 线程
+## 3.2 线程
 
 **资源消耗**：多个线程之间使用相同的地址空间，共享大部分数据，启动一个线程所花费的空间远远小于启动一个进程所花费的空间，线程间彼此切换所需的时间也远远小于进程间切换所需要的时间。**通信机制**：线程之间共享数据空间，所以一个线程的数据可以直接为其它线程所用，快捷且方便。
 
@@ -176,7 +559,7 @@ int main() {
 
 
 
-## 1.3 线程互斥&同步
+## 3.3 线程互斥&同步
 
 一个线程在访问资源未结束时，其他线程不能访问资源。在多线程编程时，要解决数据访问的互斥与同步，最常见的方法是加锁。
 
@@ -186,7 +569,7 @@ int main() {
 ```c
 // 二元信号量：一个线程独占访问的资源。
 // 多元信号量：一个初始值为N的信号量允许被N个线程并发访问。
-int sem_init (sem_t *sem, int pshared, unsigned int value);
+int sem_init(sem_t *sem, int pshared, unsigned int value);
 int sem_wait(sem_t *sem);	// 阻塞等待信号量，当信号量值大于0时，信号量减1，向下执行。
 int sem_trywait(sem_t *sem);
 int sem_post(sem_t *sem);	// 释放信号量，信号量值加1。
@@ -284,7 +667,7 @@ int main() {
 
 ### 死锁
 
-死锁指的是，两个（以上）线程在执行过程中，因争夺资源而造成一种互相等待的现象，若无外部处理，将会无限等待下去。死锁本质上就是一个线程在请求锁的时候，永远也请求不到。死锁的危险始终存在，应该在程序编写的时候尽量减少死锁存在的范围。
+死锁指的是，两个以上线程在执行过程中，因争夺资源而造成一种互相等待的现象，若无外部处理，将会无限等待下去。死锁本质上就是一个线程在请求锁的时候，永远也请求不到。死锁的危险始终存在，应该在程序编写的时候尽量减少死锁存在的范围。
 
 - 死锁发生的情况：  1、忘记释放锁；2、单线程重复申请锁；3、多线程申请多把锁，造成相互等待；
 
@@ -305,13 +688,32 @@ void process2() {
 }
 ```
 
-- 死锁问题排查：
+- 死锁问题排查：通过gdb pstack命令可查看进程的栈跟踪，多次对比线程堆栈，查看哪些线程一直处于等锁状态，进一步查看栈帧相关变量，结合代码推断确认哪些线程死锁。coredump文件，依据堆栈可同样分析。
 
 
 
+# 四、套接字
+
+网络层的“ip地址”可以唯一标识网络中的主机，而传输层的“协议+端口”可以唯一标识主机中的应用程序。
+
+> 1. 服务端先通过socket()创建一个套接字，返回一个唯一描述符，再通过bind()把一个IP+端口绑定到套接字上，再调用listen()来监听这个套接字。
+> 2. 客户端也通过socket()创建一个套接字，通过connect()指定地址向服务端发起连接请求。服务端监听接收到请求后，通过accept()完成连接。
+> 3. 之后两端通过read()/write()或recv()/send()进行I/O操作，结束后close()关闭套接字。
+
+* int **socket**(int domain, int type, int protocol);	
+* int **bind**(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
+* int **listen**(int sockfd, int backlog);
+* int **connect**(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
+* int **accept**(int sockfd, struct sockaddr *addr, socklen_t *addrlen);
+* ssize_t **recv**(int sockfd, void *buf, size_t len, int flags);
+* ssize_t **send**(int sockfd, const void *buf, size_t len, int flags);
+* ssize_t **read**(int fd, void *buf, size_t count);
+* ssize_t **write**(int fd, const void *buf, size_t count);
+* int **close**(int fd);
 
 
-# 二、Linux内存
+
+# 五、Linux内存
 
 - Linux虚拟内存分布（高地址-低地址，内核空间：1G、用户空间：3G）
   - 栈：函数局部变量空间，一般为8M。
@@ -325,3 +727,17 @@ void process2() {
 
 Linux较Windows的内存管理区别：在linux中程序被关闭，占用的内存不会归还物理内存，而是用来做缓存。当物理内存有空闲时，优先使用物理内存（所以当使用 一段时间后，即使有很大内存也会被占用）。这样做的好处是，启动那些刚启动的程序，或是存取刚存取的数据，效率速度会比较快，适用于服务器的场景。
 
+- free 查看系统内存使用情况
+
+```
+             total       used       free     shared    buffers     cached
+Mem:     131916676  130603592    1313084    1539580    3569100   42805216
+-/+ buffers/cache:   84229276   47687400
+
+total：总物理内存 used：已使用物理内存 free：未使用物理内存 buffer/cache：缓存
+total = used + free
+```
+
+- cat proc/500/maps 查看进程的虚拟地址空间使用情况
+- cat proc/500/status 查看进程的状态信息
+- cat proc/meminfo 查看操作系统的内存使用情况
