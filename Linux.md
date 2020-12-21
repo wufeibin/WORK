@@ -22,6 +22,16 @@
 - find [path] -type f -name "*.txt" 【f 普通文件，d 目录】
 - find . -type f -name "*.txt" -exec printf "File: %s\n" {} \;
 
+### chmod/chown 修改文件权限
+
+```
+drwxr-x--- 1 va         ivs        4096 Dec 16 04:10 VA2
+d : 目录
+rwx : 文件属主权限(va)
+r-x : 属组成员权限(ivs)
+--- : 其他用户权限
+```
+
 ### tar 归档
 
 - tar -xzvf xxx.tar.gz -C [path] 【解压缩文件】
