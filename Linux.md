@@ -2,64 +2,35 @@
 
 [Linux命令大全](https://man.linuxde.net/)
 
-### grep 搜索数据
-
-- grep -n xxx file 【显示行号】
-- grep -r xxx path 【递归查找目录文件】
-- grep -v xxx file 【反向搜索，输出不匹配的行】
-- grep -w xxx file 【显示全词匹配的行】
-- grep -c xxx file 【显示匹配的行数】
-- grep -l xxx * 【显示匹配的文件名】
-- grep -A 2 xxx file 【显示匹配内容和后2行】
-- grep -B 2 xxx file 【显示匹配内容和前2行】
-- grep -C 2 xxx file 【显示匹配内容和前后2行】
-- grep -e xxx -e yyy file, grep -E 'xxx|yyy' file, egrep 'xxx|yyy' file 【或匹配】
-- grep   '2020-08-3[0-9]' file
-
-### find 递归查找文件
-
-- find [path] -name file
-- find [path] -type f -name "*.txt" 【f 普通文件，d 目录】
-- find . -type f -name "*.txt" -exec printf "File: %s\n" {} \;
-
-### tar 归档
-
-- tar -xzvf xxx.tar.gz -C [path] 【解压缩文件】
-- tar -czvf xxx.tar.gz [file] 【打包压缩文件】
-
-### zip/unzip 压缩/解压zip文件
-
-- zip -r xxx.zip ./*
-- unzip -d /home xxx.zip
-
-### gzip/gunzip 压缩/解压gz文件
-
-- gzip -c -r xxx >xxx.gz
-- gunzip -c xxx.gz >xxx
-
-### ln 创建链接文件
-
-- ln -snf file ln_file
-
-### netstat 查看网络端口
-
-- netstat -anp
-
-### nm 查看目标文件的符号表
-
-### ldd 查看程序/库依赖的共享库
-
-- ldd -r xxx.so 【-r选项，数据对象和函数的重定位】
-
-### readelf 查看elf目标文件信息
-
-- readelf -sD xxx.so 【查看elf文件的动态符号表】
-
-### objdump 查看目标文件的构成
-
-### xargs 配合管道｜使用
-
-- find . -name "1.txt" | xargs ls 【与管道配合使用，将标准输出转化为参数】
+| 命令                                 | 示例                                                         |
+| ------------------------------------ | ------------------------------------------------------------ |
+| **grep**<br />搜索数据               | grep -n xxx file 【显示行号】<br />grep -r xxx path 【递归查找目录文件】<br />grep -v xxx file 【反向搜索，输出不匹配的行】<br />grep -w xxx file 【显示全词匹配的行】<br />grep -c xxx file 【显示匹配的行数】<br />grep -l xxx * 【显示匹配的文件名】 <br />grep -A 2 xxx file 【显示匹配内容和后2行】<br />grep -B 2 xxx file 【显示匹配内容和前2行】<br />grep -C 2 xxx file 【显示匹配内容和前后2行】<br />grep -e xxx -e yyy file, grep -E 'xxx\|yyy' file, egrep 'xxx\|yyy' file 【或匹配】 <br />grep '2020-08-3[0-9]' file |
+| **find**<br />递归查找文件           | find [path] -name file<br />find [path] -type f -name file 【f 普通文件，d 目录】<br />find . -type f -name file -exec printf "File: %s\n" {} \; |
+| **xargs**<br />配合管道｜使用        | find . -name "1.txt" \| xargs ls 【与管道配合使用，将标准输出转化为参数】 |
+| **chmod/chown**<br />修改文件权限    | drwxr-x--- 1 va ivs 4096 Dec 16 04:10 VA2<br/>d : 目录<br/>rwx : 文件属主权限(va)<br/>r-x : 属组成员权限(ivs)<br/>--- : 其他用户权限 |
+| **tar**<br />归档                    | tar -xzvf xxx.tar.gz -C [path] 【解压缩文件】<br />tar -czvf xxx.tar.gz [file] 【打包压缩文件】 |
+| **zip/unzip**<br />压缩/解压zip文件  | zip -r xxx.zip ./*<br />unzip -d /home xxx.zip               |
+| **gzip/gunzip**<br />压缩/解压gz文件 | gzip -c -r xxx >xxx.gz<br />gunzip -c xxx.gz >xxx            |
+| **ln**<br />创建链接文件             | ln -snf file ln_file                                         |
+| **netstat**<br />查看网络端口        | netstat -anp                                                 |
+| **ldd**<br />查看程序/库依赖的共享库 | ldd -r xxx.so 【-r选项，数据对象和函数的重定位】             |
+| **readelf**<br />查看elf目标文件信息 | readelf -sD xxx.so 【查看elf文件的动态符号表】               |
+| **nm**<br />查看目标文件的符号表     |                                                              |
+| **objdump**<br />查看目标文件的构成  |                                                              |
+| **top**<br />查看系统实时进程情况    | top -H -p [pid]                                              |
+| **mount/umount**<br />挂载存储媒体   | mount -t type device directory<br />umount device            |
+| **df**<br />查看挂载设备磁盘使用     | df -h                                                        |
+| **du**<br />查看目录的硬盘使用       | du -ch path<br />du -sh *                                    |
+|                                      |                                                              |
+|                                      |                                                              |
+|                                      |                                                              |
+|                                      |                                                              |
+|                                      |                                                              |
+|                                      |                                                              |
+|                                      |                                                              |
+| **其他实用命令**                     | cat -n file 【按行号查看文件】<br />tail -f file 【循环显示文件末尾内容】<br />tail -n 10 file 【显示文件末尾10行内容】<br />head -n 10 file 【显示文件起始10行内容】<br />more file<br />less file |
+|                                      |                                                              |
+|                                      |                                                              |
 
 ### sed 流编辑器
 
@@ -84,40 +55,6 @@
   - NF 字段数
 
 - awk -F: '{print $1}' data.txt 【-F指定分隔符 : 】
-
-### top 查看系统的实时进程运行情况
-
-### mount/umount 挂载存储媒体
-
-- mount -t type device directory
-- umount device
-
-### df 查看挂载设备磁盘使用情况
-
-- df -h
-
-### du 查看目录的硬盘使用情况
-
-- du -ch path
-- du -sh *
-
-### 其他实用命令
-
-- chmod/chown 【修改文件权限】
-	```
-	drwxr-x--- 1 va         ivs        4096 Dec 16 04:10 VA2
-	d : 目录
-	rwx : 文件属主权限(va)
-	r-x : 属组成员权限(ivs)
-	--- : 其他用户权限
-	```
-- cat -n file 【按行号查看文件】
-- tail -f file 【循环显示文件末尾内容】
-- tail -n 10 file 【显示文件末尾10行内容】
-- head -n 10 file 【显示文件起始10行内容】
-- more file
-- less file
-
 
 
 # 二、Shell脚本
