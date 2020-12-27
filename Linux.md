@@ -1,36 +1,28 @@
 # 一、Linux命令
 
-[Linux命令大全](https://man.linuxde.net/)
-
-| 命令                                 | 示例                                                         |
-| ------------------------------------ | ------------------------------------------------------------ |
-| **grep**<br />搜索数据               | grep -n xxx file 【显示行号】<br />grep -r xxx path 【递归查找目录文件】<br />grep -v xxx file 【反向搜索，输出不匹配的行】<br />grep -w xxx file 【显示全词匹配的行】<br />grep -c xxx file 【显示匹配的行数】<br />grep -l xxx * 【显示匹配的文件名】 <br />grep -A 2 xxx file 【显示匹配内容和后2行】<br />grep -B 2 xxx file 【显示匹配内容和前2行】<br />grep -C 2 xxx file 【显示匹配内容和前后2行】<br />grep -e xxx -e yyy file, grep -E 'xxx\|yyy' file, egrep 'xxx\|yyy' file 【或匹配】 <br />grep '2020-08-3[0-9]' file |
-| **find**<br />递归查找文件           | find [path] -name file<br />find [path] -type f -name file 【f 普通文件，d 目录】<br />find . -type f -name file -exec printf "File: %s\n" {} \; |
-| **xargs**<br />配合管道｜使用        | find . -name "1.txt" \| xargs ls 【与管道配合使用，将标准输出转化为参数】 |
-| **chmod/chown**<br />修改文件权限    | drwxr-x--- 1 va ivs 4096 Dec 16 04:10 VA2<br/>d : 目录<br/>rwx : 文件属主权限(va)<br/>r-x : 属组成员权限(ivs)<br/>--- : 其他用户权限 |
-| **tar**<br />归档                    | tar -xzvf xxx.tar.gz -C [path] 【解压缩文件】<br />tar -czvf xxx.tar.gz [file] 【打包压缩文件】 |
-| **zip/unzip**<br />压缩/解压zip文件  | zip -r xxx.zip ./*<br />unzip -d /home xxx.zip               |
-| **gzip/gunzip**<br />压缩/解压gz文件 | gzip -c -r xxx >xxx.gz<br />gunzip -c xxx.gz >xxx            |
-| **ln**<br />创建链接文件             | ln -snf file ln_file                                         |
-| **netstat**<br />查看网络端口        | netstat -anp                                                 |
-| **ldd**<br />查看程序/库依赖的共享库 | ldd -r xxx.so 【-r选项，数据对象和函数的重定位】             |
-| **readelf**<br />查看elf目标文件信息 | readelf -sD xxx.so 【查看elf文件的动态符号表】               |
-| **nm**<br />查看目标文件的符号表     |                                                              |
-| **objdump**<br />查看目标文件的构成  |                                                              |
-| **top**<br />查看系统实时进程情况    | top -H -p [pid]                                              |
-| **mount/umount**<br />挂载存储媒体   | mount -t type device directory<br />umount device            |
-| **df**<br />查看挂载设备磁盘使用     | df -h                                                        |
-| **du**<br />查看目录的硬盘使用       | du -ch path<br />du -sh *                                    |
-|                                      |                                                              |
-|                                      |                                                              |
-|                                      |                                                              |
-|                                      |                                                              |
-|                                      |                                                              |
-|                                      |                                                              |
-|                                      |                                                              |
-| **其他实用命令**                     | cat -n file 【按行号查看文件】<br />tail -f file 【循环显示文件末尾内容】<br />tail -n 10 file 【显示文件末尾10行内容】<br />head -n 10 file 【显示文件起始10行内容】<br />more file<br />less file |
-|                                      |                                                              |
-|                                      |                                                              |
+| [Linux命令大全](https://man.linuxde.net/) | 示例                                                         |
+| ----------------------------------------- | ------------------------------------------------------------ |
+| **grep**<br />搜索数据                    | grep -n xxx file 【显示行号】<br />grep -r xxx path 【递归查找目录文件】<br />grep -v xxx file 【反向搜索，输出不匹配的行】<br />grep -w xxx file 【显示全词匹配的行】<br />grep -c xxx file 【显示匹配的行数】<br />grep -l xxx * 【显示匹配的文件名】 <br />grep -A 2 xxx file 【显示匹配内容和后2行】<br />grep -B 2 xxx file 【显示匹配内容和前2行】<br />grep -C 2 xxx file 【显示匹配内容和前后2行】<br />grep -e xxx -e yyy file, grep -E 'xxx\|yyy' file, egrep 'xxx\|yyy' file 【或匹配】 <br />grep '2020-08-3[0-9]' file |
+| **find**<br />递归查找文件                | find [path] -name file<br />find [path] -type f -name file 【f 普通文件，d 目录】<br />find . -type f -name file -exec printf "File: %s\n" {} \; |
+| **xargs**<br />配合管道｜使用             | find . -name "1.txt" \| xargs ls 【与管道配合使用，将标准输出转化为参数】 |
+| **chmod/chown**<br />修改文件权限         | drwxr-x--- 1 va ivs 4096 Dec 16 04:10 VA2<br/>d : 目录<br/>rwx : 文件属主权限(va)<br/>r-x : 属组成员权限(ivs)<br/>--- : 其他用户权限 |
+| **tar**<br />归档                         | tar -xzvf xxx.tar.gz -C [path] 【解压缩文件】<br />tar -czvf xxx.tar.gz [file] 【打包压缩文件】 |
+| **zip/unzip**<br />压缩/解压zip文件       | zip -r xxx.zip ./*<br />unzip -d /home xxx.zip               |
+| **gzip/gunzip**<br />压缩/解压gz文件      | gzip -c -r xxx >xxx.gz<br />gunzip -c xxx.gz >xxx            |
+| **ln**<br />创建链接文件                  | ln -snf file ln_file                                         |
+| **netstat**<br />查看网络端口             | netstat -anp                                                 |
+| **ldd**<br />查看程序/库依赖的共享库      | ldd -r xxx.so 【-r选项，数据对象和函数的重定位】             |
+| **readelf**<br />查看elf目标文件信息      | readelf -sD xxx.so 【查看elf文件的动态符号表】               |
+| **nm**<br />查看目标文件的符号表          |                                                              |
+| **objdump**<br />查看目标文件的构成       |                                                              |
+| **top**<br />查看系统实时进程情况         | top -H -p [pid]                                              |
+| **mount/umount**<br />挂载存储媒体        | mount -t type device directory<br />umount device            |
+| **df**<br />查看挂载设备磁盘使用          | df -h                                                        |
+| **du**<br />查看目录的硬盘使用            | du -ch path<br />du -sh *                                    |
+|                                           |                                                              |
+|                                           |                                                              |
+|                                           |                                                              |
+| **其他实用命令**                          | cat -n file 【按行号查看文件】<br />tail -f file 【循环显示文件末尾内容】<br />tail -n 10 file 【显示文件末尾10行内容】<br />head -n 10 file 【显示文件起始10行内容】<br />more file<br />less file |
 
 ### sed 流编辑器
 
@@ -42,7 +34,7 @@
 - sed -f script.sed file
 - sed -n '/2020-08-30-15-38-[0-9]/,/2020-08-30-15-50-[0-9]/p' file 【,选项，选定行范围】
 
-### awk
+### awk 文本工具
 
 - awk 'BEGIN{ commands } pattern{ commands } END{ commands }'
   - 第一步：执行`BEGIN{ commands }`语句
@@ -57,276 +49,8 @@
 - awk -F: '{print $1}' data.txt 【-F指定分隔符 : 】
 
 
-# 二、Shell脚本
 
-| 数值比较  |              |
-| --------- | ------------ |
-| n1 -eq n2 | n1等于n2     |
-| n1 -ne n2 | n1不等于n2   |
-| n1 -ge n2 | n1大于等于n2 |
-| n1 -gt n2 | n1大于n2     |
-| n1 -le n2 | n1小于等于n2 |
-| n1 -lt n2 | n1小于n2     |
-
-
-| 字符串比较   |                 |
-| ------------ | --------------- |
-| str1 = str2  | str1和str2相同  |
-| str1 != str2 | str1和str2不同  |
-| str1 < str2  | str1比str2小    |
-| str1 > str2  | str1比str2大    |
-| -n str1      | str1的长度不为0 |
-| -z str1      | str1的长度为0   |
-
-
-| 文件比较 |                              |
-| -------- | ---------------------------- |
-| -e file  | 检查file是否存在             |
-| -f file  | 检查file是否存在并是一个文件 |
-| -d file  | 检查file是否存在并是一个目录 |
-| -r file  | 检查file是否存在并可读       |
-| -s file  | 检查file是否存在并非空       |
-| -w file  | 检查file是否存在并可写       |
-| -x file  | 检查file是否存在并可执行     |
-
- 
-
-
-- if | case
-
-```
-#!bin/bash
-str="yyy"
-if [ $str = "xxx" ]; then
-    echo "xxx"
-elif [ $str = "yyy" ]; then
-    echo "yyy"
-else
-    echo "zzz"
-fi
-```
-
-```
-#!bin/bash
-case $1 in
-jack | lisa)
-    echo "Welcome, $1"
-    echo "Please";;
-mike)
-    echo "xxx";;
-james)
-    echo "yyy";;
-*)
-    echo "zzz";;
-esac
-```
-
-- for | while | until | break | continue
-
-```
-#!/bin/bash
-for file in `pwd`/*
-do
-    echo "file : $file"
-done
-
-for (( a=1, b=10; a <= 10; a++, b-- ))
-do
-    echo "$a - $b"
-done
-```
-
-```
-var=10
-while [ $var -gt 0 ]
-do
-    echo $var
-    var=$[ $var - 1 ]
-done
-```
-
-```
-var=10
-until [ $var -eq 0 ]
-do
-    echo $var
-    var=$[ $var - 1 ]
-done
-```
-
-- function
-
-```
-function name {
-	commands
-}
-
-name() {
-	commands
-}
-```
-
-
-
-**内置变量**
-
-- $0：脚本文件名称
-
-- $1：第1个位置参数
-
-- $#：位置参数个数
-
-- $@/*：所有的位置参数
-
-- $?：退出状态码
-
-- $PATH：可执行文件的搜索路径
-
-- $PWD：当前工作目录
-
-
-
-
-### Shell实例
-
-- 菜单脚本
-
-```shell
-#!/bin/bash
-
-echo "Tool Menu"
-PS3="Please choose your option: "
-select option in "Option1" "Option2" "Option3" "Test" "Exit"
-do
-    case $option in
-        "Option1")
-            echo "option 1";;
-        "Option2")
-            echo "option 2";;
-        "Option3")
-            ls;;
-        "Test")
-            pwd;;
-        "Exit")
-            break ;;
-        *)
-            echo "invalid option"
-            break ;;
-    esac
-done
-```
-
-- 输入一个数字，运行对应的一个命令。
-
-```shell
-#!/bin/bash
-echo "1:date; 2:ls 3:who 4:pwd"
-read -p "Please input a number: " n
-echo ${n:=1}	# 默认值为1
-if [ -z "$n" ]
-then
-    echo "请输入一个纯数字,范围1-4."
-    exit
-fi
-
-${n=1}
-case $n in 
-    1)
-      date
-      ;;
-    2)
-      ls
-      ;;
-    3)
-      who
-      ;;
-    4)
-      pwd
-      ;;
-    *)
-      echo "请输入1-4的数字"
-      ;;
-esac
-```
-
-- 以 2017-12-20.log 格式每日生成一个文件，并删除一年以前的文件。
-
-```shell
-#!/bin/bash
-#时间格式：date +%F、date +%y%m%d、date +%Y-%m-%d-%H-%M-%S
-d=`date +%F` #将命令输出赋给变量：`` 或 $()
-dir=/data/logs/disklog
-if [ ! -d $dir ]
-then
-    mkdir -p $dir
-fi
-df -h > $dir/$d.log #输出重定向，写入覆盖文件：>；追加到文件末尾：>> 
-find $dir/ -mtime +365 |xargs rm
-```
-
-- 找到/123目录下所有后缀名为.txt的文件，打包压缩为123.tar.gz
-
-```shell
-#!/bin/bash
-find /123/ -type f -name "*.txt" > /tmp/txt.list
-tar -czvf 123.tar.gz `cat /tmp/txt.bak.list |xargs`
-```
-
-- 把一个文本文档的前5行中包含字母的行删除掉，同时把6到10行中的全部字母删除掉。
-
-```shell
-#!/bin/bash
-sed -n '1,5'p 1.txt |sed '/[a-zA-Z]/d' #把一个文本文档的前5行中包含字母的行删除掉
-sed '1,5d' 1.txt |sed '1,5s/[a-zA-Z]//g' ##把6到10行中的全部字母删除掉。
-```
-
-- 当时间是0点和12点时，需要将目录/data/log/下的文件全部清空，而其他时间统计每个文件的大小，一个文件一行，输出到一个按日期和时间为名字的日志里。
-
-```shell
-#!/bin/bash
-dir=/tmp/log_stat
-t=`date +%d%H`
-t1=`date +%H`
-logdir=/data/log
-
-[ -d $dir ] || mkdir $dir #或运算符，同-o
-[ -f $dir/$t.log ] && rm -f $dir/$t.log #与运算符，同-a
-
-if [ $t == "00" -o $t1 == "12" ]
-then
-    for f in `find $logdir/ -type f`
-    do
-      > $f
-    done
-else
-    for f in `find $logdir/ -type f`
-    do
-      du -sh $f >> $dir/$t.log
-    done
-fi
-```
-
-- 把文本里面每三行内容合并到一行
-
-```shell
-#!/bin/bash
-n=1
-cat $1 |while read line #逐行遍历
-do
-    n1=$[$n%3]
-    if [ $n1 -eq 0 ]
-    then
-      echo "$line"
-    else
-      echo -n "$line " #不换行
-    fi
-      n=$[$n+1]
-done
-```
-
-
-
-# 三、进程&线程
+# 二、进程&线程
 
 进程是程序执行时的一个实例，即它是程序已经执行到何种程度的数据结构的汇集。从内核的观点看，进程的目的就是担当分配系统资源（CPU时间、内存等）的基本单位。
 
@@ -338,7 +62,7 @@ done
 
 
 
-## 3.1 进程
+## 2.1 进程
 
 正常情况下，子进程是通过父进程创建的，子进程的结束和父进程的运行是一个异步过程，即父进程永远无法预测子进程到底什么时候结束。 当一个进程完成它的工作终止之后，它的父进程需要调用wait()或者waitpid()系统调用取得子进程的终止状态。
 
@@ -377,7 +101,7 @@ int main(int argc, char *argv[]) {
 
 ### 孤儿进程
 
-一个父进程退出，而它的一个或多个子进程还在运行，那么那些子进程将成为孤儿进程。孤儿进程将被init进程(进程号为1)所收养，并由init进程对它们完成状态收集工作。由于孤儿进程会被init进程给收养，所以孤儿进程不会对系统造成危害。
+一个父进程退出，而它的一个或多个子进程还在运行，那么那些子进程将成为孤儿进程。孤儿进程将被init进程所收养，并由init进程对它们完成状态收集工作。由于孤儿进程会被init进程给收养，所以孤儿进程不会对系统造成危害。
 
 ### 僵尸进程
 
@@ -425,7 +149,7 @@ void init_daemon()
     chdir("/tmp");      // 改变工作目录
     umask(0);           // 重设文件掩码
     for (int i = 0; i < getdtablesize(); ++i) {
-       close(i);        // 关闭打开的文件描述符
+        close(i);        // 关闭打开的文件描述符
     }
     return;
 }
@@ -440,8 +164,8 @@ int main(int argc, char *argv[]) {
     init_daemon(); // 初始化 Daemon 进程
     while (1) {
         if (-1 == (fp = open("/tmp/daemon.log", O_CREAT|O_WRONLY|O_APPEND, 0600))) {
-          printf("Open file error !\n");
-          exit(1);
+            printf("Open file error !\n");
+            exit(1);
         }
         len = strlen(buf);
         write(fp, buf, len);
@@ -463,13 +187,13 @@ int main(int argc, char *argv[]) {
 
 
 
-## 3.2 线程
+## 2.2 线程
 
 **资源消耗**：多个线程之间使用相同的地址空间，共享大部分数据，启动一个线程所花费的空间远远小于启动一个进程所花费的空间，线程间彼此切换所需的时间也远远小于进程间切换所需要的时间。**通信机制**：线程之间共享数据空间，所以一个线程的数据可以直接为其它线程所用，快捷且方便。
 
 ```c
 1、int pthread_create(pthread_t *thread, const pthread_attr_t *attr, void *(*start_routine) (void *), void *arg); // 创建一个线程。thread：线程标识符的指针，attr：线程属性，start_routine：线程运行函数地址，arg：运行函数入参
-2、int pthread_join(pthread_t tid, void ** status); // 等待某个线程退出
+2、int pthread_join(pthread_t tid, void **status); // 等待某个线程退出
 3、pthread_t pthread_self(void); // 返回当前线程的ID
 4、int pthread_detach(pthread_t tid); // 指定线程变为分离状态。变为分离状态的线程，如果线程退出，它的所有资源将全部释放；而不是分离状态，线程必须保留它的线程ID、退出状态，直到其它线程对它调用了pthread_join。
 5、void pthread_exit(void *status); // 终止线程
@@ -504,7 +228,7 @@ int main() {
 
 
 
-## 3.3 线程互斥&同步
+## 2.3 线程互斥&同步
 
 一个线程在访问资源未结束时，其他线程不能访问资源。在多线程编程时，要解决数据访问的互斥与同步，最常见的方法是加锁。
 
@@ -637,7 +361,7 @@ void process2() {
 
 
 
-# 四、套接字
+# 三、套接字
 
 网络层的“ip地址”可以唯一标识网络中的主机，而传输层的“协议+端口”可以唯一标识主机中的应用程序。
 
@@ -658,7 +382,7 @@ void process2() {
 
 
 
-# 五、Linux内存
+# 四、Linux内存
 
 - Linux虚拟内存分布（高地址-低地址，内核空间：1G、用户空间：3G）
   - 栈：函数局部变量空间，一般为8M。

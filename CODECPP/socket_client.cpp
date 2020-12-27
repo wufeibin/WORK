@@ -7,8 +7,8 @@
 #include<netinet/in.h>
 #define MAXLINE 4096
 
- //客户端：socket - connect - send - close
-int main(int argc, char** argv)
+//客户端：socket - connect - send - close
+int main(int argc, char **argv)
 {
     int sockfd, n;
     char recvline[MAXLINE], sendline[MAXLINE];

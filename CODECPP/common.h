@@ -21,6 +21,7 @@
 
 // C++常用头文件
 #include <iostream>
+#include <sstream>
 #include <string>
 #include <vector>
 #include <list>

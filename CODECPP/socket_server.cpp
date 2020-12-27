@@ -8,7 +8,7 @@
 #define MAXLINE 4096
 
 //服务端：socket - bind - listen - accept - recv - close
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
     int listenfd, connfd;
     struct sockaddr_in servaddr;
