@@ -2,11 +2,11 @@
 #define __CPP_STL_H
 #include "common.h"
 
+void UseString();
 void UseStringStream();
-//void UseString(){};
-//void UseVector(){};
-//void UseList(){};
-//void UseMap(){};
-//void UseSet(){};
+void UseVector();
+void UseList();
+void UseMap();
+void UseSet();
 //void UseBitset(){};
 #endif

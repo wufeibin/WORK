@@ -62,7 +62,7 @@
 
 
 
-## 2.1 进程
+## 1.进程
 
 正常情况下，子进程是通过父进程创建的，子进程的结束和父进程的运行是一个异步过程，即父进程永远无法预测子进程到底什么时候结束。 当一个进程完成它的工作终止之后，它的父进程需要调用wait()或者waitpid()系统调用取得子进程的终止状态。
 
@@ -187,9 +187,11 @@ int main(int argc, char *argv[]) {
 
 
 
-## 2.2 线程
+## 2.线程
 
-**资源消耗**：多个线程之间使用相同的地址空间，共享大部分数据，启动一个线程所花费的空间远远小于启动一个进程所花费的空间，线程间彼此切换所需的时间也远远小于进程间切换所需要的时间。**通信机制**：线程之间共享数据空间，所以一个线程的数据可以直接为其它线程所用，快捷且方便。
+**资源消耗**：多个线程之间使用相同的地址空间，共享大部分数据，启动一个线程所花费的空间远远小于启动一个进程所花费的空间，线程间彼此切换所需的时间也远远小于进程间切换所需要的时间。
+
+**通信机制**：线程之间共享数据空间，所以一个线程的数据可以直接为其它线程所用，快捷且方便。
 
 ```c
 1、int pthread_create(pthread_t *thread, const pthread_attr_t *attr, void *(*start_routine) (void *), void *arg); // 创建一个线程。thread：线程标识符的指针，attr：线程属性，start_routine：线程运行函数地址，arg：运行函数入参
@@ -197,38 +199,11 @@ int main(int argc, char *argv[]) {
 3、pthread_t pthread_self(void); // 返回当前线程的ID
 4、int pthread_detach(pthread_t tid); // 指定线程变为分离状态。变为分离状态的线程，如果线程退出，它的所有资源将全部释放；而不是分离状态，线程必须保留它的线程ID、退出状态，直到其它线程对它调用了pthread_join。
 5、void pthread_exit(void *status); // 终止线程
-
-#include <cstdio>
-#include <iostream>
-#include <pthread.h>
-using namespace std;
-
-void * ThreadProc(void *arg) { // 线程执行体
-    int c = *((int*)arg);
-    while (c < 10) {
-        cout << c++ << endl;
-        sleep(1);
-    }
-}
-
-int main() {
-    pthread_t tpid;
-    int arg = 1;
-    int ret = pthread_create(&tpid, NULL, ThreadProc, (void *)&arg);
-    if (ret != 0) {
-        cout << "pthread_create error" << endl;
-        return 0;
-    }
-    if (pthread_join(tpid, NULL))
-        return -1;
-
-    return 0;
-}
 ```
 
 
 
-## 2.3 线程互斥&同步
+## 3.线程互斥&同步
 
 一个线程在访问资源未结束时，其他线程不能访问资源。在多线程编程时，要解决数据访问的互斥与同步，最常见的方法是加锁。
 
@@ -384,6 +359,8 @@ void process2() {
 
 # 四、Linux内存
 
+## 1.内存管理
+
 - Linux虚拟内存分布（高地址-低地址，内核空间：1G、用户空间：3G）
   - 栈：函数局部变量空间，一般为8M。
   - 文件映射区：动态库、共享内存，可通过mmap函数分配。
@@ -394,9 +371,12 @@ void process2() {
 - 进程栈：也可叫主线程栈，就是虚拟地址空间中的栈区。进程栈大小是执行时增长的，系统默认的最大值8M，可通过ulimit查看和设置。
 - 线程栈：其他线程栈是在主线程的堆中通过mmap分配的，大小固定，默认为8M，可通过pthread_attr_setstacksize接口来设置线程栈的大小。所以每个线程栈空间都是独立的。
 
-Linux较Windows的内存管理区别：在linux中程序被关闭，占用的内存不会归还物理内存，而是用来做缓存。当物理内存有空闲时，优先使用物理内存（所以当使用 一段时间后，即使有很大内存也会被占用）。这样做的好处是，启动那些刚启动的程序，或是存取刚存取的数据，效率速度会比较快，适用于服务器的场景。
+> Linux较Windows的内存管理区别：在linux中程序被关闭，占用的内存不会归还物理内存，而是用来做缓存。当物理内存有空闲时，优先使用物理内存（所以当使用 一段时间后，即使有很大内存也会被占用）。这样做的好处是，启动那些刚启动的程序，或是存取刚存取的数据，效率速度会比较快，适用于服务器的场景。
 
-- free 查看系统内存使用情况
+## 2.内存信息
+
+1. top
+2. free 查看系统内存使用情况
 
 ```
              total       used       free     shared    buffers     cached
@@ -407,6 +387,9 @@ total：总物理内存 used：已使用物理内存 free：未使用物理内�
 total = used + free
 ```
 
-- cat proc/500/maps 查看进程的虚拟地址空间使用情况
-- cat proc/500/status 查看进程的状态信息
-- cat proc/meminfo 查看操作系统的内存使用情况
+3. /proc/meminfo
+   - cat proc/500/maps 查看进程的虚拟地址空间使用情况
+   - cat proc/500/status 查看进程的状态信息
+   - cat proc/meminfo 查看操作系统的内存使用情况
+
+4. vmstat

@@ -17,7 +17,7 @@ private:
 // C++类特性示例
 class SalesData {
 public:
-    SalesData() = default;
+    SalesData() = default; // 编译器发现类没有定义构造函数时，会自动合成一个默认构造函数；如果有了自定义构造函数，还需要默认构造函数，则通过则参数列表后加 = default来要求编译器生产。
     SalesData(const string &name, double p) : m_book_name(name), m_book_price(p) {}
     explicit SalesData(const string &name) : m_book_name(name) {} // explicit阻止隐式转换
     ~SalesData() {}
