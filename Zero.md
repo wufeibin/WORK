@@ -123,3 +123,8 @@ https://pocoproject.org/docs/index.html
 
 图片格式：PNG格式、JPEG格式、TIFF格式、BMP格式、GIF格式
 
+CUDA
+
+https://my.oschina.net/zhangxu0512/blog/711577
+
+https://www.cnblogs.com/marsggbo/p/11838823.html#gpu%E5%9E%8B%E5%8F%B7%E5%90%AB%E4%B9%89
