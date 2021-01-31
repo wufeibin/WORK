@@ -1,5 +1,10 @@
 #include "cpp_stl.h"
 
+static bool IsShorter(const string &s1, const string &s2)
+{
+    return s1.size() < s2.size();
+}
+
 void UseString()
 {
     // 1、定义与初始化
@@ -90,6 +95,16 @@ void UseVector()
     for(auto &v : vec1) { // 如果不增删容器数据，可考虑使用范围for语句。
         LOGINFO("%c", v);
     }
+
+    // 4、泛型算法
+    auto res = find(vec7.cbegin(), vec7.cend(), "hello");
+    if (res != vec7.cend()) {
+        LOGINFO("find result");
+    }
+
+    fill(vec7.cbegin(), vec7.cend(), "a"); // 将每个元素重置为a
+
+    sort(vec7.cbegin(), vec7.cend(), IsShorter); // 按长度排序字符串
 }
 
 void UseList()
@@ -167,3 +182,23 @@ void UseSet()
         LOGINFO("find %s", *it);
     }
 }
+
+
+void UseLambda()
+{
+    vector<int> myvec{ 3, 2, 5, 7, 3, 2};
+    sort(myvec.begin(), myvec.end(), [](int a, int b) -> bool { return a < b; }); // Lambda表达式
+
+    int a = 123;
+    auto f = [a] { cout << a << endl; }; 
+    a = 321;
+    f(); // 输出：123
+
+    int b = 123;
+    auto f = [&b] { cout << b << endl; }; 
+    b = 321;
+    f(); // 输出：321
+
+    auto x = [](int c){cout << c << endl;}(123); // 或通过“函数体”后面的‘()’传入参数
+}
+

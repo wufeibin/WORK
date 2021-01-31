@@ -21,7 +21,6 @@
 | **du**<br />查看目录的硬盘使用            | du -ch path<br />du -sh *                                    |
 |                                           |                                                              |
 |                                           |                                                              |
-|                                           |                                                              |
 | **其他实用命令**                          | cat -n file 【按行号查看文件】<br />tail -f file 【循环显示文件末尾内容】<br />tail -n 10 file 【显示文件末尾10行内容】<br />head -n 10 file 【显示文件起始10行内容】<br />more file<br />less file |
 
 ### sed 流编辑器
@@ -257,6 +256,31 @@ int pthread_rwlock_destroy(pthread_rwlock_t *rwlock);
 
 也叫可重入锁，同一个线程可以多次获取同一个递归锁，不会产生死锁。
 
+### 死锁
+
+死锁指的是，两个以上线程在执行过程中，因争夺资源而造成一种互相等待的现象，若无外部处理，将会无限等待下去。死锁本质上就是一个线程在请求锁的时候，永远也请求不到。死锁的危险始终存在，应该在程序编写的时候尽量减少死锁存在的范围。
+
+- 死锁发生的情况：  1、忘记释放锁；2、单线程重复申请锁；3、多线程申请多把锁，造成相互等待；
+
+```c++
+void process1() {
+    mutex1.enter(); // 步骤1
+    mutex2.enter(); // 步骤3
+    do_Something;
+    mutex2.leave();
+    mutex1.leave();
+}
+void process2() {
+    mutex2.enter(); // 步骤2
+    mutex1.enter(); // 步骤4
+    do_Something;
+    mutex1.leave();
+    mutex2.leave();
+}
+```
+
+- 死锁问题排查：通过gdb pstack命令可查看进程的栈跟踪，多次对比线程堆栈，查看哪些线程一直处于等锁状态，进一步查看栈帧相关变量，结合代码推断确认哪些线程死锁。coredump文件，依据堆栈可同样分析。
+
 ### 条件变量
 
 阻塞线程，避免线程不断轮训，类似于一个栅栏。一个条件变量可以被多个线程等待，当条件变量被唤醒，所有的线程可以一起恢复执行。
@@ -309,34 +333,9 @@ int main() {
 }
 ```
 
-### 死锁
-
-死锁指的是，两个以上线程在执行过程中，因争夺资源而造成一种互相等待的现象，若无外部处理，将会无限等待下去。死锁本质上就是一个线程在请求锁的时候，永远也请求不到。死锁的危险始终存在，应该在程序编写的时候尽量减少死锁存在的范围。
-
-- 死锁发生的情况：  1、忘记释放锁；2、单线程重复申请锁；3、多线程申请多把锁，造成相互等待；
-
-```c++
-void process1() {
-    mutex1.enter(); // 步骤1
-    mutex2.enter(); // 步骤3
-    do_Something;
-    mutex2.leave();
-    mutex1.leave();
-}
-void process2() {
-    mutex2.enter(); // 步骤2
-    mutex1.enter(); // 步骤4
-    do_Something;
-    mutex1.leave();
-    mutex2.leave();
-}
-```
-
-- 死锁问题排查：通过gdb pstack命令可查看进程的栈跟踪，多次对比线程堆栈，查看哪些线程一直处于等锁状态，进一步查看栈帧相关变量，结合代码推断确认哪些线程死锁。coredump文件，依据堆栈可同样分析。
 
 
-
-# 三、套接字
+# 三、网络编程
 
 网络层的“ip地址”可以唯一标识网络中的主机，而传输层的“协议+端口”可以唯一标识主机中的应用程序。
 
@@ -361,6 +360,8 @@ void process2() {
 
 ## 1.内存管理
 
+[为什么 Linux 需要虚拟内存](https://draveness.me/whys-the-design-os-virtual-memory/)
+
 - Linux虚拟内存分布（高地址-低地址，内核空间：1G、用户空间：3G）
   - 栈：函数局部变量空间，一般为8M。
   - 文件映射区：动态库、共享内存，可通过mmap函数分配。
@@ -375,7 +376,24 @@ void process2() {
 
 ## 2.内存信息
 
-1. top
+[free和top命令查看系统内存使用情况](https://www.cnblogs.com/hider/p/12753757.html)
+
+1. top 实时显示进程情况
+
+```
+top - 10:45:01 up 135 days, 23:34,  2 users,  load average: 0.01, 0.03, 0.05
+Tasks: 838 total,   1 running, 837 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  1.6 us,  0.3 sy,  0.0 ni, 98.0 id,  0.1 wa,  0.0 hi,  0.0 si,  0.0 st
+
+   PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND                                
+ 78245 root      20   0 10.224g 2.598g  14008 S  46.5  4.1 414:40.34 java                                   
+ 78625 root      20   0 9921416 1.002g  13992 S  19.3  1.6 640:11.10 java                                   
+162617 root      20   0 2373152 575292  12540 S   8.6  0.9 502:46.88 gnome-shell                                                            
+139865 root      20   0  124276   2292   1184 R   0.7  0.0   0:00.12 top                                    
+
+【VIRT是虚拟内存；RES是持续占用内存；SHR是共享内存】
+```
+
 2. free 查看系统内存使用情况
 
 ```
@@ -387,9 +405,4 @@ total：总物理内存 used：已使用物理内存 free：未使用物理内�
 total = used + free
 ```
 
-3. /proc/meminfo
-   - cat proc/500/maps 查看进程的虚拟地址空间使用情况
-   - cat proc/500/status 查看进程的状态信息
-   - cat proc/meminfo 查看操作系统的内存使用情况
-
-4. vmstat
+3. vmstat 获取有关进程、虚存、页面交换空间及CPU活动的信息

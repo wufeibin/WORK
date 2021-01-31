@@ -166,11 +166,9 @@ snprintf(pc1, sizeof(pc1), "%s", "bbb");
 
 ## extern
 
-> 定义只能一次，声明可以多次。
-
 1. 修饰全局变量
 ```c
-// 在一个源文件中声明定义全局变量（下面3种形式都可行），在使用的源文件（或包含的头文件）中声明全局变量后，即可使用。
+// 定义只能一次，声明可以多次。在一个源文件中声明定义全局变量（下面3种形式都可行），在使用的源文件（或包含的头文件）中声明全局变量后，即可使用。
 extern int i; // 声明
 extern int i = 0; // 声明并定义
 int i; // 声明并定义
@@ -253,38 +251,48 @@ int main() {
 - **顺序容器**：是一种各元素之间有顺序关系的线性表，是一种线性结构的可序群集。顺序性容器中的每个元素均有固定的位置，除非用删除或插入的操作改变这个位置。顺序容器的元素排列次序与元素值无关，而是由元素添加到容器里的次序决定。包含：string（只含字符的vector）、vector（动态数组）、list（双向链表）、forward_list（单向链表）、array（固定数组）、deque（双端队列）
 - **关联容器**：关联式容器是非线性的树结构，更准确的说是二叉树结构。各元素之间没有严格的物理上的顺序关系，也就是说元素在容器中并没有保存元素置入容器时的逻辑顺序。但是关联式容器提供了另一种根据元素特点排序的功能，这样迭代器就能根据元素的特点“顺序地”获取元素。元素是有序的集合，默认在插入的时候按升序排列。包含：map（映射）、set（集合）、multimap（多重映射）、multiset（多重集合）。
 
-
-
 ## vector原理
 
 9.4
 
 ## lanbda表达式
 
-10.3
+[C++ 11 Lambda表达式](https://www.cnblogs.com/DswCnblog/p/5629165.html)
 
-## 动态内存&智能指针
+C++11的一大亮点就是引入了Lambda表达式，利用Lambda表达式可以方便地定义和创建匿名函数。Lambda表达式完整的声明格式：`[capture list] (params list) mutable exception-> return type { function body }`
+
+1. capture list：捕获外部变量列表
+2. params list：形参列表
+3. mutable指示符：用来说用是否可以修改捕获的变量
+4. exception：异常设定
+5. return type：返回类型
+6. function body：函数体
+
+此外，我们还可以省略其中的某些成分来声明“不完整”的Lambda表达式，常见的有以下几种：
+
+- `[capture list] (params list) -> return type {function body}`  声明了const类型的表达式，这种类型的表达式不能修改捕获列表中的值。
+- `[capture list] (params list) {function body}` 省略了返回值类型，但编译器可以根据以下规则推断出Lambda表达式的返回类型： （1）：如果function body中存在return语句，则该Lambda表达式的返回类型由return语句的返回类型确定； （2）：如果function body中没有return语句，则返回值为void类型。
+- `[capture list] {function body}`省略了参数列表，类似普通函数中的无参函数。
+
+## 智能指针
+
 1. 智能指针的设计思想
-* 我们不能保证申请的内存被正确释放，所以需要使用智能指针来管理。使用智能指针可以很大程度上的避免这个问题，因为智能指针就是一个类，当超出了类的作用域时，类会自动调用析构函数，析构函数会自动释放资源。
-* 智能指针通过类模板将基本类型指针封装为类对象指针，并在析构函数里编写delete语句删除指针指向的内存空间，这样内存也被自动释放了。
+
+我们不能保证申请的内存被正确释放，所以需要使用智能指针来管理。使用智能指针可以很大程度上的避免这个问题，因为智能指针就是一个类，当超出了类的作用域时，类会自动调用析构函数，析构函数会自动释放资源。智能指针通过类模板将基本类型指针封装为类对象指针，并在析构函数里编写delete语句删除指针指向的内存空间，这样内存也被自动释放了。
 
 2. C++智能指针介绍
 * STL提供的智能指针：shared_ptr、unique_ptr、weak_ptr、auto_ptr（被摒弃）
-* 智能指针实质是一个类模版，定义的对象行为表现像指针，使用时和普通指针类似。
+* 智能指针实质是一个类模版，定义的对象行为表现像指针，使用时和普通指针类似。对于智能指针都要避免一点：不能将delete作用于非堆的内存。
 * 智能指针类都有一个explicit构造函数，以指针作为参数。因此不能自动将指针转换为智能指针对象，必须显式调用：
-```cpp
-double *p_reg = new double;
-shared_ptr<double> pshared = p_reg; // not allowed (implicit conversion)
-shared_ptr<double> pshared(p_reg); // allowed (explicit conversion)
-```
-* 对于智能指针都要避免一点：不能将delete作用于非堆的内存  
+  ```cpp
+  double *p_reg = new double;
+  shared_ptr<double> pshared = p_reg; // not allowed (implicit conversion)
+  shared_ptr<double> pshared(p_reg); // allowed (explicit conversion)
+  ```
 
 3. **shared_ptr**
 
-允许多个share_ptr指针指向同个对象。每个share_ptr有一个关联的计数器，称为**引用计数**。  
-当拷贝一个share_ptr，计数器会递增；  
-当一个share_ptr被赋新值或share_ptr被销毁，计数器会递减；  
-当一个share_ptr的计数器为0时，它就会自动释放所管理的对象。  
+允许多个share_ptr指针指向同个对象。每个share_ptr有一个关联的计数器，称为**引用计数**。当拷贝一个share_ptr，计数器会递增；当一个share_ptr被赋新值或share_ptr被销毁，计数器会递减；当一个share_ptr的计数器为0时，它就会自动释放所管理的对象。  
 
 4. **unique_ptr**
 
@@ -299,13 +307,6 @@ unique_ptr<string> pu2;
 pu2 = pu1; // 编译器会禁止报错
 unique_ptr<string> pu3;
 pu3 = unique_ptr<string>(new string ("You")); // 允许
-```
-5. **auto_ptr**
-```c++
-string *p = new string("aaaa")
-auto_ptr<string> p1(p);
-auto_ptr<string> p2;
-p2 = p1; // p1将所有权赋给p2，p1变成NULL指针，若访问会异常，所以auto_ptr被摒弃。
 ```
 
 
@@ -378,13 +379,11 @@ pFun();
 
 * 成员函数不在类对象的内存空间中，成员函数本质上是一个包含指向具体对象this指针的普通函数。this指针是一个隐含于非静态成员函数中的特殊指针，它指向调用该成员函数的那个对象。
 
+## 移动拷贝
 
 
-# 四、C++高级特性
 
-- 移动拷贝
-
-# 五、Effective C++
+# 四、Effective C++
 
 1. 视 C++ 为一个语言联邦（C、Object-Oriented C++、Template C++、STL）
 2. 宁可以编译器替换预处理器（尽量以 `const`、`enum`、`inline` 替换 `#define`）
