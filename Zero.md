@@ -123,6 +123,8 @@ https://pocoproject.org/docs/index.html
 
 图片格式：PNG格式、JPEG格式、TIFF格式、BMP格式、GIF格式
 
+
+
 CUDA
 
 https://my.oschina.net/zhangxu0512/blog/711577
@@ -131,23 +133,6 @@ https://www.cnblogs.com/marsggbo/p/11838823.html#gpu%E5%9E%8B%E5%8F%B7%E5%90%AB%
 
 
 
-
-
-# 网络安全
-
-## HTTPS简介
-
-超文本传输安全协议（英语：Hypertext Transfer Protocol Secure，缩写：HTTPS，常称为HTTP over TLS，HTTP over SSL或HTTP Secure）是一种网络安全传输协议。具体介绍以前先来介绍一下以前常见的HTTP，HTTP就是我们平时浏览网页时候使用的一种协议。HTTP协议传输的数据都是未加密的，也就是明文，因此使用HTTP协议传输隐私信息非常不安全。HTTP使用80端口通讯，而HTTPS占用443端口通讯。在计算机网络上，HTTPS经由超文本传输协议（HTTP）进行通信，但利用SSL/TLS来加密数据包。HTTPS开发的主要目的，是提供对网络服务器的身份认证，保护交换数据的隐私与完整性。这个协议由网景公司（Netscape）在1994年首次提出，随后扩展到互联网上。
-
-
-
-## 证书
-
-> 证书用来证明公钥拥有者身份的凭证
-
-.crt 表示证书, .key 表示私钥, .req 表示请求文件,.csr 也表示请求文件, .pem 表示 pem 格式，.der 表示 der 格式。
-
-## 鉴权
 
 
 类型命名风格
@@ -165,11 +150,5 @@ https://www.cnblogs.com/marsggbo/p/11838823.html#gpu%E5%9E%8B%E5%8F%B7%E5%90%AB%
 
 
 
-- HTTP 状态码
-- HTTPS协议、TLS协议、证书认证过程解析
-- 使用 curl 进行 ssl 认证
-- Https单向认证和双向认证
-- curl 的用法指南
-
-
+# 正则表达式
 

@@ -253,7 +253,9 @@ int main() {
 
 ## vector原理
 
-9.4
+Vector通过一个连续数组存放元素，使用的是堆内存。如果集合已满，再新增数据时，就要分配一块更大的内存，将原来的数据复制过来，释放之前的内存，再插入新增的元素。不同的编译器实现的扩容方式不一样，VS2015中以1.5倍扩容，GCC以2倍扩容。
+
+对vector的任何操作，一旦引起空间重新配置，指向原vector的所有迭代器就都失效了。初始时刻vector的capacity为0，插入第一个元素后capacity增加为1。
 
 ## lanbda表达式
 
@@ -296,9 +298,9 @@ C++11的一大亮点就是引入了Lambda表达式，利用Lambda表达式可以
 
 4. **unique_ptr**
 
+unique_ptr独占所指对象。当程序试图将一个unique_ptr赋值给另一个时，如果源unique_ptr是个临时右值，编译器允许这么做；如果源unique_ptr将存在一段时间，编译器将禁止这么做。
+
 ```c++
-// unique_ptr独占所指对象
-// 当程序试图将一个 unique_ptr 赋值给另一个时，如果源 unique_ptr 是个临时右值，编译器允许这么做；如果源 unique_ptr 将存在一段时间，编译器将禁止这么做。
 auto_ptr<string> p1(new string ("auto"));
 auto_ptr<string> p2;
 p2 = p1; // p2接管string对象的所有权后，p1是空指针。再使用p1会内存崩溃
@@ -381,7 +383,7 @@ pFun();
 
 ## 移动拷贝
 
-
+[右值引用与转移语义](https://www.ibm.com/developerworks/cn/aix/library/1307_lisl_c11/)
 
 # 四、Effective C++
 
