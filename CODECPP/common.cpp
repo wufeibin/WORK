@@ -28,10 +28,11 @@ void Log(const char *level, const char *file, const int line, const char *func, 
 #endif
 }
 
-static void *ThreadProc(void *arg)
+
+static void *ThreadProc1(void *arg)
 {
 	int c = *((int*)arg);
-	while (c < 10) {
+	while (c < 5) {
 		LOGINFO("%d", c++);
 		sleep(1);
 	}
@@ -42,7 +43,7 @@ void CreateThread()
 {
 	pthread_t tpid;
 	int arg = 1;
-	int ret = pthread_create(&tpid, NULL, ThreadProc, (void *)&arg);
+	int ret = pthread_create(&tpid, NULL, ThreadProc1, (void *)&arg);
 	if (ret != 0) {
 		LOGERR("pthread_create error");
 		return;

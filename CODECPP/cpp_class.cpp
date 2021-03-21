@@ -27,7 +27,7 @@ void UsePtr()
 {
     // c++11 条款21：尽量使用std::make_unique和std::make_shared而不直接使用new
     unique_ptr<SalesData> p1(new(nothrow) SalesData());
-    unique_ptr<SalesData> p2 = make_unique<SalesData>();
+    // 编译器未支持 unique_ptr<SalesData> p2 = make_unique<SalesData>();
 
     shared_ptr<SalesData> p3(new(nothrow) SalesData());
     shared_ptr<SalesData> p4 = make_shared<SalesData>();

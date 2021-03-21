@@ -29,6 +29,7 @@ SRC_FILES += main.cpp
 SRC_FILES += common.cpp
 SRC_FILES += cpp_class.cpp
 SRC_FILES += cpp_stl.cpp
+SRC_FILES += file.cpp
 OBJ_FILES = $(SRC_FILES:%.cpp=%.o)
 
 # 链接生成目标文件

@@ -1,5 +1,5 @@
 #include "cpp_stl.h"
-
+/*
 static bool IsShorter(const string &s1, const string &s2)
 {
     return s1.size() < s2.size();
@@ -82,8 +82,8 @@ void UseVector()
     vec1.push_back('c'); // 尾部插入元素
     vec1.pop_back(); // 尾部删除元素
     vec1.insert(vec1.end(),5,'v'); // 在end位置插入5个值为v的元素
-    vec1.swap(vec2);
-    swap(vec1, vec2);
+    //vec1.swap(vec2);
+    //swap(vec1, vec2);
 
     // 3、遍历
     for(int i = 0; i < vec1.size(); i++) {
@@ -179,13 +179,14 @@ void UseSet()
     set1.count("aaa"); // 返回key值为aaa的元素数量
     set<string>::iterator it = set1.find("aaa"); // 返回指向元素值为aaa的指针；不存在则返回指针set.end()
     if (it != set1.end()) {
-        LOGINFO("find %s", *it);
+        LOGINFO("find %s", (*it).c_str());
     }
 }
 
 
 void UseLambda()
 {
+#if 0
     vector<int> myvec{ 3, 2, 5, 7, 3, 2};
     sort(myvec.begin(), myvec.end(), [](int a, int b) -> bool { return a < b; }); // Lambda表达式
 
@@ -200,5 +201,8 @@ void UseLambda()
     f(); // 输出：321
 
     auto x = [](int c){cout << c << endl;}(123); // 或通过“函数体”后面的‘()’传入参数
+#endif
 }
+
+*/
 
