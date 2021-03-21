@@ -35,7 +35,7 @@
 
 void ReadFile()
 {
-    const char* filename = "./dir/read_file.txt";
+    const char *filename = "./dir/read_file.txt";
     FILE* fp = fopen(filename, "r");
     if (!fp) {
         LOGINFO("fopen failed");
@@ -54,7 +54,7 @@ void ReadFile()
 
 void WriteFile()
 {
-    const char* filename = "./dir/wrtie_file.txt";
+    const char *filename = "./dir/wrtie_file.txt";
     FILE* fp = fopen(filename, "a");
     if (!fp) {
         LOGINFO("fopen failed");
@@ -79,12 +79,12 @@ C++文件操作类
     ofstream：文件写入流
     fstream：文件读取/写入流
 1. 打开文件
-    void open(const char * filename, ios_base::openmode mode = ios_base::in | ios_base::out);
+    void open(const char *filename, ios_base::openmode mode = ios_base::in | ios_base::out);
         ios::in     为输入(读)而打开文件                                                     
         ios::out    为输出(写)而打开文件   
-        ios::ate	初始位置：文件尾
+        ios::ate	初始位置为文件末尾
         ios::app	所有输出追加在文件末尾             
-        ios::trunc	如果文件已存在则先删除该文件
+        ios::trunc	如果文件已存在则清空
         ios::binary	二进制方式
 2. 获得流指针位置
     long tellg();
@@ -99,7 +99,7 @@ C++文件操作类
 
 void ReadFileCpp()
 {
-    const char* filename = "./dir/read_file.txt";
+    const char *filename = "./dir/read_file.txt";
     ifstream readfile(filename);
     // ifstream readfile;
     // readfile.open(filename);
@@ -118,7 +118,7 @@ void ReadFileCpp()
 
 void WriteFileCpp()
 {
-    const char* filename = "./dir/wrtie_file.txt";
+    const char *filename = "./dir/wrtie_file.txt";
     ofstream writefile(filename);
     // ofstream writefile;
     // writefile.open(filename);

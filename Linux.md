@@ -222,7 +222,7 @@ int sem_destroy(sem_t *sem);
 
 ### 互斥量/锁
 
-与二元信号量很相似。区别是互斥量由哪个线程获取，那个线程就负责释放。
+与二元信号量很相似。区别是互斥量由哪个线程获取，哪个线程就负责释放。
 
 ```c
 int pthread_mutex_init(pthread_mutex_t *mutex, const pthread_mutex_attr_t *mutexattr);
@@ -231,6 +231,14 @@ int pthread_mutex_trylock(pthread_mutex_t *mutex);
 int pthread_mutex_timedlock(pthread_mutex_t * mutex,const struct timespec *tsptr);
 int pthread_mutex_unlock(pthread_mutex_t *mutex);
 int pthread_mutex_destroy(pthread_mutex_t *mutex);
+```
+
+```cpp
+#include <mutex>
+std::mutex tmp_mutex;
+tmp_mutex.lock();
+tmp_mutex.unlock();
+std::lock_guard<std::mutex> lk(tmp_mutex);
 ```
 
 ### 读写锁
@@ -256,32 +264,7 @@ int pthread_rwlock_destroy(pthread_rwlock_t *rwlock);
 
 也叫可重入锁，同一个线程可以多次获取同一个递归锁，不会产生死锁。
 
-### 死锁
-
-死锁指的是，两个以上线程在执行过程中，因争夺资源而造成一种互相等待的现象，若无外部处理，将会无限等待下去。死锁本质上就是一个线程在请求锁的时候，永远也请求不到。死锁的危险始终存在，应该在程序编写的时候尽量减少死锁存在的范围。
-
-- 死锁发生的情况：  1、忘记释放锁；2、单线程重复申请锁；3、多线程申请多把锁，造成相互等待；
-
-```c++
-void process1() {
-    mutex1.enter(); // 步骤1
-    mutex2.enter(); // 步骤3
-    do_Something;
-    mutex2.leave();
-    mutex1.leave();
-}
-void process2() {
-    mutex2.enter(); // 步骤2
-    mutex1.enter(); // 步骤4
-    do_Something;
-    mutex1.leave();
-    mutex2.leave();
-}
-```
-
-- 死锁问题排查：通过gdb pstack命令可查看进程的栈跟踪，多次对比线程堆栈，查看哪些线程一直处于等锁状态，进一步查看栈帧相关变量，结合代码推断确认哪些线程死锁。coredump文件，依据堆栈可同样分析。
-
-### 条件变量
+### 条件变量/锁
 
 阻塞线程，避免线程不断轮训，类似于一个栅栏。一个条件变量可以被多个线程等待，当条件变量被唤醒，所有的线程可以一起恢复执行。
 
@@ -333,6 +316,31 @@ int main() {
 }
 ```
 
+### 死锁
+
+死锁指的是，两个以上线程在执行过程中，因争夺资源而造成一种互相等待的现象，若无外部处理，将会无限等待下去。死锁本质上就是一个线程在请求锁的时候，永远也请求不到。死锁的危险始终存在，应该在程序编写的时候尽量减少死锁存在的范围。
+
+- 死锁发生的情况： 1、忘记释放锁；2、单线程重复申请锁；3、多线程申请多把锁，造成相互等待；
+
+```c++
+void process1() {
+    mutex1.enter(); // 步骤1
+    mutex2.enter(); // 步骤3
+    do_Something;
+    mutex2.leave();
+    mutex1.leave();
+}
+void process2() {
+    mutex2.enter(); // 步骤2
+    mutex1.enter(); // 步骤4
+    do_Something;
+    mutex1.leave();
+    mutex2.leave();
+}
+```
+
+- 死锁问题排查：通过gdb pstack命令可查看进程的栈跟踪，多次对比线程堆栈，查看哪些线程一直处于等锁状态，进一步查看栈帧相关变量，结合代码推断确认哪些线程死锁。coredump文件，依据堆栈可同样分析。
+
 
 
 # 三、网络编程
@@ -353,6 +361,112 @@ int main() {
 * ssize_t **read**(int fd, void *buf, size_t count);
 * ssize_t **write**(int fd, const void *buf, size_t count);
 * int **close**(int fd);
+
+```cpp
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<errno.h>
+#include<sys/types.h>
+#include<sys/socket.h>
+#include<netinet/in.h>
+#define MAXLINE 4096
+
+//服务端：socket - bind - listen - accept - recv - close
+int main(int argc, char **argv)
+{
+    int listenfd, connfd;
+    struct sockaddr_in servaddr;
+    char buff[MAXLINE];
+    int n;
+
+    if((listenfd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
+        printf("create socket error: %s(errno: %d)\n",strerror(errno),errno);
+        exit(0);
+    }
+
+    memset(&servaddr, 0, sizeof(servaddr));
+    servaddr.sin_family = AF_INET;
+    servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
+    servaddr.sin_port = htons(6666);
+
+    if( bind(listenfd, (struct sockaddr*)&servaddr, sizeof(servaddr)) == -1) {
+        printf("bind socket error: %s(errno: %d)\n",strerror(errno),errno);
+        exit(0);
+    }
+
+    if( listen(listenfd, 10) == -1) {
+        printf("listen socket error: %s(errno: %d)\n",strerror(errno),errno);
+        exit(0);
+    }
+
+    printf("======waiting for client's request======\n");
+    while(1) {
+        if( (connfd = accept(listenfd, (struct sockaddr*)NULL, NULL)) == -1)
+        {
+            printf("accept socket error: %s(errno: %d)",strerror(errno),errno);
+            continue;
+        }
+        n = recv(connfd, buff, MAXLINE, 0);
+        buff[n] = '\0';
+        printf("recv msg from client: %s\n", buff);
+        close(connfd);
+    }
+
+    close(listenfd);
+}
+```
+
+```cpp
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<errno.h>
+#include<sys/types.h>
+#include<sys/socket.h>
+#include<netinet/in.h>
+#define MAXLINE 4096
+
+//客户端：socket - connect - send - close
+int main(int argc, char **argv)
+{
+    int sockfd, n;
+    char recvline[MAXLINE], sendline[MAXLINE];
+    struct sockaddr_in servaddr;
+
+    if (argc != 2) {
+        printf("usage: ./client <ipaddress>\n");
+        exit(0);
+    }
+
+    if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+        printf("create socket error: %s(errno: %d)\n", strerror(errno),errno);
+        exit(0);
+    }
+
+    memset(&servaddr, 0, sizeof(servaddr));
+    servaddr.sin_family = AF_INET;
+    servaddr.sin_port = htons(6666);
+    if (net_pton(AF_INET, argv[1], &servaddr.sin_addr) <= 0) {
+        printf("inet_pton error for %s\n",argv[1]);
+        exit(0);
+    }
+
+    if (connect(sockfd, (struct sockaddr*)&servaddr, sizeof(servaddr)) < 0) {
+        printf("connect error: %s(errno: %d)\n",strerror(errno),errno);
+        exit(0);
+    }
+
+    printf("send msg to server: \n");
+    fgets(sendline, MAXLINE, stdin);
+    if (send(sockfd, sendline, strlen(sendline), 0) < 0) {
+        printf("send msg error: %s(errno: %d)\n", strerror(errno), errno);
+        exit(0);
+    }
+
+    close(sockfd);
+}
+```
 
 
 
@@ -376,7 +490,7 @@ int main() {
 
 ## 2.内存信息
 
-[free和top命令查看系统内存使用情况](https://www.cnblogs.com/hider/p/12753757.html)
+[free和top命令查看系统内存使用情况](http://t.zoukankan.com/hider-p-12753757.html)
 
 1. top 实时显示进程情况
 
@@ -391,7 +505,7 @@ Tasks: 838 total,   1 running, 837 sleeping,   0 stopped,   0 zombie
 162617 root      20   0 2373152 575292  12540 S   8.6  0.9 502:46.88 gnome-shell                                                            
 139865 root      20   0  124276   2292   1184 R   0.7  0.0   0:00.12 top                                    
 
-【VIRT是虚拟内存；RES是持续占用内存；SHR是共享内存】
+【VIRT是虚拟内存；RES是持续占用内存（物理内存）；SHR是共享内存】
 ```
 
 2. free 查看系统内存使用情况
@@ -406,3 +520,4 @@ total = used + free
 ```
 
 3. vmstat 获取有关进程、虚存、页面交换空间及CPU活动的信息
+
