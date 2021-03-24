@@ -57,6 +57,7 @@ public:
     ~CallBack() {};
     void Register(FUNC_PTR call_back_ptr);
     void Test();
+
 private:
     FUNC_PTR m_call_back_ptr;
 };

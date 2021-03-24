@@ -142,3 +142,14 @@ https://www.cnblogs.com/marsggbo/p/11838823.html#gpu%E5%9E%8B%E5%8F%B7%E5%90%AB%
 
 # 正则表达式
 
+
+
+
+
+
+
+encrypt、decrypt、plaintext、ciphertext
+
+Alic、Bob：相互通信
+Eve：窃听者
+Mallory：主动攻击者
