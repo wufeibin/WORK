@@ -153,3 +153,7 @@ encrypt、decrypt、plaintext、ciphertext
 Alic、Bob：相互通信
 Eve：窃听者
 Mallory：主动攻击者
+
+
+使用 Valgrind 检测 C++ 内存泄漏
+http://senlinzhan.github.io/2017/12/31/valgrind/
