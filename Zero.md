@@ -155,5 +155,74 @@ Eve：窃听者
 Mallory：主动攻击者
 
 
-使用 Valgrind 检测 C++ 内存泄漏
-http://senlinzhan.github.io/2017/12/31/valgrind/
+```
+
+#include <iostream>
+#include <vector>
+#include <chrono>
+#include "ThreadPool.h"
+
+int main()
+{
+	// create thread pool with 4 worker threads
+    ThreadPool pool(4);
+    std::vector< std::future<int> > results;
+
+    for(int i = 0; i < 8; ++i) {
+        results.emplace_back(
+            pool.enqueue([i] {
+                std::cout << "hello " << i << std::endl;
+                std::this_thread::sleep_for(std::chrono::seconds(1));
+                std::cout << "world " << i << std::endl;
+                return i*i;
+            })
+        );
+    }
+
+    for(auto && result: results)
+        std::cout << result.get() << ' ';
+    std::cout << std::endl;
+    
+    return 0;
+}
+
+
+
+std::thread rptThread_;
+volatile bool isRunning_{false};
+
+void KpiManager::sendStastics()
+{
+    IVS_RUN_LOG_INF("Manage stastics", "kpi messanger begin to run");
+    while (isRunning_) {
+        std::vector<std::shared_ptr<KpiMsg>> kpiMsg;
+        {
+            std::lock_guard<std::mutex> lk(kpiMux_);
+            kpiMsg.swap(kpiMsg_);
+        }
+
+        for (const auto &msg : kpiMsg) {
+            msg->report();
+        }
+
+        constexpr const int intval = 1;
+        sleep(intval);
+    }
+}
+
+void KpiManager::run()
+{
+    isRunning_ = true;
+    rptThread_ = std::thread([]() {
+        KpiManager::instance().sendStastics();
+    });
+}
+
+void KpiManager::stop()
+{
+    isRunning_ = false;
+    if (rptThread_.joinable()) {
+        rptThread_.join();
+    }
+}
+```
