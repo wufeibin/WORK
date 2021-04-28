@@ -47,6 +47,10 @@
 
 - awk -F: '{print $1}' data.txt 【-F指定分隔符 : 】
 
+### 正则表达式
+
+
+
 
 
 # 二、进程&线程
@@ -341,6 +345,8 @@ void process2() {
 
 - 死锁问题排查：通过gdb pstack命令可查看进程的栈跟踪，多次对比线程堆栈，查看哪些线程一直处于等锁状态，进一步查看栈帧相关变量，结合代码推断确认哪些线程死锁。coredump文件，依据堆栈可同样分析。
 
+  http://senlinzhan.github.io/2018/01/01/gdb-on-multithreaded/
+
 
 
 # 三、网络编程
@@ -358,9 +364,9 @@ void process2() {
 * int **accept**(int sockfd, struct sockaddr *addr, socklen_t *addrlen);
 * ssize_t **recv**(int sockfd, void *buf, size_t len, int flags);
 * ssize_t **send**(int sockfd, const void *buf, size_t len, int flags);
-* ssize_t **read**(int fd, void *buf, size_t count);
-* ssize_t **write**(int fd, const void *buf, size_t count);
-* int **close**(int fd);
+* ssize_t **read**(int sockfd, void *buf, size_t count);
+* ssize_t **write**(int sockfd, const void *buf, size_t count);
+* int **close**(int sockfd);
 
 ```cpp
 #include<stdio.h>

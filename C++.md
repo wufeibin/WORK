@@ -1,5 +1,3 @@
-[TOC]
-
 # 一、C++基础
 
 ## const
@@ -301,14 +299,14 @@ C++11的一大亮点就是引入了Lambda表达式，利用Lambda表达式可以
 unique_ptr独占所指对象。当程序试图将一个unique_ptr赋值给另一个时，如果源unique_ptr是个临时右值，编译器允许这么做；如果源unique_ptr将存在一段时间，编译器将禁止这么做。
 
 ```c++
-auto_ptr<string> p1(new string ("auto"));
+auto_ptr<string> p1(new string("auto"));
 auto_ptr<string> p2;
 p2 = p1; // p2接管string对象的所有权后，p1是空指针。再使用p1会内存崩溃
-unique_ptr<string> pu1(new string ("hello world"));
+unique_ptr<string> pu1(new string("hello world"));
 unique_ptr<string> pu2;
 pu2 = pu1; // 编译器会禁止报错
 unique_ptr<string> pu3;
-pu3 = unique_ptr<string>(new string ("You")); // 允许
+pu3 = unique_ptr<string>(new string("you")); // 允许
 ```
 
 
