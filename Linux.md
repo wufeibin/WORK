@@ -1,4 +1,19 @@
-# 一、Linux命令
+# 一、计算机操作系统
+
+- [概述](https://github.com/CyC2018/CS-Notes/blob/master/notes/计算机操作系统 - 概述.md)
+- [进程管理](https://github.com/CyC2018/CS-Notes/blob/master/notes/计算机操作系统 - 进程管理.md)
+- [死锁](https://github.com/CyC2018/CS-Notes/blob/master/notes/计算机操作系统 - 死锁.md)
+- [内存管理](https://github.com/CyC2018/CS-Notes/blob/master/notes/计算机操作系统 - 内存管理.md)
+- [设备管理](https://github.com/CyC2018/CS-Notes/blob/master/notes/计算机操作系统 - 设备管理.md)
+- [链接](https://github.com/CyC2018/CS-Notes/blob/master/notes/计算机操作系统 - 链接.md)
+
+
+
+# 二、[Linux整理](https://github.com/CyC2018/CS-Notes/blob/master/notes/Linux.md)
+
+
+
+# 三、Linux命令
 
 | [Linux命令大全](https://man.linuxde.net/) | 示例                                                         |
 | ----------------------------------------- | ------------------------------------------------------------ |
@@ -53,7 +68,7 @@
 
 
 
-# 二、进程&线程
+# 四、进程&线程
 
 进程是程序执行时的一个实例，即它是程序已经执行到何种程度的数据结构的汇集。从内核的观点看，进程的目的就是担当分配系统资源（CPU时间、内存等）的基本单位。
 
@@ -349,7 +364,7 @@ void process2() {
 
 
 
-# 三、网络编程
+# 五、网络编程
 
 网络层的“ip地址”可以唯一标识网络中的主机，而传输层的“协议+端口”可以唯一标识主机中的应用程序。
 
@@ -476,7 +491,7 @@ int main(int argc, char **argv)
 
 
 
-# 四、Linux内存
+# 六、Linux内存
 
 ## 1.内存管理
 
