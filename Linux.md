@@ -1,19 +1,8 @@
-# 一、计算机操作系统
-
-- [概述](https://github.com/CyC2018/CS-Notes/blob/master/notes/计算机操作系统 - 概述.md)
-- [进程管理](https://github.com/CyC2018/CS-Notes/blob/master/notes/计算机操作系统 - 进程管理.md)
-- [死锁](https://github.com/CyC2018/CS-Notes/blob/master/notes/计算机操作系统 - 死锁.md)
-- [内存管理](https://github.com/CyC2018/CS-Notes/blob/master/notes/计算机操作系统 - 内存管理.md)
-- [设备管理](https://github.com/CyC2018/CS-Notes/blob/master/notes/计算机操作系统 - 设备管理.md)
-- [链接](https://github.com/CyC2018/CS-Notes/blob/master/notes/计算机操作系统 - 链接.md)
+# 一、[Linux整理](https://github.com/CyC2018/CS-Notes/blob/master/notes/Linux.md)
 
 
 
-# 二、[Linux整理](https://github.com/CyC2018/CS-Notes/blob/master/notes/Linux.md)
-
-
-
-# 三、Linux命令
+# 二、Linux命令
 
 | [Linux命令大全](https://man.linuxde.net/) | 示例                                                         |
 | ----------------------------------------- | ------------------------------------------------------------ |
@@ -68,7 +57,7 @@
 
 
 
-# 四、进程&线程
+# 三、进程&线程
 
 进程是程序执行时的一个实例，即它是程序已经执行到何种程度的数据结构的汇集。从内核的观点看，进程的目的就是担当分配系统资源（CPU时间、内存等）的基本单位。
 
@@ -80,7 +69,7 @@
 
 
 
-## 1.进程
+## 1.[进程](https://github.com/CyC2018/CS-Notes/blob/master/notes/计算机操作系统%20-%20进程管理.md)
 
 正常情况下，子进程是通过父进程创建的，子进程的结束和父进程的运行是一个异步过程，即父进程永远无法预测子进程到底什么时候结束。 当一个进程完成它的工作终止之后，它的父进程需要调用wait()或者waitpid()系统调用取得子进程的终止状态。
 
@@ -335,7 +324,7 @@ int main() {
 }
 ```
 
-### 死锁
+### [死锁](https://github.com/CyC2018/CS-Notes/blob/master/notes/计算机操作系统%20-%20死锁.md)
 
 死锁指的是，两个以上线程在执行过程中，因争夺资源而造成一种互相等待的现象，若无外部处理，将会无限等待下去。死锁本质上就是一个线程在请求锁的时候，永远也请求不到。死锁的危险始终存在，应该在程序编写的时候尽量减少死锁存在的范围。
 
@@ -364,7 +353,7 @@ void process2() {
 
 
 
-# 五、网络编程
+# 四、网络编程
 
 网络层的“ip地址”可以唯一标识网络中的主机，而传输层的“协议+端口”可以唯一标识主机中的应用程序。
 
@@ -491,9 +480,9 @@ int main(int argc, char **argv)
 
 
 
-# 六、Linux内存
+# 五、Linux内存
 
-## 1.内存管理
+## 1.[内存管理](https://github.com/CyC2018/CS-Notes/blob/master/notes/计算机操作系统%20-%20内存管理.md)
 
 [为什么 Linux 需要虚拟内存](https://draveness.me/whys-the-design-os-virtual-memory/)
 
