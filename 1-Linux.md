@@ -24,7 +24,6 @@
 | **df**<br />查看挂载设备磁盘使用          | df -h                                                        |
 | **du**<br />查看目录的硬盘使用            | du -ch path<br />du -sh *                                    |
 |                                           |                                                              |
-|                                           |                                                              |
 | **其他实用命令**                          | cat -n file 【按行号查看文件】<br />tail -f file 【循环显示文件末尾内容】<br />tail -n 10 file 【显示文件末尾10行内容】<br />head -n 10 file 【显示文件起始10行内容】<br />more file<br />less file |
 
 ### sed 流编辑器
@@ -669,7 +668,7 @@ else
 
 ### 比较
 
-#### 1. 功能
+**1. 功能**
 
 select 和 poll 的功能基本相同，不过在一些实现细节上有所不同。
 
@@ -678,11 +677,11 @@ select 和 poll 的功能基本相同，不过在一些实现细节上有所不�
 - poll 提供了更多的事件类型，并且对描述符的重复利用上比 select 高。
 - 如果一个线程对某个描述符调用了 select 或者 poll，另一个线程关闭了该描述符，会导致调用结果不确定。
 
-#### 2. 速度
+**2. 速度**
 
 select 和 poll 速度都比较慢，每次调用都需要将全部描述符从应用进程缓冲区复制到内核缓冲区。
 
-#### 3. 可移植性
+**3. 可移植性**
 
 几乎所有的系统都支持 select，但是只有比较新的系统支持 poll。
 
@@ -756,11 +755,11 @@ else
 
 epoll 的描述符事件有两种触发模式：LT（level trigger）和 ET（edge trigger）。
 
-#### 1. LT 模式
+**1. LT 模式**
 
 当 epoll_wait() 检测到描述符事件到达时，将此事件通知进程，进程可以不立即处理该事件，下次调用 epoll_wait() 会再次通知进程。是默认的一种模式，并且同时支持 Blocking 和 No-Blocking。
 
-#### 2. ET 模式
+**2. ET 模式**
 
 和 LT 模式不同的是，通知之后进程必须立即处理事件，下次再调用 epoll_wait() 时不会再得到事件到达的通知。
 
@@ -770,17 +769,17 @@ epoll 的描述符事件有两种触发模式：LT（level trigger）和 ET（ed
 
 很容易产生一种错觉认为只要用 epoll 就可以了，select 和 poll 都已经过时了，其实它们都有各自的使用场景。
 
-#### 1. select 应用场景
+**1. select 应用场景**
 
 select 的 timeout 参数精度为微秒，而 poll 和 epoll 为毫秒，因此 select 更加适用于实时性要求比较高的场景，比如核反应堆的控制。
 
 select 可移植性更好，几乎被所有主流平台所支持。
 
-#### 2. poll 应用场景
+**2. poll 应用场景**
 
 poll 没有最大描述符数量的限制，如果平台支持并且对实时性要求不高，应该使用 poll 而不是 select。
 
-#### 3. epoll 应用场景
+**3. epoll 应用场景**
 
 只需要运行在 Linux 平台上，有大量的描述符需要同时轮询，并且这些连接最好是长连接。
 
@@ -794,7 +793,7 @@ poll 没有最大描述符数量的限制，如果平台支持并且对实时性
 
 # 五、Linux内存
 
-## 1. [内存管理](https://github.com/CyC2018/CS-Notes/blob/master/notes/计算机操作系统%20-%20内存管理.md)
+## [内存管理](https://github.com/CyC2018/CS-Notes/blob/master/notes/计算机操作系统%20-%20内存管理.md)
 
 [为什么 Linux 需要虚拟内存](https://draveness.me/whys-the-design-os-virtual-memory/)
 
@@ -810,7 +809,7 @@ poll 没有最大描述符数量的限制，如果平台支持并且对实时性
 
 > Linux较Windows的内存管理区别：在linux中程序被关闭，占用的内存不会归还物理内存，而是用来做缓存。当物理内存有空闲时，优先使用物理内存（所以当使用 一段时间后，即使有很大内存也会被占用）。这样做的好处是，启动那些刚启动的程序，或是存取刚存取的数据，效率速度会比较快，适用于服务器的场景。
 
-## 2. 内存信息
+## 内存信息
 
 [free和top命令查看系统内存使用情况](http://t.zoukankan.com/hider-p-12753757.html)
 
