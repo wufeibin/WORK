@@ -15,8 +15,8 @@ public:
     static SingleHungry* GetInstance() {
         return &ins;
     }
-	
-	void print() {
+    
+    void print() {
         printf("SingleHungry this:%p\n", this);
     }
 };
@@ -47,7 +47,7 @@ public:
 
     // 方法三：双检查锁
     static SingleLazy* GetInstance3() {
-		static std::mutex insMutex;
+        static std::mutex insMutex;
         static SingleLazy* pIns = NULL;
         if (pIns == NULL) { // 防止多个线程获取单例时阻塞，添加此判断，提高效率
             std::lock_guard<std::mutex> lk(insMutex); // 加锁，防止多个线程同时进入创建实例，解决线程安全问题
@@ -67,7 +67,7 @@ public:
 
 int main()
 {
-	SingleHungry::GetInstance()->print();
+    SingleHungry::GetInstance()->print();
     SingleLazy::GetInstance1()->print();
     SingleLazy::GetInstance2()->print();
     SingleLazy::GetInstance3()->print();

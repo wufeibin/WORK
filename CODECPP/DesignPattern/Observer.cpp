@@ -1,6 +1,6 @@
 /*
-观察者模式：一个被观察者对象Subject的状态发生改变，通知所有的观察者Observer对象。 
-*/
+ * 观察者模式：一个被观察者对象Subject的状态发生改变，通知所有的观察者Observer对象。 
+ */
 
 #include "../common.h"
 
