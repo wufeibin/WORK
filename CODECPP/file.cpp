@@ -1,6 +1,6 @@
 #include "file.h"
 
-/*
+/* 
 1. 打开文件
     FILE *fopen(const char *filename, const char *mode);
         "r"，只读。
@@ -31,11 +31,11 @@
     int fseek(FILE *strean, long offset, int whence); 
 9. 重置读写位置０
     void rewind(FILE *stream);
-*/
+ */
 
 void ReadFile()
 {
-    const char *filename = "./dir/read_file.txt";
+    const char *filename = "./read_file.txt";
     FILE* fp = fopen(filename, "r");
     if (!fp) {
         LOGINFO("fopen failed");
@@ -54,7 +54,7 @@ void ReadFile()
 
 void WriteFile()
 {
-    const char *filename = "./dir/wrtie_file.txt";
+    const char *filename = "./wrtie_file.txt";
     FILE* fp = fopen(filename, "a");
     if (!fp) {
         LOGINFO("fopen failed");
@@ -73,7 +73,7 @@ void WriteFile()
 
 
 
-/*
+/* 
 C++文件操作类
     ifstream：读取文件流
     ofstream：文件写入流
@@ -95,11 +95,11 @@ C++文件操作类
 3. 设置流指针位置
     seekg(off_type offset, seekdir direction);
     seekp(off_type offset, seekdir direction);
-*/
+ */
 
 void ReadFileCpp()
 {
-    const char *filename = "./dir/read_file.txt";
+    const char *filename = "./read_file.txt";
     ifstream readfile(filename);
     // ifstream readfile;
     // readfile.open(filename);
@@ -118,7 +118,7 @@ void ReadFileCpp()
 
 void WriteFileCpp()
 {
-    const char *filename = "./dir/wrtie_file.txt";
+    const char *filename = "./wrtie_file.txt";
     ofstream writefile(filename);
     // ofstream writefile;
     // writefile.open(filename);

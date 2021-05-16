@@ -2,12 +2,14 @@
 #include<stdlib.h>
 #include<string.h>
 #include<errno.h>
+#include<unistd.h>
 #include<sys/types.h>
 #include<sys/socket.h>
 #include<netinet/in.h>
+#include<arpa/inet.h>
 #define MAXLINE 4096
 
-//客户端：socket - connect - send - close
+// 客户端：socket - connect - send - close
 int main(int argc, char **argv)
 {
     int sockfd, n;
@@ -27,7 +29,7 @@ int main(int argc, char **argv)
     memset(&servaddr, 0, sizeof(servaddr));
     servaddr.sin_family = AF_INET;
     servaddr.sin_port = htons(6666);
-    if (net_pton(AF_INET, argv[1], &servaddr.sin_addr) <= 0) {
+    if (inet_pton(AF_INET, argv[1], &servaddr.sin_addr) <= 0) {
         printf("inet_pton error for %s\n",argv[1]);
         exit(0);
     }
@@ -46,3 +48,10 @@ int main(int argc, char **argv)
 
     close(sockfd);
 }
+
+/* 
+wufeibindeMacBook-Pro:Socket wufeibin$ g++ SocketClient.cpp -o client
+wufeibindeMacBook-Pro:Socket wufeibin$ ./client 127.0.0.1
+send msg to server: 
+wufeibin
+ */

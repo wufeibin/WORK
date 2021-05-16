@@ -2,12 +2,13 @@
 #include<stdlib.h>
 #include<string.h>
 #include<errno.h>
+#include<unistd.h>
 #include<sys/types.h>
 #include<sys/socket.h>
 #include<netinet/in.h>
 #define MAXLINE 4096
 
-//服务端：socket - bind - listen - accept - recv - close
+// 服务端：socket - bind - listen - accept - recv - close
 int main(int argc, char **argv)
 {
     int listenfd, connfd;
@@ -50,3 +51,11 @@ int main(int argc, char **argv)
 
     close(listenfd);
 }
+
+/* 
+wufeibindeMacBook-Pro:Socket wufeibin$ g++ SocketServer.cpp -o server
+wufeibindeMacBook-Pro:Socket wufeibin$ ./server 
+======waiting for client's request======
+recv msg from client: wufeibin
+
+ */

@@ -8,8 +8,8 @@ class Observer { // 抽象观察者
 protected:
     string name;
 public:
-    Observer(string name) {
-        this->name = name;
+    Observer(string _name) {
+        name = _name;
     }
 
     virtual void update(string action) = 0;
@@ -50,11 +50,11 @@ public:
 };
 
 class SecretarySubject : public Subject { // 具体被观察者，秘书发出通知
-    void attach(Observer *observer) {
+    void attach(Observer* observer) {
         observers.push_back(observer);
     }
 
-    void detach(Observer *observer) {
+    void detach(Observer* observer) {
         list<Observer *>::iterator iter = observers.begin();
         while (iter != observers.end()) {
             if ((*iter) == observer) {
@@ -65,7 +65,7 @@ class SecretarySubject : public Subject { // 具体被观察者，秘书发出�
     }
     
     void notify(string action) {
-        list<Observer *>::iterator iter = observers.begin();
+        list<Observer*>::iterator iter = observers.begin();
         while (iter != observers.end()) {
             (*iter)->update(action);
             ++iter;

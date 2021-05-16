@@ -1,5 +1,0 @@
-This is wrtie file test[0]!
-This is wrtie file test[1]!
-This is wrtie file test[2]!
-This is wrtie file test[3]!
-This is wrtie file test[4]!

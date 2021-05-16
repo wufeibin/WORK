@@ -31,7 +31,7 @@ function PrintColor {
 }
 
 # 文件替换/备份
-function ReplaceBak {
+ReplaceBak() {
     
 }
 

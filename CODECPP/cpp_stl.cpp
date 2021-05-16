@@ -1,11 +1,11 @@
 #include "cpp_stl.h"
-/*
+
 static bool IsShorter(const string &s1, const string &s2)
 {
     return s1.size() < s2.size();
 }
 
-void UseString()
+void StringDemo()
 {
     // 1、定义与初始化
     string s1; //默认初始化，一个空字符串
@@ -51,7 +51,7 @@ void UseString()
 }
 
 // stringstream通常是用来做数据转换
-void UseStringStream()
+void StringStreamDemo()
 {
     std::stringstream stream;
     std::string result;
@@ -62,7 +62,7 @@ void UseStringStream()
 }
 
 // 通常使用vector是最好的选择
-void UseVector()
+void VectorDemo()
 {
     // 1、定义与初始化
     vector<char> vec; // 默认初始化，vec1为空
@@ -102,12 +102,13 @@ void UseVector()
         LOGINFO("find result");
     }
 
-    fill(vec7.cbegin(), vec7.cend(), "a"); // 将每个元素重置为a
+    // to fix
+    //fill(vec7.cbegin(), vec7.cend(), "a"); // 将每个元素重置为a
 
-    sort(vec7.cbegin(), vec7.cend(), IsShorter); // 按长度排序字符串
+    //sort(vec7.cbegin(), vec7.cend(), IsShorter); // 按长度排序字符串
 }
 
-void UseList()
+void ListDemo()
 {
     // 1、定义与初始化
     list<char> lst1;
@@ -137,7 +138,7 @@ void UseList()
 // map类型通常被称为关联数组，map容器是键值对（key-value）的容器。与正常数组不同之处在于其下标不是整数，而是一个关键字key值。对于迭代器，可以修改value值，不能修改key值。
 // map会根据key值自动排序。key值需要支持<操作符。
 // map与multimap差别仅仅在于multiple允许一个键对应多个值。
-void UseMap()
+void MapDemo()
 {
     // 1、定义与初始化
     map<int, string> map1; // 空map，key值为int型，value值为string型。
@@ -172,7 +173,7 @@ void UseMap()
 }
 
 // set的含义是集合，它是一个有序的容器，里面的元素都是排序好的。set容器的每个键都只能对应一个元素。当想知道一个值是否存在，set是最有用的。
-void UseSet()
+void SetDemo()
 {
     set<string> set1 = {"111", "222"};
     set1.insert("aaa"); // 添加元素
@@ -184,25 +185,24 @@ void UseSet()
 }
 
 
-void UseLambda()
+void LambdaDemo()
 {
-#if 0
     vector<int> myvec{ 3, 2, 5, 7, 3, 2};
     sort(myvec.begin(), myvec.end(), [](int a, int b) -> bool { return a < b; }); // Lambda表达式
 
     int a = 123;
-    auto f = [a] { cout << a << endl; }; 
+    auto f_a = [a] { cout << a << endl; }; 
     a = 321;
-    f(); // 输出：123
+    f_a(); // 输出：123
 
     int b = 123;
-    auto f = [&b] { cout << b << endl; }; 
+    auto f_b = [&b] { cout << b << endl; }; 
     b = 321;
-    f(); // 输出：321
+    f_b(); // 输出：321
 
-    auto x = [](int c){cout << c << endl;}(123); // 或通过“函数体”后面的‘()’传入参数
-#endif
+    // to fix 
+    //auto x = [](int c){cout << c << endl;}(123); // 或通过“函数体”后面的‘()’传入参数
+    //x();
+
 }
-
-*/
 
