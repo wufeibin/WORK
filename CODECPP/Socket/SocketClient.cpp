@@ -9,6 +9,20 @@
 #include<arpa/inet.h>
 #define MAXLINE 4096
 
+/* 
+int socket(int domain, int type, int protocol);	
+int bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
+int listen(int sockfd, int backlog);
+int connect(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
+int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen);
+ssize_t recv(int sockfd, void *buf, size_t len, int flags);
+ssize_t send(int sockfd, const void *buf, size_t len, int flags);
+ssize_t read(int sockfd, void *buf, size_t count);
+ssize_t write(int sockfd, const void *buf, size_t count);
+int close(int sockfd);
+ */
+
+
 // 客户端：socket - connect - send - close
 int main(int argc, char **argv)
 {
