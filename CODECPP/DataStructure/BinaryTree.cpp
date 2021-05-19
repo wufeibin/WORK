@@ -1,180 +1,204 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include<iostream>
+#include<stack>
+#include<queue>
+using namespace std;
 
-#define TRUE 1
-#define FALSE 0
-#define OK 1
-#define ERROR 0
-#define OVERFLOW -1
-#define SUCCESS 1
-#define UNSUCCESS 0
-#define dataNum 5
-int i = 0;
-int dep = 0;
-char data[dataNum] = { 'A', 'B', 'C', 'D', 'E' };
-
-typedef int Status;
-typedef char TElemType;
-
-// 二叉树结构
-typedef struct BiTNode
-{
-	TElemType data;
-	struct BiTNode *lchild, *rchild;
-}BiTNode, *BiTree;
-
-// 初始化一个空树
-void InitBiTree(BiTree &T)
-{
-	T = NULL;
-}
+// 节点结构体
+struct Node {
+    Node(int value):value(value), left(NULL), right(NULL) {}
+    int value;
+    Node * left;
+    Node * right;
+};
 
 // 构建二叉树
-BiTree MakeBiTree(TElemType e, BiTree L, BiTree R)
+void inertNode(Node *node, int value)
 {
-	BiTree t;
-	t = (BiTree)malloc(sizeof(BiTNode));
-	if (NULL == t) return NULL;
-	t->data = e;
-	t->lchild = L;
-	t->rchild = R;
-	return t;
+    if (value <= node->value) {
+        if (!node->left) {
+            node->left = new Node(value);
+        } else {
+            inertNode(node->left, value);
+        }
+    } else {
+        if (!node->right) {
+            node->right = new Node(value);
+        } else {
+            inertNode(node->right, value);
+        }
+    }
 }
 
-// 访问结点
-Status visit(TElemType e)
+// 前序遍历递归实现
+void preOrder(Node *node)
 {
-	printf("%c", e);
-	return OK;
+    if (node) {
+        cout << node->value << " ";
+        preOrder(node->left);
+        preOrder(node->right);
+    }
 }
 
-// 对二叉树T求叶子结点数目
-int Leaves(BiTree T)
+// 中序遍历递归实现
+void inOrder(Node *node)
 {
-	int l = 0, r = 0;
-	if (NULL == T) return 0;
-	if (NULL == T->lchild && NULL == T->rchild) return 1;
-
-	// 求左子树叶子数目
-	l = Leaves(T->lchild);
-	// 求右子树叶子数目
-	r = Leaves(T->rchild);
-	// 组合
-	return r + l;
+    if (node) {
+        inOrder(node->left);
+        cout << node->value << " ";
+        inOrder(node->right);
+    }
 }
 
-// 层次遍历：dep是个全局变量,高度
-int depTraverse(BiTree T)
+// 后序遍历递归实现
+void posOrder(Node *node)
 {
-	if (NULL == T) return ERROR;
-
-	dep = (depTraverse(T->lchild) > depTraverse(T->rchild)) ? depTraverse(T->lchild) : depTraverse(T->rchild);
-
-	return dep + 1;
+    if (node) {
+        posOrder(node->left);
+        posOrder(node->right);
+        cout << node->value << " ";
+    }
 }
 
-// 高度遍历：lev是局部变量，层次
-void levTraverse(BiTree T, Status(*visit)(TElemType e), int lev)
+// 前序遍历非递归实现
+void preOrder1(Node *node)
 {
-	if (NULL == T) return;
-	visit(T->data);
-	printf("的层次是%d\n", lev);
+    if (!node) {
+        return;
+    }
 
-	levTraverse(T->lchild, visit, ++lev);
-	levTraverse(T->rchild, visit, lev);
+    stack<Node *> _stack;
+    _stack.push(node);
+    while (!_stack.empty()) {
+        Node *temp = _stack.top();
+        cout << temp->value << " ";
+        _stack.pop();
+        if (temp->right) {
+            _stack.push(temp->right);
+        }
+        if (temp->left) {
+            _stack.push(temp->left);
+        }
+    }
 }
 
-// num是个全局变量
-void InOrderTraverse(BiTree T, Status(*visit)(TElemType e), int &num)
+// 中序遍历非递归实现
+void inOrder1(Node *node)
 {
-	if (NULL == T) return;
-	visit(T->data);
-	if (NULL == T->lchild && NULL == T->rchild) { printf("是叶子结点"); num++; }
-	else printf("不是叶子结点");
-	printf("\n");
-	InOrderTraverse(T->lchild, visit, num);
-	InOrderTraverse(T->rchild, visit, num);
+    if (!node) {
+        return;
+    }
+
+    stack<Node *> _stack;
+    Node *temp = node;
+    while (temp || !_stack.empty()) {
+        if (temp) {
+            _stack.push(temp);
+            temp = temp->left;
+        } else {
+            temp = _stack.top();
+            cout << temp->value << " ";
+            _stack.pop();
+            temp = temp->right;
+        }
+    }
 }
 
-// 二叉树判空
-Status BiTreeEmpty(BiTree T)
+// 后序遍历非递归实现
+void posOrder1(Node *node)
 {
-	if (NULL == T) return TRUE;
-	return FALSE;
+    if (!node) {
+        return;
+    }
+
+    stack<Node *> _stack1, _stack2;
+    _stack1.push(node);
+    while (!_stack1.empty()) {
+        Node *temp = _stack1.top();
+        _stack1.pop();
+        _stack2.push(temp);
+        if (temp->left) {
+            _stack1.push(temp->left);
+        }
+        if(temp->right) {
+           _stack1.push(temp->right);
+        }
+    }
+
+    while (!_stack2.empty()) {
+        cout << _stack2.top()->value << " ";
+        _stack2.pop();
+    }
 }
 
-// 打断二叉树：置空二叉树的左右子树
-Status BreakBiTree(BiTree &T, BiTree &L, BiTree &R)
+// 广度优先遍历
+void broadOrder(Node *node)
 {
-	if (NULL == T) return ERROR;
-	L = T->lchild;
-	R = T->rchild;
-	T->lchild = NULL;
-	T->rchild = NULL;
-	return OK;
+    if (!node) {
+        return;
+    }
+    
+    queue<Node *> _qnode;
+    _qnode.push(node);
+    while (!_qnode.empty()) {
+        Node * temp = _qnode.front();
+        cout << temp->value << " ";
+        _qnode.pop();
+        if (temp->left) {
+            _qnode.push(temp->left);
+        }
+        if (temp->right) {
+            _qnode.push(temp->right);
+        }
+    }
 }
 
-// 替换左子树
-Status ReplaceLeft(BiTree &T, BiTree &LT)
-{
-	BiTree temp;
-	if (NULL == T) return ERROR;
-	temp = T->lchild;
-	T->lchild = LT;
-	LT = temp;
-	return OK;
-}
 
-// 替换右子树
-Status ReplaceRight(BiTree &T, BiTree &RT)
-{
-	BiTree temp;
-	if (NULL == T) return ERROR;
-	temp = T->rchild;
-	T->rchild = RT;
-	RT = temp;
-	return OK;
-}
-
-// 合并二叉树
-void UnionBiTree(BiTree &Ttemp)
-{
-	BiTree L = NULL, R = NULL;
-	L = MakeBiTree(data[i++], NULL, NULL);
-	R = MakeBiTree(data[i++], NULL, NULL);
-	ReplaceLeft(Ttemp, L);
-	ReplaceRight(Ttemp, R);
-}
 
 int main()
 {
-	BiTree T = NULL, Ttemp = NULL;
+    int array[10] = {5, 3, 7, 2, 4, 6, 8, 1, 9, 10};
+    Node root(array[0]);
+    for (int i = 1; i < 10; ++i) {
+        inertNode(&root, array[i]);
+    }
+    
+    cout << "preOrder : ";
+    preOrder(&root);
+    cout << endl;
 
-	InitBiTree(T);
-	if (TRUE == BiTreeEmpty(T)) printf("初始化T为空\n");
-	else printf("初始化T不为空\n");
+    cout << "inOrder : ";
+    inOrder(&root);
+    cout << endl;
 
-	T = MakeBiTree(data[i++], NULL, NULL);
+    cout << "posOrder : ";
+    posOrder(&root);
+    cout << endl;
+    
+    cout << "preOrder1 : ";
+    preOrder1(&root);
+    cout << endl;
+    
+    cout << "inOrder1 : ";
+    inOrder1(&root);
+    cout << endl;
+    
+    cout << "posOrder1 : ";
+    posOrder1(&root);
+    cout << endl;
+    
+    cout << "broadOrder : ";
+    broadOrder(&root);
+    cout << endl;
 
-	Ttemp = T;
-	UnionBiTree(Ttemp);
-
-	Ttemp = T->lchild;
-	UnionBiTree(Ttemp);
-
-	Status(*visit1)(TElemType);
-	visit1 = visit;
-	int num = 0;
-	InOrderTraverse(T, visit1, num);
-	printf("叶子结点是 %d\n", num);
-
-	printf("叶子结点是 %d\n", Leaves(T));
-
-	int lev = 1;
-	levTraverse(T, visit1, lev);
-
-	printf("高度是 %d\n", depTraverse(T));
-
-	getchar();
-	return 0;
+    return 0;
 }
+
+/* 
+preOrder : 5 3 2 1 4 7 6 8 9 10 
+inOrder : 1 2 3 4 5 6 7 8 9 10 
+posOrder : 1 2 4 3 6 10 9 8 7 5 
+preOrder1 : 5 3 2 1 4 7 6 8 9 10 
+inOrder1 : 1 2 3 4 5 6 7 8 9 10 
+posOrder1 : 1 2 4 3 6 10 9 8 7 5 
+broadOrder : 5 3 7 2 4 6 8 1 9 10 
+ */

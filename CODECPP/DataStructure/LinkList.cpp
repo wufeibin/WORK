@@ -1,144 +1,185 @@
-/**
-* @author huihut
-* @E-mail:huihut@outlook.com
-* @version 创建时间：2016年9月18日
-* 说明：本程序实现了一个单链表。
-*/
+// 单链表
+#include<string>
+#include<iostream>
+using namespace std;
 
-#include "stdio.h"
-#include "stdlib.h"
-#include "malloc.h"
+template<typename Type>
+struct ListNode {
+    ListNode(Type x) : next(NULL), val(x) {}
+    ListNode *next;
+    Type val;
+};
 
-//5个常量定义
-#define TRUE 1
-#define FALSE 0
-#define OK 1
-#define ERROR 0
-#define OVERFLOW -1
+template<typename Type>
+class LinkedList {
+public:
+    LinkedList();
+    ~LinkedList();
+    void insert(Type val, int pos);
+    void remove(Type val);
+    int find(const Type &val);
+    void reverse();
+    const int size();
+    void print();
 
-//类型定义
-typedef int Status;
-typedef int ElemType;
+private:
+    ListNode<Type> *head;
+    int length;
+};
 
-//测试程序长度定义
-#define LONGTH 5
-
-//链表的类型
-typedef struct LNode {
-	ElemType data;
-	struct LNode *next;
-} LNode, *LinkList;
-
-//创建包含n个元素的链表L，元素值存储在data数组中
-Status create(LinkList &L, ElemType *data, int n) {
-	LNode *p, *q;
-	int i;
-	if (n < 0) return ERROR;
-	L = NULL;
-	p = L;
-	for (i = 0; i < n; i++)
-	{
-		q = (LNode *)malloc(sizeof(LNode));
-		if (NULL == q) return OVERFLOW;
-		q->data = data[i];
-		q->next = NULL;
-		if (NULL == p) L = q;
-		else p->next = q;
-		p = q;
-	}
-	return OK;
+template<typename Type>
+LinkedList<Type>::LinkedList() {
+    head = NULL;
+    length = 0;
 }
 
-//e从链表末尾入链表
-Status EnQueue_LQ(LinkList &L, ElemType &e) {
-	LinkList p, q;
-
-	if (NULL == (q = (LNode *)malloc(sizeof(LNode)))) return OVERFLOW;
-	q->data = e;
-	q->next = NULL;
-	if (NULL == L) L = q;
-	else
-	{
-		p = L;
-		while (p->next != NULL)
-		{
-			p = p->next;
-		}
-		p->next = q;
-	}
-	return OK;
-}
-
-
-//从链表头节点出链表到e
-Status DeQueue_LQ(LinkList &L, ElemType &e) {
-	if (NULL == L) return ERROR;
-	LinkList p;
-	p = L;
-	e = p->data;
-	L = L->next;
-	free(p);
-	return OK;
-}
-
-//遍历调用
-Status visit(ElemType e) {
-	printf("%d\t", e);
-	return OK;
-}
-
-//遍历单链表
-void ListTraverse_L(LinkList L, Status(*visit)(ElemType e))
+template<typename Type>
+LinkedList<Type>::~LinkedList()
 {
-	if (NULL == L) return;
-	for (LinkList p = L; NULL != p; p = p->next) {
-		visit(p->data);
-	}
+    ListNode<Type> *del = head;
+    while (head->next!= NULL) {
+        del = head->next;
+        head->next = del->next;
+        delete del;
+    }
+    delete head;
+    cout << "析构函数" << endl;
 }
 
-int main() {
-	int i;
-	ElemType e, data[LONGTH] = { 1, 2, 3, 4, 5 };
-	LinkList L;
+template<typename Type>
+void LinkedList<Type>::insert(Type val, int pos) {
+    if (pos < 0) {
+        cout << "The n must be positive" << endl;
+        return;
+    }
+    ListNode<Type> *temp = head;
+    ListNode<Type> *node = new ListNode<Type>(val);
 
-	//显示测试值
-	printf("---【单链表】---\n");
-	printf("待测试元素为：\n");
-	for (i = 0; i < LONGTH; i++) printf("%d\t", data[i]);
-	printf("\n");
+    if (head == NULL) {
+        head = node;
+        ++length;
+        return;
+    }
 
-	//创建链表L
-	printf("创建链表L\n");
-	if (ERROR == create(L, data, LONGTH))
-	{
-		printf("创建链表L失败\n");
-		return -1;
-	}
-	printf("成功创建包含%d个元素的链表L\n元素值存储在data数组中\n", LONGTH);
+    if (pos == 0) {
+        node->next= temp;
+        head = node;
+        ++length;
+        return;
+    }
 
-	//遍历单链表
-	printf("此时链表中元素为：\n");
-	ListTraverse_L(L, visit);
+    for (int i = 1; i != pos; ++i) {
+        temp = temp->next;
+    }
 
-	//从链表头节点出链表到e
-	printf("\n出链表到e\n");
-	DeQueue_LQ(L, e);
-	printf("出链表的元素为：%d\n", e);
-	printf("此时链表中元素为：\n");
-
-	//遍历单链表
-	ListTraverse_L(L, visit);
-
-	//e从链表末尾入链表
-	printf("\ne入链表\n");
-	EnQueue_LQ(L, e);
-	printf("入链表的元素为：%d\n", e);
-	printf("此时链表中元素为：\n");
-
-	//遍历单链表
-	ListTraverse_L(L, visit);
-	printf("\n");
-
-	getchar();
-	return 0;
+    if (temp == NULL) {
+        cout << "insert failed" << endl;
+        return;
+    }
+    node->next = temp->next;
+    temp->next = node;
+    ++length;
 }
+
+template<typename Type>
+void LinkedList<Type>::remove(Type val)
+{
+    int pos = find(val);
+    if (pos == -1) {
+        return;
+    }
+
+    if (pos == 1) {
+        head = head->next;
+        --length;
+        return;
+    }
+
+    ListNode<Type> *temp = head;
+    for (int i = 2; i < pos; ++i) {
+        temp = temp->next;
+    }
+    temp->next = temp->next->next;
+    --length;
+}
+
+template<typename Type>
+int LinkedList<Type>::find(const Type & val)
+{
+    if (head == NULL)
+        return -1;
+    ListNode<Type> *temp = head;
+    int count = 1;
+    while ((temp->val) != val) {
+        ++count;
+        temp = temp->next;
+        if (temp == NULL)
+            return -1;
+    }
+    cout << "LinkedList find : " << count << endl;
+    return count;
+}
+
+template<typename Type>
+void LinkedList<Type>::reverse()
+{
+    if(head==NULL)
+            return;
+    ListNode<Type> *froTemp = head, *nextTemp = head->next, *temp;
+    while (nextTemp != NULL) {
+        temp = nextTemp->next;
+        nextTemp->next = froTemp;
+        froTemp = nextTemp;
+        nextTemp = temp;
+    }
+    head->next = NULL;
+    head = froTemp;
+}
+
+template<typename Type>
+const int LinkedList<Type>::size()
+{
+    return length;
+}
+
+template<typename Type>
+void LinkedList<Type>::print()
+{
+    cout << "LinkedList print : ";
+    ListNode<Type> *temp = head;
+    while (temp != NULL) {
+        cout << temp->val << " "; // 内置类型
+        temp = temp->next;
+    }
+    cout << endl;
+}
+
+
+
+int main()
+{
+	LinkedList<int> list;
+	for (int i = 0; i != 10; ++i) {
+		list.insert(i, i);
+	}
+	list.print();
+
+	list.find(1);
+	list.remove(2);
+	list.print();
+
+	list.reverse();
+	list.print();
+	cout << "list size : " << list.size() << endl;
+    return 0;
+}
+
+/* 
+LinkedList print : 0 1 2 3 4 5 6 7 8 9 
+LinkedList find : 2
+LinkedList find : 3
+LinkedList print : 0 1 3 4 5 6 7 8 9 
+LinkedList print : 9 8 7 6 5 4 3 1 0 
+list size : 9
+析构函数
+ */
