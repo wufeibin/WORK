@@ -5,10 +5,10 @@ using namespace std;
 
 // 节点结构体
 struct Node {
-    Node(int value):value(value), left(NULL), right(NULL) {}
+    Node(int value) : value(value), left(NULL), right(NULL) {}
     int value;
-    Node * left;
-    Node * right;
+    Node *left;
+    Node *right;
 };
 
 // 构建二叉树

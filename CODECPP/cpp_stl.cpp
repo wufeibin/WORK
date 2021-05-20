@@ -135,6 +135,34 @@ void ListDemo()
     }
 }
 
+void StackDemo()
+{
+    stack<int> stack1;
+    for (int i = 0; i <= 10; i++){
+        stack1.push(i);
+    }
+    LOGINFO("stack size %d", stack1.size());
+    while (!stack1.empty()) {
+        LOGINFO("stack top %d", stack1.top());
+        stack1.pop();
+    }
+}
+
+void QueueDemo()
+{
+    queue<int> queue1;
+    for (int i = 0; i < 10; i++) {
+        queue1.push(i); // 末尾加入一个元素
+    }
+    int front = queue1.front(); // 第一个元素
+    int back = queue1.back(); // 最后一个元素
+    LOGINFO("front %d, back %d", front, back);
+    
+    while (!queue1.empty()) {
+        queue1.pop(); // 删除第一个元素
+    }
+}
+
 // map类型通常被称为关联数组，map容器是键值对（key-value）的容器。与正常数组不同之处在于其下标不是整数，而是一个关键字key值。对于迭代器，可以修改value值，不能修改key值。
 // map会根据key值自动排序。key值需要支持<操作符。
 // map与multimap差别仅仅在于multiple允许一个键对应多个值。
@@ -183,7 +211,6 @@ void SetDemo()
         LOGINFO("find %s", (*it).c_str());
     }
 }
-
 
 void LambdaDemo()
 {

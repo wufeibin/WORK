@@ -10,9 +10,13 @@ void VectorDemo();
 
 void ListDemo();
 
+void SetDemo();
+
+void StackDemo();
+
 void MapDemo();
 
-void SetDemo();
+void QueueDemo();
 
 void LambdaDemo();
 
