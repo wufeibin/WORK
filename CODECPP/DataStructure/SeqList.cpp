@@ -229,7 +229,7 @@ int main()
 {
     SeqList<int> testList;
     int array[10] = {7, 3, 1, 4, 8, 2, 9, 10, 5, 6};
-    for (int i = 1; i != 11; ++i) {
+    for (int i = 1; i <= 10; ++i) {
         testList.insert(i, array[i - 1]);
     }
     testList.print();

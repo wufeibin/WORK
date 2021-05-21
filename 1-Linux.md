@@ -24,7 +24,7 @@
 | **df**<br />查看挂载设备磁盘使用          | df -h                                                        |
 | **du**<br />查看目录的硬盘使用            | du -ch path<br />du -sh *                                    |
 |                                           |                                                              |
-| **其他实用命令**                          | cat -n file 【按行号查看文件】<br />tail -f file 【循环显示文件末尾内容】<br />tail -n 10 file 【显示文件末尾10行内容】<br />head -n 10 file 【显示文件起始10行内容】<br />more file<br />less file |
+| **其他实用命令**                          | cat -n file 【按行号查看文件】<br />tail -f file 【循环显示文件末尾内容】<br />tail -n 10 file 【显示文件末尾10行内容】<br />head -n 10 file 【显示文件头部10行内容】<br />more file<br />less file |
 
 ### sed 流编辑器
 
@@ -695,9 +695,7 @@ poll 没有最大描述符数量的限制，如果平台支持并且对实时性
 
 ## [内存管理](https://github.com/CyC2018/CS-Notes/blob/master/notes/计算机操作系统%20-%20内存管理.md)
 
-[为什么 Linux 需要虚拟内存](https://draveness.me/whys-the-design-os-virtual-memory/)
-
-- Linux虚拟内存分布（高地址-低地址，内核空间：1G、用户空间：3G）
+- Linux[虚拟内存](https://draveness.me/whys-the-design-os-virtual-memory/)分布（高地址-低地址，内核空间：1G、用户空间：3G）
   - 栈：函数局部变量空间，一般为8M。
   - 文件映射区：动态库、共享内存，可通过mmap函数分配。
   - 堆：动态内存，通过malloc/free管理，堆顶位置可通过brk函数调整。
