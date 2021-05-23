@@ -67,12 +67,12 @@ char str[10] = "123456";
 char *pc = str;
 char *ps = "1234";
 
-cout << "sizeof(str)=" << sizeof(str) << endl; //sizeof(数组名) 数组的大小，10
-cout << "sizeof(pc)=" << sizeof(pc) << endl; //sizeof(数组指针) 指针大小，4
+cout << "sizeof(str)=" << sizeof(str) << endl; // sizeof(数组名) 数组的大小，10
+cout << "sizeof(pc)=" << sizeof(pc) << endl; // sizeof(数组指针) 指针大小，4
 
-cout << "strlen(str)=" << strlen(str) << endl; //6
-cout << "strlen(pc)=" << strlen(pc) << endl; //6
-cout << "strlen(ps)=" << strlen(ps) << endl; //4
+cout << "strlen(str)=" << strlen(str) << endl; // 6
+cout << "strlen(pc)=" << strlen(pc) << endl; // 6
+cout << "strlen(ps)=" << strlen(ps) << endl; // 4
 ```
 
 ## 字符串拷贝
@@ -257,9 +257,7 @@ Vector通过一个连续数组存放元素，使用的是堆内存。如果集�
 
 对vector的任何操作，一旦引起空间重新配置，指向原vector的所有迭代器就都失效了。初始时刻vector的capacity为0，插入第一个元素后capacity增加为1。
 
-## lanbda表达式
-
-[C++ 11 Lambda表达式](https://www.cnblogs.com/DswCnblog/p/5629165.html)
+## [lanbda表达式](https://www.cnblogs.com/DswCnblog/p/5629165.html)
 
 C++11的一大亮点就是引入了Lambda表达式，利用Lambda表达式可以方便地定义和创建匿名函数。Lambda表达式完整的声明格式：`[capture list] (params list) mutable exception-> return type { function body }`
 

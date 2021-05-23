@@ -152,14 +152,14 @@ void QueueDemo()
 {
     queue<int> queue1;
     for (int i = 0; i < 10; i++) {
-        queue1.push(i); // 末尾加入一个元素
+        queue1.push(i); // 入队，末尾加入一个元素
     }
     int front = queue1.front(); // 第一个元素
     int back = queue1.back(); // 最后一个元素
     LOGINFO("front %d, back %d", front, back);
     
     while (!queue1.empty()) {
-        queue1.pop(); // 删除第一个元素
+        queue1.pop(); // 出队，删除第一个元素
     }
 }
 

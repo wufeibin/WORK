@@ -1,6 +1,7 @@
 #include "common.h"
 #include "cpp_class.h"
 #include "cpp_stl.h"
+#include "thread.h"
 #include "file.h"
 
 /*
@@ -15,9 +16,11 @@
 int main(int argc, char *argv[])
 {
     LOGINFO("main start ...");
-	CallbackTest();
-	CreateThread();
+    ThreadDemo::Instance().Run();
+    CreateThread();
+    ThreadDemo::Instance().Stop();
 
+    CallbackTest();
     LOGINFO("main end ...");
     return 0;
 }

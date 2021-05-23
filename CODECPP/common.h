@@ -33,6 +33,7 @@
 #include <bitset>
 #include <algorithm>
 #include <memory>
+#include <thread>
 #include <initializer_list>
 
 using namespace std;
@@ -44,9 +45,9 @@ using namespace std;
 
 void Log(const char *level, const char *file, const int line, const char *func, const char *format, ...);
 
+uint64_t GetCurrentTime();
 
-void CreateThread();
-
+void ChronoTimeDemo();
 
 // 函数指针回调
 void CallbackTest();
