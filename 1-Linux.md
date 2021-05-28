@@ -17,13 +17,12 @@
 | **netstat**<br />查看网络端口             | netstat -anp                                                 |
 | **ldd**<br />查看程序/库依赖的共享库      | ldd -r xxx.so 【-r选项，数据对象和函数的重定位】             |
 | **readelf**<br />查看elf目标文件信息      | readelf -sD xxx.so 【查看elf文件的动态符号表】               |
-| **nm**<br />查看目标文件的符号表          |                                                              |
-| **objdump**<br />查看目标文件的构成       |                                                              |
+| **nm**<br />查看目标文件的符号表          | nm file                                                      |
+| **objdump**<br />查看目标文件的构成       | objdump file                                                 |
 | **top**<br />查看系统实时进程情况         | top -H -p [pid]                                              |
 | **mount/umount**<br />挂载存储媒体        | mount -t type device directory<br />umount device            |
 | **df**<br />查看挂载设备磁盘使用          | df -h                                                        |
 | **du**<br />查看目录的硬盘使用            | du -ch path<br />du -sh *                                    |
-|                                           |                                                              |
 | **其他实用命令**                          | cat -n file 【按行号查看文件】<br />tail -f file 【循环显示文件末尾内容】<br />tail -n 10 file 【显示文件末尾10行内容】<br />head -n 10 file 【显示文件头部10行内容】<br />more file<br />less file |
 
 ### sed 流编辑器
@@ -113,7 +112,7 @@ int main(int argc, char *argv[]) {
 
 一个进程使用fork创建子进程，如果子进程退出，而父进程并没有调用wait或waitpid获取子进程的状态信息，那么子进程的进程描述符仍然保存在系统中，这种进程称之为僵死进程。如果要消灭系统中大量的僵死进程，只需要将其父进程杀死，此时所有的僵死进程就会编程孤儿进程，从而被init所收养，这样init就会释放所有的僵死进程所占有的资源，从而结束僵死进程。
 
-在每个进程退出的时候，内核释放该进程所有的资源，包括打开的文件，占用的内存等。 但是仍然为其保留一定的信息（进程号、退出状态、运行时间t等），直到父进程通过wait / waitpid来取时才释放。 如果进程不调用wait / waitpid的话， 那么保留的那段信息就不会释放，其进程号就会一直被占用，但是系统所能使用的进程号是有限的，如果大量的产生僵死进程，将因为没有可用的进程号而导致系统不能产生新的进程，此即为僵尸进程的危害，应当避免。
+在每个进程退出的时候，内核释放该进程所有的资源，包括打开的文件，占用的内存等。 但是仍然为其保留一定的信息（进程号、退出状态、运行时间t等），直到父进程通过wait waitpid来取时才释放。 如果进程不调用wait/waitpid的话， 那么保留的那段信息就不会释放，其进程号就会一直被占用，但是系统所能使用的进程号是有限的，如果大量的产生僵死进程，将因为没有可用的进程号而导致系统不能产生新的进程，此即为僵尸进程的危害，应当避免。
 
 ### 守护进程
 
@@ -223,7 +222,7 @@ int sem_init(sem_t *sem, int pshared, unsigned int value);
 int sem_wait(sem_t *sem);	// 阻塞等待信号量，当信号量值大于0时，信号量减1，向下执行。
 int sem_trywait(sem_t *sem);
 int sem_post(sem_t *sem);	// 释放信号量，信号量值加1。
-int sem_getvalue(sem_t *sem, int *sval)
+int sem_getvalue(sem_t *sem, int *sval);
 int sem_destroy(sem_t *sem);
 ```
 
@@ -238,14 +237,6 @@ int pthread_mutex_trylock(pthread_mutex_t *mutex);
 int pthread_mutex_timedlock(pthread_mutex_t * mutex,const struct timespec *tsptr);
 int pthread_mutex_unlock(pthread_mutex_t *mutex);
 int pthread_mutex_destroy(pthread_mutex_t *mutex);
-```
-
-```cpp
-#include <mutex>
-std::mutex tmp_mutex;
-tmp_mutex.lock();
-tmp_mutex.unlock();
-std::lock_guard<std::mutex> lk(tmp_mutex);
 ```
 
 ### 读写锁
@@ -269,7 +260,7 @@ int pthread_rwlock_destroy(pthread_rwlock_t *rwlock);
 
 ### 递归锁
 
-也叫可重入锁，同一个线程可以多次获取同一个递归锁，不会产生死锁。
+也叫可重入锁，同一个线程可以多次获取同一个递归锁，不会产生死锁。递归锁是不提倡的，用到递归锁说明代码设计是有问题的，可能会隐藏某些代码问题。
 
 ### 条件变量/锁
 
