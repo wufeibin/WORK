@@ -1,6 +1,10 @@
-#ifndef __CPP_STL_H
-#define __CPP_STL_H
+#ifndef __CPP_BASIC_H
+#define __CPP_BASIC_H
 #include "common.h"
+
+void StrCopyDemo();
+
+void SizeCountDemo();
 
 void StringDemo();
 

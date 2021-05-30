@@ -28,7 +28,7 @@ LIBS_DIRS_F = $(addprefix -L, $(LIBS_DIRS))
 SRC_FILES += main.cpp
 SRC_FILES += common.cpp
 SRC_FILES += cpp_class.cpp
-SRC_FILES += cpp_stl.cpp
+SRC_FILES += cpp_basic.cpp
 SRC_FILES += thread.cpp
 SRC_FILES += file.cpp
 OBJ_FILES = $(SRC_FILES:%.cpp=%.o)

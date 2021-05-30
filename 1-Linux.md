@@ -9,7 +9,6 @@
 | **grep**<br />搜索数据                    | grep -n xxx file 【显示行号】<br />grep -r xxx path 【递归查找目录文件】<br />grep -v xxx file 【反向搜索，输出不匹配的行】<br />grep -w xxx file 【显示全词匹配的行】<br />grep -c xxx file 【显示匹配的行数】<br />grep -l xxx * 【显示匹配的文件名】 <br />grep -A 2 xxx file 【显示匹配内容和后2行】<br />grep -B 2 xxx file 【显示匹配内容和前2行】<br />grep -C 2 xxx file 【显示匹配内容和前后2行】<br />grep -e xxx -e yyy file, grep -E 'xxx\|yyy' file, egrep 'xxx\|yyy' file 【或匹配】 <br />grep '2020-08-3[0-9]' file |
 | **find**<br />递归查找文件                | find [path] -name file<br />find [path] -type f -name file 【f 普通文件，d 目录】<br />find . -type f -name file -exec printf "File: %s\n" {} \; |
 | **xargs**<br />配合管道｜使用             | find . -name "1.txt" \| xargs ls 【与管道配合使用，将标准输出转化为参数】 |
-| **chmod/chown**<br />修改文件权限         | drwxr-x--- 1 va ivs 4096 Dec 16 04:10 VA2<br/>d : 目录<br/>rwx : 文件属主权限(va)<br/>r-x : 属组成员权限(ivs)<br/>--- : 其他用户权限 |
 | **tar**<br />归档                         | tar -xzvf xxx.tar.gz -C [path] 【解压缩文件】<br />tar -czvf xxx.tar.gz [file] 【打包压缩文件】 |
 | **zip/unzip**<br />压缩/解压zip文件       | zip -r xxx.zip ./*<br />unzip -d /home xxx.zip               |
 | **gzip/gunzip**<br />压缩/解压gz文件      | gzip -c -r xxx >xxx.gz<br />gunzip -c xxx.gz >xxx            |
@@ -19,6 +18,7 @@
 | **readelf**<br />查看elf目标文件信息      | readelf -sD xxx.so 【查看elf文件的动态符号表】               |
 | **nm**<br />查看目标文件的符号表          | nm file                                                      |
 | **objdump**<br />查看目标文件的构成       | objdump file                                                 |
+| **chmod/chown**<br />修改文件权限         | drwxr-x--- 1 va ivs 4096 Dec 16 04:10 VA2<br/>d : 目录<br/>rwx : 文件属主权限(va)<br/>r-x : 属组成员权限(ivs)<br/>--- : 其他用户权限 |
 | **top**<br />查看系统实时进程情况         | top -H -p [pid]                                              |
 | **mount/umount**<br />挂载存储媒体        | mount -t type device directory<br />umount device            |
 | **df**<br />查看挂载设备磁盘使用          | df -h                                                        |

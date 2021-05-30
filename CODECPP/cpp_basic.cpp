@@ -1,8 +1,65 @@
-#include "cpp_stl.h"
+#include "cpp_basic.h"
 
-static bool IsShorter(const string &s1, const string &s2)
+// 字符串拷贝
+void StrCopyDemo()
 {
-    return s1.size() < s2.size();
+    typedef struct student {
+        char name[16];
+        int age;
+    } STUDENT;
+    STUDENT stu1;
+    STUDENT stu2[5];
+    char pc1[10];
+    char pc2[5] = "abcd";
+
+    // 1、memset 用来对一段内存空间全部设置为某个字符，一般用在对定义的字符串进行初始化为0
+    // 原型：void *memset(void *s, int c, size_t n);
+    memset(&stu1, 0, sizeof(STUDENT));
+    memset(stu2, 0, sizeof(STUDENT) * 5);
+    memset(pc1, 0, sizeof(pc1));
+
+    // 2、memcpy 复制src所指的内存内容的前num个字节到dest所指的内存地址上，不会因为遇到“\0”而结束。
+    // 原型：void *memcpy(void *dest, const void *src, size_t num);
+    // 返回值：返回dest指针。注意返回的指针类型是void*，使用时一般要进行强制类型转换。
+    // 注意点：dest指针要分配足够的空间，>=num个字节。可用于很多数据类型的复制。
+    memcpy(pc1, pc2, 5);
+
+    // 3、strcpy 将参数src字符串拷贝至参数dest所指的地址，遇到'\0'拷贝完就就结束。
+    // 原型：char *strcpy(char *dest, const char *src);
+    // 返回值：返回dest指针
+    // 注意点：如果dest所指的内存空间不够大，会造成缓存溢出。使用时用strncpy()来取代。
+    strcpy(pc1, pc2);
+
+    // 4、strncpy 将参数src字符串前n个字节拷贝至参数dest所指的地址，遇到'\0'拷贝完就就结束。长度n超出源字符串长度部分会填0。
+    // 原型：char *strncpy(char *dest, const char *src, size_t n);
+    // 返回值：返回dest指针
+    strncpy(pc1, pc2, 4);
+    pc1[sizeof(pc1) - 1] = '\0';
+
+    // 5、sprintf
+    // 原型：int sprintf(char *str, const char *format, ...);
+    sprintf(pc1, "%s", "aaaa");
+
+    // 6、snprintf 最多从源串中拷贝n－1个字符到目标串中，然后再在后面加一个0。所以如果目标串的大小为n的话，不会溢出。（建议使用：安全高效）
+    // 原型：int snprintf(char *str, size_t size, const char *format, ...);
+    snprintf(pc1, sizeof(pc1), "%s", "bbb");
+}
+
+// sizeof、strlen
+void SizeCountDemo()
+{
+    char str[10] = "123456";
+    char *pc = str;
+    char *ps = "1234";
+
+    // sizeof运算符：查询对象或数据类型的大小，返回size_t常量。
+    cout << "sizeof(str)=" << sizeof(str) << endl; // sizeof(数组名) 数组的大小，10
+    cout << "sizeof(pc)=" << sizeof(pc) << endl; // sizeof(数组指针) 指针大小，4
+
+    // strlen函数：统计字符串的长度。字符串的长度由终止空字符确定，不包括终止空字符本身。
+    cout << "strlen(str)=" << strlen(str) << endl; // 6
+    cout << "strlen(pc)=" << strlen(pc) << endl; // 6
+    cout << "strlen(ps)=" << strlen(ps) << endl; // 4
 }
 
 void StringDemo()
@@ -59,6 +116,11 @@ void StringStreamDemo()
     stream << i;  // 将int输入流
     stream >> result;
     LOGINFO("result:%s", result.c_str());
+}
+
+static bool IsShorter(const string &s1, const string &s2)
+{
+    return s1.size() < s2.size();
 }
 
 // 通常使用vector是最好的选择
