@@ -49,10 +49,6 @@
 
 - awk -F: '{print $1}' data.txt 【-F指定分隔符 : 】
 
-### 正则表达式
-
-
-
 
 
 # 三、进程&线程
@@ -341,7 +337,7 @@ void process2() {
 
 
 
-# 四、网络编程SOCKET
+# 四、SOCKET
 
 网络层的“ip地址”可以唯一标识网络中的主机，而传输层的“协议+端口”可以唯一标识主机中的应用程序。
 
@@ -696,7 +692,7 @@ poll 没有最大描述符数量的限制，如果平台支持并且对实时性
 
 ## 内存信息
 
-[free和top命令查看系统内存使用情况](http://t.zoukankan.com/hider-p-12753757.html)
+> [free和top命令查看系统内存使用情况](http://t.zoukankan.com/hider-p-12753757.html)
 
 1. top 实时显示进程情况
 
