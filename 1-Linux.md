@@ -20,7 +20,7 @@
 
     通常总线被设计成传送定长的字节块，也就是字（word），现在大多数机器字长（字中的字节数）有的是 4 个字节，有的是 8 个字节。
 
-- **操作系统**是管理计算机硬件的程序，在用户和硬件之间起媒介作用的一种程序。操作系统的一个功能是提供抽象的接口，另外一个主要功能是管理硬件资源（CPU、存储器、I/O设备）。操作系统通过几个基本抽象概念实现以上功能：**文件**是对I/O设备的抽象表示；**虚拟内存**是对主存和磁盘I/O的抽象表示；**进程**是对处理器、主存和I/O设备的抽象表示。
+- **操作系统**：管理计算机硬件的程序，在用户和硬件之间起媒介作用的一种程序。操作系统的一个功能是提供抽象的接口，另外一个主要功能是管理硬件资源（CPU、存储器、I/O设备）。操作系统通过几个基本抽象概念实现以上功能：**文件**是对I/O设备的抽象表示；**虚拟内存**是对主存和磁盘I/O的抽象表示；**进程**是对处理器、主存和I/O设备的抽象表示。
 
 ## Linux内核
 
@@ -54,7 +54,7 @@
 
 ## GNU
 
-GNU计划，译为革奴计划，它的目标是创建一套完全自由的操作系统，其内容软件完全以GPL方式发布。其中GPL全称为GNU通用公共许可协议（GNU General Public License），包含了以下内容：
+GNU计划，译为革奴计划，它的目标是创建一套完全自由的操作系统，其内容软件完全以GPL方式发布。GPL全称为GNU通用公共许可协议（GNU General Public License），包含了以下内容：
 
 - 以任何目的运行此程序的自由；
 - 再复制的自由；
@@ -313,18 +313,7 @@ void process2() {
 
 # 四、SOCKET
 
-网络层的“ip地址”可以唯一标识网络中的主机，而传输层的“协议+端口”可以唯一标识主机中的应用程序。
-
-* int **socket**(int domain, int type, int protocol);	
-* int **bind**(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
-* int **listen**(int sockfd, int backlog);
-* int **connect**(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
-* int **accept**(int sockfd, struct sockaddr *addr, socklen_t *addrlen);
-* ssize_t **recv**(int sockfd, void *buf, size_t len, int flags);
-* ssize_t **send**(int sockfd, const void *buf, size_t len, int flags);
-* ssize_t **read**(int sockfd, void *buf, size_t count);
-* ssize_t **write**(int sockfd, const void *buf, size_t count);
-* int **close**(int sockfd);
+网络层的“IP地址”可以唯一标识网络中的主机，而传输层的“协议+端口”可以唯一标识主机中的应用程序。
 
 > 1. 服务端先通过socket()创建一个套接字，返回一个唯一描述符，再通过bind()把一个IP+端口绑定到套接字上，再调用listen()来监听这个套接字。
 > 2. 客户端也通过socket()创建一个套接字，通过connect()指定地址向服务端发起连接请求。服务端监听接收到请求后，通过accept()完成连接。
