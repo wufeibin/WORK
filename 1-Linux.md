@@ -2,9 +2,9 @@
 
 ## 计算机系统
 
-![计算机系统结构](./BOOK/images/计算机系统结构.png)
+![计算机系统结构](BOOK/images/计算机系统结构.png)
 
-- **硬件系统**组成：运算器、控制器、存储器、输入设备、输出设备
+- **硬件系统**：运算器、控制器、存储器、输入设备、输出设备
 
   - **中央处理单元**：CPU，简称处理器，是解释或执行存储在主存中指令的引擎。
 
@@ -18,28 +18,26 @@
 
   - **总线**：一组贯穿整个系统的电子管，携带信息字节并负责在各个部件间传递。
 
-    通常总线被设计成传送定长的字节块，也就是字（word）。现在大多数机器字长（字中的字节数）有的是 4 个字节（32位），有个是 8 个字节（64位）。
+    通常总线被设计成传送定长的字节块，也就是字（word），现在大多数机器字长（字中的字节数）有的是 4 个字节，有的是 8 个字节。
 
 - **操作系统**是管理计算机硬件的程序，在用户和硬件之间起媒介作用的一种程序。操作系统的一个功能是提供抽象的接口，另外一个主要功能是管理硬件资源（CPU、存储器、I/O设备）。操作系统通过几个基本抽象概念实现以上功能：**文件**是对I/O设备的抽象表示；**虚拟内存**是对主存和磁盘I/O的抽象表示；**进程**是对处理器、主存和I/O设备的抽象表示。
 
 ## Linux内核
 
-Linux 内核有 4 项工作：
-
-1. **内存管理：**追踪记录有多少内存存储了什么以及存储在哪里
-2. **进程管理：**确定哪些进程可以使用中央处理器（CPU）、何时使用以及持续多长时间
-3. **设备驱动程序：**充当硬件与进程之间的调解程序/解释程序
-4. **系统调用和安全防护：**从流程接受服务请求
+1. **内存管理**：追踪记录有多少内存存储了什么以及存储在哪里
+2. **进程管理**：确定哪些进程可以使用中央处理器（CPU）、何时使用以及持续多长时间
+3. **设备驱动程序**：充当硬件与进程之间的调解程序/解释程序
+4. **系统调用和安全防护**：从流程接受服务请求
 
 在正确实施的情况下，内核对于用户是不可见的，它在自己的小世界（称为内核空间）中工作，并从中分配内存和跟踪所有内容的存储位置。用户所看到的内容（例如 Web 浏览器和文件）则被称为用户空间，这些应用通过系统调用接口（SCI）与内核进行交互。
 
-![LINUX内核入门学习之路——LINUX内核简介2](https://res-static.hc-cdn.cn/fms/img/9caa38c9af40e3f707e3d8c7db862f231603441164084)
+![img](BOOK/images/LINUX内核入门学习之路——LINUX内核简介2.jpg)
 
 
 
 ## Linux目录
 
-![目录配置](https://camo.githubusercontent.com/c89a9597946ed0c7f045dd31df0ee669d2851e73f9d502f37c4694192dc7d1f8/68747470733a2f2f63732d6e6f7465732d313235363130393739362e636f732e61702d6775616e677a686f752e6d7971636c6f75642e636f6d2f6c696e75782d66696c6573797374656d2e706e67)
+![目录配置](BOOK/images/Linux目录.png)
 
 - bin：binaries，存放二进制可执行文件
 - sbin：super user binaries，存放二进制可执行文件，只有root才能访问
@@ -68,25 +66,25 @@ GNU计划，译为革奴计划，它的目标是创建一套完全自由的操�
 
 | [Linux命令大全](https://man.linuxde.net/) | 示例                                                         |
 | ----------------------------------------- | ------------------------------------------------------------ |
-| **grep**<br />搜索数据                    | grep -n xxx file 【显示行号】<br />grep -r xxx path 【递归查找目录文件】<br />grep -v xxx file 【反向搜索，输出不匹配的行】<br />grep -w xxx file 【显示全词匹配的行】<br />grep -c xxx file 【显示匹配的行数】<br />grep -l xxx * 【显示匹配的文件名】 <br />grep -A 2 xxx file 【显示匹配内容和后2行】<br />grep -B 2 xxx file 【显示匹配内容和前2行】<br />grep -C 2 xxx file 【显示匹配内容和前后2行】<br />grep -e xxx -e yyy file, grep -E 'xxx\|yyy' file, egrep 'xxx\|yyy' file 【或匹配】 <br />grep '2020-08-3[0-9]' file |
-| **find**<br />递归查找文件                | find [path] -name file<br />find [path] -type f -name file 【f 普通文件，d 目录】<br />find . -type f -name file -exec printf "File: %s\n" {} \; |
-| **xargs**<br />配合管道｜使用             | find . -name "1.txt" \| xargs ls 【与管道配合使用，将标准输出转化为参数】 |
-| **tar**<br />归档                         | tar -xzvf xxx.tar.gz -C path 【解压缩文件】<br />tar -czvf xxx.tar.gz file 【打包压缩文件】 |
-| **zip/unzip**<br />压缩/解压zip文件       | zip -r xxx.zip ./*<br />unzip -d /home xxx.zip               |
-| **gzip/gunzip**<br />压缩/解压gz文件      | gzip -c -r xxx >xxx.gz<br />gunzip -c xxx.gz >xxx            |
-| **ln**<br />创建链接文件                  | ln -snf file ln_file                                         |
-| **netstat**<br />查看网络端口             | netstat -anp ｜ grep port                                    |
-| **ldd**<br />查看程序/库依赖的共享库      | ldd -r xxx.so 【-r选项，数据对象和函数的重定位】             |
-| **readelf**<br />查看elf目标文件信息      | readelf -sD xxx.so 【查看elf文件的动态符号表】               |
-| **nm**<br />查看目标文件的符号表          | nm file                                                      |
-| **objdump**<br />查看目标文件的构成       | objdump file                                                 |
-| **su/sudo**<br />切换用户                 | su user 【切换用户，默认切换到root用户】<br />su - 【切换为root用户】<br />sudo 【跳过root用户执行命令，通过配置/etc/sudoers，设置提权用户】 |
-| **chmod/chown**<br />修改文件权限         | drwxr-x--- 1 va ivs 4096 Dec 16 04:10 VA2<br/>d : 目录<br/>rwx : 文件属主权限(va)<br/>r-x : 属组成员权限(ivs)<br/>--- : 其他用户权限 |
-| **top**<br />查看系统实时进程情况         | top -H -p 1234                                               |
-| **mount/umount**<br />挂载存储媒体        | mount -t type device directory<br />umount device            |
-| **df**<br />查看挂载设备磁盘使用          | df -h                                                        |
-| **du**<br />查看目录的硬盘使用            | du -ch path<br />du -sh *                                    |
-| **文件查看**                              | cat -n file 【按行号查看文件】<br />tail -f file 【循环显示文件末尾内容】<br />tail -n 10 file 【显示文件末尾10行内容】<br />head -n 10 file 【显示文件头部10行内容】<br />more file 【按页查看文件内容，适合大文件】<br />less file 【与more类似，多了个向前翻页的功能】 |
+| grep<br />搜索数据                        | grep -n xxx file 【显示行号】<br />grep -r xxx path 【递归查找目录文件】<br />grep -v xxx file 【反向搜索，输出不匹配的行】<br />grep -w xxx file 【显示全词匹配的行】<br />grep -c xxx file 【显示匹配的行数】<br />grep -l xxx * 【显示匹配的文件名】 <br />grep -A 2 xxx file 【显示匹配内容和后2行】<br />grep -B 2 xxx file 【显示匹配内容和前2行】<br />grep -C 2 xxx file 【显示匹配内容和前后2行】<br />grep -e xxx -e yyy file, grep -E 'xxx\|yyy' file, egrep 'xxx\|yyy' file 【或匹配】 <br />grep '2020-08-3[0-9]' file |
+| find<br />递归查找文件                    | find [path] -name file<br />find [path] -type f -name file 【f 普通文件，d 目录】<br />find . -type f -name file -exec printf "File: %s\n" {} \; |
+| xargs<br />配合管道｜使用                 | find . -name "1.txt" \| xargs ls 【与管道配合使用，将标准输出转化为参数】 |
+| tar<br />归档                             | tar -xzvf xxx.tar.gz -C path 【解压缩文件】<br />tar -czvf xxx.tar.gz file 【打包压缩文件】 |
+| zip/unzip<br />压缩/解压zip文件           | zip -r xxx.zip ./*<br />unzip -d /home xxx.zip               |
+| gzip/gunzip<br />压缩/解压gz文件          | gzip -c -r xxx >xxx.gz<br />gunzip -c xxx.gz >xxx            |
+| ln<br />创建链接文件                      | ln -snf file ln_file                                         |
+| netstat<br />查看网络端口                 | netstat -anp ｜ grep port                                    |
+| ldd<br />查看程序/库依赖的共享库          | ldd -r xxx.so 【-r选项，数据对象和函数的重定位】             |
+| readelf<br />查看elf目标文件信息          | readelf -sD xxx.so 【查看elf文件的动态符号表】               |
+| nm<br />查看目标文件的符号表              | nm file                                                      |
+| objdump<br />查看目标文件的构成           | objdump file                                                 |
+| su/sudo<br />切换用户                     | su user 【切换用户，默认切换到root用户】<br />su - 【切换为root用户】<br />sudo 【跳过root用户执行命令，通过配置/etc/sudoers，设置提权用户】 |
+| chmod/chown<br />修改文件权限             | drwxr-x--- 1 va ivs 4096 Dec 16 04:10 VA2<br/>d : 目录<br/>rwx : 文件属主权限(va)<br/>r-x : 属组成员权限(ivs)<br/>--- : 其他用户权限 |
+| top<br />查看系统实时进程情况             | top -H -p 1234                                               |
+| mount/umount<br />挂载存储媒体            | mount -t type device directory<br />umount device            |
+| df<br />查看挂载设备磁盘使用              | df -h                                                        |
+| du<br />查看目录的硬盘使用                | du -ch path<br />du -sh *                                    |
+| 文件查看                                  | cat -n file 【按行号查看文件】<br />tail -f file 【循环显示文件末尾内容】<br />tail -n 10 file 【显示文件末尾10行内容】<br />head -n 10 file 【显示文件头部10行内容】<br />more file 【按页查看文件内容，适合大文件】<br />less file 【与more类似，多了个向前翻页的功能】 |
 
 ## vim
 
@@ -197,71 +195,7 @@ int main(int argc, char *argv[]) {
 
 Linux Daemon（守护进程）是运行在后台的一种特殊进程。它独立于控制终端并且周期性地执行某种任务或等待处理某些发生的事件。Linux系统的大多数服务器就是通过守护进程实现的。常见的守护进程包括系统日志进程syslogd、 web服务器httpd、邮件服务器sendmail和数据库服务器mysqld等。守护进程一般在系统启动时开始运行，除非强行终止，否则直到系统关机都保持运行。守护进程经常以超级用户（root）权限运行，因为它们要使用特殊的端口（1-1024）或访问某些特殊的资源。
 
-```c
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
-#include <unistd.h>
-#include <sys/param.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-
-// 守护进程初始化函数
-void init_daemon()
-{
-    pid_t pid;
-    if ((pid = fork()) == -1) {
-        printf("Fork error !\n");
-        exit(1);
-    }
-    if (pid != 0) {
-        exit(0);        // 父进程退出
-    }
-
-    setsid();           // 子进程开启新会话，并成为会话首进程和组长进程
-    if ((pid = fork()) == -1) {
-        printf("Fork error !\n");
-        exit(-1);
-    }
-    if (pid != 0) {
-        exit(0);        // 结束第一子进程，第二子进程不再是会话首进程
-    }
-    chdir("/tmp");      // 改变工作目录
-    umask(0);           // 重设文件掩码
-    for (int i = 0; i < getdtablesize(); ++i) {
-        close(i);        // 关闭打开的文件描述符
-    }
-    return;
-}
-
-int main(int argc, char *argv[]) {
-    int fp;
-    time_t t;
-    char buf[] = {"This is a daemon:  "};
-    char *datetime;
-    int len = 0;
-
-    init_daemon(); // 初始化 Daemon 进程
-    while (1) {
-        if (-1 == (fp = open("/tmp/daemon.log", O_CREAT|O_WRONLY|O_APPEND, 0600))) {
-            printf("Open file error !\n");
-            exit(1);
-        }
-        len = strlen(buf);
-        write(fp, buf, len);
-        t = time(0);
-        datetime = asctime(localtime(&t));
-        len = strlen(datetime);
-        write(fp, datetime, len);
-        close(fp);
-        sleep(60); // 每隔一分钟记录运行状态
-    }
-    return 0;
-}
-// 注：也利用库函数daemon()创建守护进程
-```
+> [Daemon.cpp](CODECPP/System/Daemon.cpp)
 
 ### 进程间通信
 
@@ -299,9 +233,9 @@ int sem_getvalue(sem_t *sem, int *sval);
 int sem_destroy(sem_t *sem);
 ```
 
-### 互斥量/锁
+### 互斥锁
 
-与二元信号量很相似，区别是互斥量由哪个线程获取，哪个线程就负责释放。
+与二元信号量很相似，区别是互斥锁由哪个线程获取，哪个线程就负责释放。
 
 ```c
 int pthread_mutex_init(pthread_mutex_t *mutex, const pthread_mutex_attr_t *mutexattr);
@@ -333,11 +267,13 @@ int pthread_rwlock_destroy(pthread_rwlock_t *rwlock);
 
 ### 递归锁
 
-也叫可重入锁，同一个线程可以多次获取同一个递归锁，不会产生死锁。递归锁是不提倡的，用到递归锁说明代码设计是有问题的，可能会隐藏某些代码问题。
+递归锁也叫可重入锁，同一个线程可以多次获取同一个递归锁，不会产生死锁。递归锁是不提倡的，用到递归锁说明代码设计有问题，可能会隐藏某些问题。
 
-### 条件变量/锁
+### 条件变量
 
 阻塞线程，避免线程不断轮训，类似于一个栅栏。一个条件变量可以被多个线程等待，当条件变量被唤醒，所有的线程可以一起恢复执行。
+
+> [Condition.cpp](CODECPP/System/Condition.cpp)
 
 ```c
 int pthread_cond_init(pthread_cond_t *cond, pthread_condattr_t *cond_attr);
@@ -346,45 +282,6 @@ int pthread_cond_timewait(pthread_cond_t *cond, pthread_mutex *mutex, const time
 int pthread_cond_signal(pthread_cond_t *cond);
 int pthread_cond_broadcast(pthread_cond_t *cond);
 int pthread_cond_destroy(pthread_cond_t *cond);
-```
-
-```c
-pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
-pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
-data_type data;
-
-void *product(void *arg) {
-    while(1) {
-        if (需要生产) {
-            pthread_mutex_lock(&lock);
-            push_node(data);
-            pthread_mutex_unlock(&lock);
-            pthread_cond_signal(&cond);
-        }
-        sleep(1);
-    }
-}
-
-void *consumer(void *arg) {
-    while(1) {
-        pthread_mutex_lock(&lock);
-        while(-1 == pop_node(&data)) { // 为空
-            pthread_cond_wait(&cond, &lock); // 阻塞等待，解锁；唤醒执行，加锁。
-        }
-        func(data); // 执行业务
-        pthread_mutex_unlock(&lock);
-        sleep(1);
-    }
-}
-
-int main() {
-    pthread_t tid1, tid2;
-    pthread_create(&tid1, NULL, product, NULL);
-    pthread_create(&tid2, NULL, consumer, NULL);
-    pthread_join(tid1, NULL);
-    pthread_join(tid2, NULL);
-    return 0;
-}
 ```
 
 ### [死锁](https://github.com/CyC2018/CS-Notes/blob/master/notes/计算机操作系统%20-%20死锁.md)
@@ -433,9 +330,9 @@ void process2() {
 > 2. 客户端也通过socket()创建一个套接字，通过connect()指定地址向服务端发起连接请求。服务端监听接收到请求后，通过accept()完成连接。
 > 3. 之后两端通过read()/write()或recv()/send()进行I/O操作，结束后close()关闭套接字。
 >
-> [SocketServer.cpp](./CODECPP/Socket/SocketServer.cpp)
+> [SocketServer.cpp](CODECPP/Socket/SocketServer.cpp)
 >
-> [SocketClient.cpp](./CODECPP/Socket/SocketClient.cpp)
+> [SocketClient.cpp](CODECPP/Socket/SocketClient.cpp)
 
 
 

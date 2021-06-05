@@ -1,7 +1,6 @@
 #include "common.h"
 #include "cpp_class.h"
 #include "cpp_basic.h"
-#include "thread.h"
 #include "file.h"
 
 /*
@@ -13,14 +12,83 @@
  */
 
 
+// 函数指针回调
+void CallbackTest();
+typedef int (*FUNC_PTR)(int, string);
+class CallBack {
+public:
+    CallBack() : m_call_back_ptr(nullptr) {};
+    ~CallBack() {};
+    void Register(FUNC_PTR call_back_ptr);
+    void Test();
+
+private:
+    FUNC_PTR m_call_back_ptr;
+};
+
+static int CallbackFunc(int i, string str)
+{
+    LOGINFO("%d, %s", i, str.c_str());
+    return 0;
+}
+
+void CallbackTest()
+{
+    CallBack cb;
+    cb.Register(&CallbackFunc);
+    cb.Test();
+}
+
+void CallBack::Register(FUNC_PTR call_back_ptr)
+{
+    m_call_back_ptr = call_back_ptr;
+}
+
+void CallBack::Test()
+{
+    if (m_call_back_ptr) {
+        (*m_call_back_ptr)(1, "test1");
+        m_call_back_ptr(1, "test2");
+    }
+}
+
 int main(int argc, char *argv[])
 {
     LOGINFO("main start ...");
-    ThreadDemo::Instance().Run();
-    CreateThread();
-    ThreadDemo::Instance().Stop();
-
     CallbackTest();
     LOGINFO("main end ...");
     return 0;
 }
+
+
+/* 线程池
+#include <iostream>
+#include <vector>
+#include <chrono>
+#include "ThreadPool.h"
+
+int main()
+{
+    // create thread pool with 4 worker threads
+    ThreadPool pool(4);
+    std::vector< std::future<int> > results;
+
+    for(int i = 0; i < 8; ++i) {
+        results.emplace_back(
+            pool.enqueue([i] {
+                std::cout << "hello " << i << std::endl;
+                std::this_thread::sleep_for(std::chrono::seconds(1));
+                std::cout << "world " << i << std::endl;
+                return i*i;
+            })
+        );
+    }
+
+    for(auto && result: results)
+        std::cout << result.get() << ' ';
+    std::cout << std::endl;
+    
+    return 0;
+}
+
+*/

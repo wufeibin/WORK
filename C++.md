@@ -247,13 +247,14 @@ int main() {
 
 # 二、[STL](https://github.com/steveLauwh/SGI-STL)
 
-> C++ 标准模板库（STL）是一套功能强大的 C++ 模板类，提供了通用的模板类和函数，这些模板类和函数可以实现多种流行和常用的算法和数据结构，如向量、链表、队列、栈。C++ 标准模板库的核心包括以下三个组件：容器、算法、迭代器
->
+C++ 标准模板库（STL）是一套功能强大的 C++ 模板类，提供了通用的模板类和函数，这些模板类和函数可以实现多种流行和常用的算法和数据结构，如向量、链表、队列、栈。C++ 标准模板库的核心包括以下三个组件：容器、算法、迭代器
+
 > https://en.cppreference.com/w/cpp/header
 
 ## 容器
 
-- 容器定义：容器就是一些特定类型对象的集合。在数据存储上，有一种对象类型，它可以持有其它对象或指向其它对象的指针，这种对象类型就叫做容器。容器就是保存其它对象的对象，这种对象还包含了一系列处理其它对象的方法。
+容器就是一些特定类型对象的集合。在数据存储上，有一种对象类型，它可以持有其它对象或指向其它对象的指针，这种对象类型就叫做容器。容器就是保存其它对象的对象，这种对象还包含了一系列处理其它对象的方法。
+
 - **顺序容器**：是一种各元素之间有顺序关系的线性表，是一种线性结构的可序群集。顺序性容器中的每个元素均有固定的位置，除非用删除或插入的操作改变这个位置。顺序容器的元素排列次序与元素值无关，而是由元素添加到容器里的次序决定。包含：string（只含字符的vector）、vector（动态数组）、list（双向链表）、forward_list（单向链表）、array（固定数组）、deque（双端队列）
 - **关联容器**：关联式容器是非线性的树结构，更准确的说是二叉树结构。各元素之间没有严格的物理上的顺序关系，也就是说元素在容器中并没有保存元素置入容器时的逻辑顺序。但是关联式容器提供了另一种根据元素特点排序的功能，这样迭代器就能根据元素的特点“顺序地”获取元素。元素是有序的集合，默认在插入的时候按升序排列。包含：map（映射）、set（集合）、multimap（多重映射）、multiset（多重集合）。
 
@@ -265,38 +266,38 @@ Vector通过一个连续数组存放元素，使用的是堆内存。如果集�
 
 ## 智能指针
 
-1. 智能指针的设计思想
-
 我们不能保证申请的内存被正确释放，所以需要使用智能指针来管理。使用智能指针可以很大程度上的避免这个问题，因为智能指针就是一个类，当超出了类的作用域时，类会自动调用析构函数，析构函数会自动释放资源。智能指针通过类模板将基本类型指针封装为类对象指针，并在析构函数里编写delete语句删除指针指向的内存空间，这样内存也被自动释放了。
 
-2. C++智能指针介绍
-* STL提供的智能指针：shared_ptr、unique_ptr、weak_ptr、auto_ptr（被摒弃）
-* 智能指针实质是一个类模版，定义的对象行为表现像指针，使用时和普通指针类似。对于智能指针都要避免一点：不能将delete作用于非堆的内存。
-* 智能指针类都有一个explicit构造函数，以指针作为参数。因此不能自动将指针转换为智能指针对象，必须显式调用：
+- STL提供的智能指针：shared_ptr、unique_ptr、weak_ptr、auto_ptr（被摒弃）
+
+- 智能指针实质是一个类模版，定义的对象行为表现像指针，使用时和普通指针类似。对于智能指针都要避免一点：不能将delete作用于非堆的内存。
+
+- 智能指针类都有一个explicit构造函数，以指针作为参数。因此不能自动将指针转换为智能指针对象，必须显式调用：
+
   ```cpp
   double *p_reg = new double;
   shared_ptr<double> pshared = p_reg; // not allowed (implicit conversion)
   shared_ptr<double> pshared(p_reg); // allowed (explicit conversion)
   ```
+  
+1. **shared_ptr**
 
-3. **shared_ptr**
+   允许多个share_ptr指针指向同个对象。每个share_ptr有一个关联的计数器，称为**引用计数**。当拷贝一个share_ptr，计数器会递增；当一个share_ptr被赋新值或share_ptr被销毁，计数器会递减；当一个share_ptr的计数器为0时，它就会自动释放所管理的对象。  
 
-允许多个share_ptr指针指向同个对象。每个share_ptr有一个关联的计数器，称为**引用计数**。当拷贝一个share_ptr，计数器会递增；当一个share_ptr被赋新值或share_ptr被销毁，计数器会递减；当一个share_ptr的计数器为0时，它就会自动释放所管理的对象。  
+2. **unique_ptr**
 
-4. **unique_ptr**
+   unique_ptr独占所指对象。当程序试图将一个unique_ptr赋值给另一个时，如果源unique_ptr是个临时右值，编译器允许这么做；如果源unique_ptr将存在一段时间，编译器将禁止这么做。
 
-unique_ptr独占所指对象。当程序试图将一个unique_ptr赋值给另一个时，如果源unique_ptr是个临时右值，编译器允许这么做；如果源unique_ptr将存在一段时间，编译器将禁止这么做。
-
-```c++
-auto_ptr<string> p1(new string("auto"));
-auto_ptr<string> p2;
-p2 = p1; // p2接管string对象的所有权后，p1是空指针。再使用p1会内存崩溃
-unique_ptr<string> pu1(new string("hello world"));
-unique_ptr<string> pu2;
-pu2 = pu1; // 编译器会禁止报错
-unique_ptr<string> pu3;
-pu3 = unique_ptr<string>(new string("you")); // 允许
-```
+   ```cpp
+   auto_ptr<string> p1(new string("auto"));
+   auto_ptr<string> p2;
+   p2 = p1; // p2接管string对象的所有权后，p1是空指针。再使用p1会内存崩溃
+   unique_ptr<string> pu1(new string("hello world"));
+   unique_ptr<string> pu2;
+   pu2 = pu1; // 编译器会禁止报错
+   unique_ptr<string> pu3;
+   pu3 = unique_ptr<string>(new string("you")); // 允许
+   ```
 
 
 
