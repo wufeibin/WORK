@@ -1,31 +1,66 @@
 # 一、Linux介绍
 
-## 目录
+## 计算机系统
+
+![计算机系统结构](./BOOK/images/计算机系统结构.png)
+
+- **硬件系统**组成：运算器、控制器、存储器、输入设备、输出设备
+
+  - **中央处理单元**：CPU，简称处理器，是解释或执行存储在主存中指令的引擎。
+
+    处理器的核心是一个字长的存储设备（或寄存器），称为程序计数器（PC）。在任何时刻，PC 都指向主存中的某条机器语言指令（即含有该条指令的地址）。CPU 在指令的要求下，可能会进行以下操作：加载、存储、操作、跳转
+
+  - **主存**：一个临时存储设备，在处理器执行程序时，用来存放程序和程序处理的数据。
+
+    从物理上来说，主存（内存）是由一组动态随机存取存储器（DRAM）芯片封装组成。从逻辑上来说，存储器是一个线性的字节数组，每个字节都有唯一的地址（即数组索引），这些地址是从 0 开始的。
+
+  - **I/O设备**：系统与外部世界的联系通道。
+
+  - **总线**：一组贯穿整个系统的电子管，携带信息字节并负责在各个部件间传递。
+
+    通常总线被设计成传送定长的字节块，也就是字（word）。现在大多数机器字长（字中的字节数）有的是 4 个字节（32位），有个是 8 个字节（64位）。
+
+- **操作系统**是管理计算机硬件的程序，在用户和硬件之间起媒介作用的一种程序。操作系统的一个功能是提供抽象的接口，另外一个主要功能是管理硬件资源（CPU、存储器、I/O设备）。操作系统通过几个基本抽象概念实现以上功能：**文件**是对I/O设备的抽象表示；**虚拟内存**是对主存和磁盘I/O的抽象表示；**进程**是对处理器、主存和I/O设备的抽象表示。
+
+## Linux内核
+
+Linux 内核有 4 项工作：
+
+1. **内存管理：**追踪记录有多少内存存储了什么以及存储在哪里
+2. **进程管理：**确定哪些进程可以使用中央处理器（CPU）、何时使用以及持续多长时间
+3. **设备驱动程序：**充当硬件与进程之间的调解程序/解释程序
+4. **系统调用和安全防护：**从流程接受服务请求
+
+在正确实施的情况下，内核对于用户是不可见的，它在自己的小世界（称为内核空间）中工作，并从中分配内存和跟踪所有内容的存储位置。用户所看到的内容（例如 Web 浏览器和文件）则被称为用户空间，这些应用通过系统调用接口（SCI）与内核进行交互。
+
+![LINUX内核入门学习之路——LINUX内核简介2](https://res-static.hc-cdn.cn/fms/img/9caa38c9af40e3f707e3d8c7db862f231603441164084)
+
+
+
+## Linux目录
 
 ![目录配置](https://camo.githubusercontent.com/c89a9597946ed0c7f045dd31df0ee669d2851e73f9d502f37c4694192dc7d1f8/68747470733a2f2f63732d6e6f7465732d313235363130393739362e636f732e61702d6775616e677a686f752e6d7971636c6f75642e636f6d2f6c696e75782d66696c6573797374656d2e706e67)
 
-- / (root根目录)
-- /usr (unix software resource)：所有系统默认软件都会安装到这个目录
-- /var (variable)：存放系统或程序运行过程中的数据文件
+- bin：binaries，存放二进制可执行文件
+- sbin：super user binaries，存放二进制可执行文件，只有root才能访问
+- etc ：etcetera，存放系统配置文件
+- usr：unix shared resources，用于存放共享的系统资源
+- home：存放用户文件的根目录
+- root：超级用户目录
+- dev ：devices，用于存放设备文件
+- lib ：library，存放跟文件系统中的程序运行所需要的共享库及内核模块
+- mnt：mount，系统管理员安装临时文件系统的安装点
+- boot：存放用于系统引导时使用的各种文件
+- tmp：temporary，用于存放各种临时文件
+- var：variable，用于存放运行时需要改变数据的文件
 
 ## GNU
 
-GNU 计划，译为革奴计划，它的目标是创建一套完全自由的操作系统，称为 GNU，其内容软件完全以 GPL 方式发布。其中 GPL 全称为 GNU 通用公共许可协议（GNU General Public License），包含了以下内容：
+GNU计划，译为革奴计划，它的目标是创建一套完全自由的操作系统，其内容软件完全以GPL方式发布。其中GPL全称为GNU通用公共许可协议（GNU General Public License），包含了以下内容：
 
 - 以任何目的运行此程序的自由；
 - 再复制的自由；
 - 改进此程序，并公开发布改进的自由。
-
-
-
-**开源协议：**
-
-- [Choose an open source license](https://choosealicense.com/)
-- [如何选择开源许可证？](http://www.ruanyifeng.com/blog/2011/05/how_to_choose_free_software_licenses.html)
-
-## VIM
-
-![img](https://camo.githubusercontent.com/c34cfd7b6eb5a2d59b77833a3474706167f20c18554172d87df7b23dc5b18bd0/68747470733a2f2f63732d6e6f7465732d313235363130393739362e636f732e61702d6775616e677a686f752e6d7971636c6f75642e636f6d2f696d6167652d32303139313230393030323831383632362e706e67)
 
 
 
@@ -36,7 +71,7 @@ GNU 计划，译为革奴计划，它的目标是创建一套完全自由的操�
 | **grep**<br />搜索数据                    | grep -n xxx file 【显示行号】<br />grep -r xxx path 【递归查找目录文件】<br />grep -v xxx file 【反向搜索，输出不匹配的行】<br />grep -w xxx file 【显示全词匹配的行】<br />grep -c xxx file 【显示匹配的行数】<br />grep -l xxx * 【显示匹配的文件名】 <br />grep -A 2 xxx file 【显示匹配内容和后2行】<br />grep -B 2 xxx file 【显示匹配内容和前2行】<br />grep -C 2 xxx file 【显示匹配内容和前后2行】<br />grep -e xxx -e yyy file, grep -E 'xxx\|yyy' file, egrep 'xxx\|yyy' file 【或匹配】 <br />grep '2020-08-3[0-9]' file |
 | **find**<br />递归查找文件                | find [path] -name file<br />find [path] -type f -name file 【f 普通文件，d 目录】<br />find . -type f -name file -exec printf "File: %s\n" {} \; |
 | **xargs**<br />配合管道｜使用             | find . -name "1.txt" \| xargs ls 【与管道配合使用，将标准输出转化为参数】 |
-| **tar**<br />归档                         | tar -xzvf xxx.tar.gz -C [path] 【解压缩文件】<br />tar -czvf xxx.tar.gz [file] 【打包压缩文件】 |
+| **tar**<br />归档                         | tar -xzvf xxx.tar.gz -C path 【解压缩文件】<br />tar -czvf xxx.tar.gz file 【打包压缩文件】 |
 | **zip/unzip**<br />压缩/解压zip文件       | zip -r xxx.zip ./*<br />unzip -d /home xxx.zip               |
 | **gzip/gunzip**<br />压缩/解压gz文件      | gzip -c -r xxx >xxx.gz<br />gunzip -c xxx.gz >xxx            |
 | **ln**<br />创建链接文件                  | ln -snf file ln_file                                         |
@@ -45,12 +80,17 @@ GNU 计划，译为革奴计划，它的目标是创建一套完全自由的操�
 | **readelf**<br />查看elf目标文件信息      | readelf -sD xxx.so 【查看elf文件的动态符号表】               |
 | **nm**<br />查看目标文件的符号表          | nm file                                                      |
 | **objdump**<br />查看目标文件的构成       | objdump file                                                 |
+| **su/sudo**<br />切换用户                 | su user 【切换用户，默认切换到root用户】<br />su - 【切换为root用户】<br />sudo 【跳过root用户执行命令，通过配置/etc/sudoers，设置提权用户】 |
 | **chmod/chown**<br />修改文件权限         | drwxr-x--- 1 va ivs 4096 Dec 16 04:10 VA2<br/>d : 目录<br/>rwx : 文件属主权限(va)<br/>r-x : 属组成员权限(ivs)<br/>--- : 其他用户权限 |
-| **top**<br />查看系统实时进程情况         | top -H -p [pid]                                              |
+| **top**<br />查看系统实时进程情况         | top -H -p 1234                                               |
 | **mount/umount**<br />挂载存储媒体        | mount -t type device directory<br />umount device            |
 | **df**<br />查看挂载设备磁盘使用          | df -h                                                        |
 | **du**<br />查看目录的硬盘使用            | du -ch path<br />du -sh *                                    |
-| **其他实用命令**                          | cat -n file 【按行号查看文件】<br />tail -f file 【循环显示文件末尾内容】<br />tail -n 10 file 【显示文件末尾10行内容】<br />head -n 10 file 【显示文件头部10行内容】<br />more file 【按页查看文件内容，适合大文件的查看】<br />less file 【与more类似，多了个向前翻页的功能】 |
+| **文件查看**                              | cat -n file 【按行号查看文件】<br />tail -f file 【循环显示文件末尾内容】<br />tail -n 10 file 【显示文件末尾10行内容】<br />head -n 10 file 【显示文件头部10行内容】<br />more file 【按页查看文件内容，适合大文件】<br />less file 【与more类似，多了个向前翻页的功能】 |
+
+## vim
+
+![img](https://camo.githubusercontent.com/c34cfd7b6eb5a2d59b77833a3474706167f20c18554172d87df7b23dc5b18bd0/68747470733a2f2f63732d6e6f7465732d313235363130393739362e636f732e61702d6775616e677a686f752e6d7971636c6f75642e636f6d2f696d6167652d32303139313230393030323831383632362e706e67)
 
 ## sed 流编辑器
 
@@ -65,16 +105,16 @@ GNU 计划，译为革奴计划，它的目标是创建一套完全自由的操�
 ## awk 文本工具
 
 - awk 'BEGIN{ commands } pattern{ commands } END{ commands }'
-  - 第一步：执行`BEGIN{ commands }`语句
-  - 第二步：从文件或标准输入逐行读取，执行`pattern{ commands }`语句
-  - 第三步：执行`END{ commands }`语句
+  1. 执行`BEGIN{ commands }`语句
+  2. 从文件或标准输入逐行读取，执行`pattern{ commands }`语句
+  3. 执行`END{ commands }`语句
 
 - echo -e "A line 1\nA line 2" | awk 'BEGIN{ print "Start" } { print; print $1 } END{ print "End" }'
   - $0 整行内容
   - $n 第n个字段
   - NF 字段数
 
-- awk -F: '{print $1}' data.txt 【-F指定分隔符 : 】
+- awk -F: '{print $1}' data.txt 【-F指定分隔符: 】
 
 
 
@@ -90,7 +130,7 @@ GNU 计划，译为革奴计划，它的目标是创建一套完全自由的操�
 
 
 
-## 1. [进程](https://github.com/CyC2018/CS-Notes/blob/master/notes/计算机操作系统%20-%20进程管理.md)
+## [进程](https://github.com/CyC2018/CS-Notes/blob/master/notes/计算机操作系统%20-%20进程管理.md)
 
 正常情况下，子进程是通过父进程创建的，子进程的结束和父进程的运行是一个异步过程，即父进程永远无法预测子进程到底什么时候结束。 当一个进程完成它的工作终止之后，它的父进程需要调用wait()或者waitpid()系统调用取得子进程的终止状态。
 
@@ -229,7 +269,7 @@ int main(int argc, char *argv[]) {
 
 
 
-## 2. 线程
+## 线程
 
 **资源消耗**：多个线程之间使用相同的地址空间，共享大部分数据，启动一个线程所花费的空间远远小于启动一个进程所花费的空间，线程间彼此切换所需的时间也远远小于进程间切换所需要的时间。
 
@@ -243,11 +283,7 @@ int main(int argc, char *argv[]) {
 5、void pthread_exit(void *status); // 终止线程
 ```
 
-
-
-## 3. 线程互斥&同步
-
-一个线程在访问资源未结束时，其他线程不能访问资源。在多线程编程时，要解决数据访问的互斥与同步，最常见的方法是加锁。
+**线程互斥&同步**：一个线程在访问资源未结束时，其他线程不能访问资源。在多线程编程时，要解决数据访问的互斥与同步，最常见的方法是加锁。
 
 ### 信号量
 一个特殊类型的变量
@@ -265,7 +301,7 @@ int sem_destroy(sem_t *sem);
 
 ### 互斥量/锁
 
-与二元信号量很相似。区别是互斥量由哪个线程获取，哪个线程就负责释放。
+与二元信号量很相似，区别是互斥量由哪个线程获取，哪个线程就负责释放。
 
 ```c
 int pthread_mutex_init(pthread_mutex_t *mutex, const pthread_mutex_attr_t *mutexattr);
