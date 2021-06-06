@@ -269,6 +269,16 @@ int pthread_rwlock_destroy(pthread_rwlock_t *rwlock);
 
 递归锁也叫可重入锁，同一个线程可以多次获取同一个递归锁，不会产生死锁。递归锁是不提倡的，用到递归锁说明代码设计有问题，可能会隐藏某些问题。
 
+```c
+int pthread_mutexattr_settype(pthread_mutexattr_t *attr, int type);
+
+pthread_mutexattr_t attr;
+pthread_mutexattr_init(&attr);
+pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
+pthread_mutex_t Mutex;
+pthread_mutex_init(&Mutex, &attr);
+```
+
 ### 条件变量
 
 阻塞线程，避免线程不断轮训，类似于一个栅栏。一个条件变量可以被多个线程等待，当条件变量被唤醒，所有的线程可以一起恢复执行。
@@ -284,29 +294,11 @@ int pthread_cond_broadcast(pthread_cond_t *cond);
 int pthread_cond_destroy(pthread_cond_t *cond);
 ```
 
-### [死锁](https://github.com/CyC2018/CS-Notes/blob/master/notes/计算机操作系统%20-%20死锁.md)
+### 死锁
 
 死锁指的是，两个以上线程在执行过程中，因争夺资源而造成一种互相等待的现象，若无外部处理，将会无限等待下去。死锁本质上就是一个线程在请求锁的时候，永远也请求不到。死锁的危险始终存在，应该在程序编写的时候尽量减少死锁存在的范围。
 
 - 死锁发生的情况： 1、忘记释放锁；2、单线程重复申请锁；3、多线程申请多把锁，造成相互等待。
-
-```c++
-void process1() {
-    mutex1.enter(); // 步骤1
-    mutex2.enter(); // 步骤3
-    do_Something;
-    mutex2.leave();
-    mutex1.leave();
-}
-void process2() {
-    mutex2.enter(); // 步骤2
-    mutex1.enter(); // 步骤4
-    do_Something;
-    mutex1.leave();
-    mutex2.leave();
-}
-```
-
 - [死锁问题排查](http://senlinzhan.github.io/2018/01/01/gdb-on-multithreaded/)：通过gdb pstack命令可查看进程的栈跟踪，多次对比线程堆栈，查看哪些线程一直处于等锁状态，进一步查看栈帧相关变量，结合代码推断确认哪些线程死锁。coredump文件，依据堆栈可同样分析。
 
 
@@ -426,7 +418,7 @@ poll 的功能与 select 类似，也是等待一组描述符中的一个成为�
 
 ```c
 int epoll_create(int size);
-int epoll_ctl(int epfd, int op, int fd, struct epoll_event *event)；
+int epoll_ctl(int epfd, int op, int fd, struct epoll_event *event);
 int epoll_wait(int epfd, struct epoll_event * events, int maxevents, int timeout);
 ```
 
