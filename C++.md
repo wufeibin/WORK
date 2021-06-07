@@ -1,3 +1,48 @@
+![STL 六大组件](https://img-blog.csdn.net/20160320180158788)
+
+
+
+
+
+# STL六大组件
+
+STL六大组件的交互关系：
+
+- [Container](https://github.com/steveLauwh/SGI-STL/tree/master/The Annotated STL Sources V3.3/container) 通过 [Allocator](https://github.com/steveLauwh/SGI-STL/tree/master/The Annotated STL Sources V3.3/allocator) 取得数据储存空间
+- [Algorithm](https://github.com/steveLauwh/SGI-STL/tree/master/The Annotated STL Sources V3.3/algorithm) 通过 [Iterator](https://github.com/steveLauwh/SGI-STL/tree/master/The Annotated STL Sources V3.3/iterator) 存取 [Container](https://github.com/steveLauwh/SGI-STL/tree/master/The Annotated STL Sources V3.3/container) 内容
+- [Functor](https://github.com/steveLauwh/SGI-STL/tree/master/The Annotated STL Sources V3.3/functor-function object) 可以协助 [Algorithm](https://github.com/steveLauwh/SGI-STL/tree/master/The Annotated STL Sources V3.3/algorithm) 完成不同的策略变化
+- [Adapter](https://github.com/steveLauwh/SGI-STL/tree/master/The Annotated STL Sources V3.3/adapter) 可以修饰或套接 [Functor](https://github.com/steveLauwh/SGI-STL/tree/master/The Annotated STL Sources V3.3/functor-function object)、[Iterator](https://github.com/steveLauwh/SGI-STL/tree/master/The Annotated STL Sources V3.3/iterator)
+
+## 1. 容器（containers）
+
+各种数据结构，如vector、list、deque、set、map，用来存放数据。从实现的角度看，STL 容器是一种class template。
+
+## 2. 算法（algorithms）
+
+各种常用算法如sort、search、copy。从实现的角度看，STL 算法是一种function template。
+
+## 3. 迭代器（iterators）
+
+迭代器是容器和算法之间的桥梁，算法通过容器的迭代器来进行操作。迭代器可以看作是一种智能指针，支持原生指针的一般操作，如`*、->、++`等。从实现的角度看，STL 迭代器是一种class template，通过重载`operator*、operator->、operator++`等运算符来实现和原生指针类似的功能。
+
+## 4. 仿函数（functors）
+
+行为类似函数，可做为算法的某种策略。从实作的角度看，仿函数是一种重载了`operator()`的class或class template。
+
+## 5. 配接器（adapters）
+
+一种用来修饰容器（containers）或仿函数（functors）或迭代器（iterators）接口的东西。
+
+例如 STL 提供的queue和stack，虽然看似容器，其实只能算是一种容器配接器，因为它们的底部完全借重deque，所有动作都由底层的deque供应。改变functor接口者，称为function adapter；改变container接口者，称为container adapter；改变iterator接口者，称为iterator adapter。
+
+## 6. 配置器（allocators）
+
+负责空间配置与管理。从实现的角度看，配置器是一个实现了动态空间配置、空间管理、空间释放的class template。
+
+
+
+
+
 # 一、C++基础
 
 > [C++ 参考手册](https://zh.cppreference.com)
