@@ -52,14 +52,6 @@
 - tmp：temporary，用于存放各种临时文件
 - var：variable，用于存放运行时需要改变数据的文件
 
-## GNU
-
-GNU计划，译为革奴计划，它的目标是创建一套完全自由的操作系统，其内容软件完全以GPL方式发布。GPL全称为GNU通用公共许可协议（GNU General Public License），包含了以下内容：
-
-- 以任何目的运行此程序的自由；
-- 再复制的自由；
-- 改进此程序，并公开发布改进的自由。
-
 
 
 # 二、Linux命令
@@ -103,14 +95,12 @@ GNU计划，译为革奴计划，它的目标是创建一套完全自由的操�
 ## awk 文本工具
 
 - awk 'BEGIN{ commands } pattern{ commands } END{ commands }'
-  1. 执行`BEGIN{ commands }`语句
-  2. 从文件或标准输入逐行读取，执行`pattern{ commands }`语句
-  3. 执行`END{ commands }`语句
+
+  执行`BEGIN{ commands }`语句；从文件或标准输入逐行读取，执行`pattern{ commands }`语句；执行`END{ commands }`语句
 
 - echo -e "A line 1\nA line 2" | awk 'BEGIN{ print "Start" } { print; print $1 } END{ print "End" }'
-  - $0 整行内容
-  - $n 第n个字段
-  - NF 字段数
+
+  `$0`整行内容；`$n`第n个字段；`NF`字段数
 
 - awk -F: '{print $1}' data.txt 【-F指定分隔符: 】
 
