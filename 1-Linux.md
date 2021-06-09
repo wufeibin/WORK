@@ -24,16 +24,14 @@
 
 ## Linux内核
 
-1. **内存管理**：追踪记录有多少内存存储了什么以及存储在哪里
-2. **进程管理**：确定哪些进程可以使用中央处理器（CPU）、何时使用以及持续多长时间
-3. **设备驱动程序**：充当硬件与进程之间的调解程序/解释程序
-4. **系统调用和安全防护**：从流程接受服务请求
+1. 内存管理
+2. 进程管理
+3. 设备驱动程序***
+4. 系统调用和安全防护
 
 在正确实施的情况下，内核对于用户是不可见的，它在自己的小世界（称为内核空间）中工作，并从中分配内存和跟踪所有内容的存储位置。用户所看到的内容（例如 Web 浏览器和文件）则被称为用户空间，这些应用通过系统调用接口（SCI）与内核进行交互。
 
 ![img](BOOK/images/LINUX内核入门学习之路——LINUX内核简介2.jpg)
-
-
 
 ## Linux目录
 
@@ -95,13 +93,11 @@
 ## awk 文本工具
 
 - awk 'BEGIN{ commands } pattern{ commands } END{ commands }'
-
   执行`BEGIN{ commands }`语句；从文件或标准输入逐行读取，执行`pattern{ commands }`语句；执行`END{ commands }`语句
-
+  
 - echo -e "A line 1\nA line 2" | awk 'BEGIN{ print "Start" } { print; print $1 } END{ print "End" }'
-
   `$0`整行内容；`$n`第n个字段；`NF`字段数
-
+  
 - awk -F: '{print $1}' data.txt 【-F指定分隔符: 】
 
 
