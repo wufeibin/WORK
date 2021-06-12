@@ -26,6 +26,8 @@ public:
 
     string GetBookName() const;
 
+    void UselessFunc() = delete; // "=delete"表示这个函数被定义为deleted，该成员函数不能再被调用。
+
     inline void PrintBookName() { // 显式内联，类内部定义的成员函数自动inline，可省略
         LOGINFO("%s", m_book_name.c_str());
     }
