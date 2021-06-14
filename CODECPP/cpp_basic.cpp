@@ -280,18 +280,19 @@ void LambdaDemo()
     sort(myvec.begin(), myvec.end(), [](int a, int b) -> bool { return a < b; }); // Lambda表达式
 
     int a = 123;
-    auto f_a = [a] { cout << a << endl; }; 
+    auto f_a = [a] { cout << a << endl; }; // 捕获外部变量 - 值捕获
+    // auto f_a = [=] { cout << a << endl; }; // 捕获外部变量 - 隐式值捕获
     a = 321;
     f_a(); // 输出：123
 
     int b = 123;
-    auto f_b = [&b] { cout << b << endl; }; 
+    auto f_b = [&b] { cout << b << endl; }; // 捕获外部变量 - 引用捕获
+    // auto f_b = [&] { cout << b << endl; }; // 捕获外部变量 - 隐式引用捕获
     b = 321;
     f_b(); // 输出：321
 
-    // to fix 
-    //auto x = [](int c){cout << c << endl;}(123); // 或通过“函数体”后面的‘()’传入参数
-    //x();
+    int res = [](int x, int y) { return x + y; }(5, 4); // Lambda表达式的参数
+    cout << res << endl;
 
 }
 
