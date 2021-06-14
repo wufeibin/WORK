@@ -363,8 +363,8 @@ void main()
 ```c++
 class HasPtrMem {
 public:
-    HasPtrMem() :d (new int(0)) {}
-    HasPtrMem(HasPtrMem &rhs) :d (new int(*rhs.d)) {} // 深拷贝：复制构造函数
+    HasPtrMem() : d (new int(0)) {}
+    HasPtrMem(HasPtrMem &rhs) : d (new int(*rhs.d)) {} // 深拷贝：复制构造函数
     ~HasPtrMem() { delete d; }
     int *d;
 };
@@ -407,9 +407,9 @@ public:
 class HasPtrMem {
 public:
     HasPtrMem() : d(new int(0)), hm(1024) { }
-    HasPtrMem(HasPtrMem &rhs) :d(new int(*rhs.d)), hm(rhs.hm) {}
+    HasPtrMem(HasPtrMem &rhs) : d(new int(*rhs.d)), hm(rhs.hm) {}
     // std::move()可以强制将一个左值或右值转换为右值，等同于类型转换static_cast<T&& >(lvalue)。
-    HasPtrMem(HasPtrMem &&rhs) :d(rhs.d), hm(std::move(rhs.hm)) { // 强制转为右值，调用移动构造
+    HasPtrMem(HasPtrMem &&rhs) : d(rhs.d), hm(std::move(rhs.hm)) { // 强制转为右值，调用移动构造
         rhs.d = nullptr;
     }
     ~HasPtrMem() { delete d; }

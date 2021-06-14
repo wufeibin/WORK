@@ -1,4 +1,4 @@
-# 简介&安装
+# 简介
 
 > Python的定位是简单优雅。Python提供了完善的基础库以及大量的第三方库，有丰富的社区资源。
 >
@@ -336,4 +336,10 @@ finally...
 ```
 
 
+
+
+
+[Python编程：从入门到实践 项目《外星人入侵》完整代码](https://www.cnblogs.com/qbdj/p/11004744.html)
+
+[Python tutorial 2.7.13](https://www.runoob.com/manual/pythontutorial/docs/html/index.html#)
 
