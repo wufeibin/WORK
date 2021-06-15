@@ -17,7 +17,7 @@
 
 在正确的情况下，内核对于用户是不可见的，它在自己的小世界（称为内核空间）中工作，并从中分配内存和跟踪所有内容的存储位置。用户所看到的内容（例如 Web 浏览器和文件）则被称为用户空间，这些应用通过系统调用接口（SCI）与内核进行交互。
 
-<img src="BOOK/images/LINUX内核入门学习之路——LINUX内核简介2.jpg" alt="img"  />
+![img](https://images2018.cnblogs.com/blog/1142140/201806/1142140-20180607223821520-1164156678.png)
 
 1. 内存管理
 2. 进程管理
@@ -27,8 +27,6 @@
 
 
 ## Linux目录
-
-![目录配置](BOOK/images/Linux目录.png)
 
 - bin：binaries，存放二进制可执行文件
 - sbin：super user binaries，存放二进制可执行文件，只有root才能访问
