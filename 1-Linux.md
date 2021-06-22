@@ -24,8 +24,6 @@
 3. 设备驱动程序
 4. 系统调用和安全防护
 
-
-
 ## Linux目录
 
 - bin：binaries，存放二进制可执行文件
@@ -71,7 +69,9 @@
 
 ![img](https://camo.githubusercontent.com/c34cfd7b6eb5a2d59b77833a3474706167f20c18554172d87df7b23dc5b18bd0/68747470733a2f2f63732d6e6f7465732d313235363130393739362e636f732e61702d6775616e677a686f752e6d7971636c6f75642e636f6d2f696d6167652d32303139313230393030323831383632362e706e67)
 
-## sed 流编辑器
+## sed
+
+sed是一个的文件处理工具，本身是一个管道命令，主要是以行为单位进行处理，可以对数据行进行替换、删除、新增、选取等操作。
 
 - echo this is xxx | sed 's/xxx/yyy/'
 - sed 's/xxx/yyy/' file 【替换文本中的字符串】
@@ -81,7 +81,9 @@
 - sed -f script.sed file
 - sed -n '/2020-08-30-15-38-[0-9]/,/2020-08-30-15-50-[0-9]/p' file 【,选项，选定行范围】
 
-## awk 文本工具
+## awk
+
+awk是一个强大的文本分析工具，相对于grep查找，sed编辑，awk在其对数据分析并生成报告时，更为强大。简单来说awk就是把文件逐行的读入，以空格为默认分隔符将每行切片，切开部分再进行各种分析处理。
 
 - awk 'BEGIN{ commands } pattern{ commands } END{ commands }'
   执行`BEGIN{ commands }`语句；从文件或标准输入逐行读取，执行`pattern{ commands }`语句；执行`END{ commands }`语句

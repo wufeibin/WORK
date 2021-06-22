@@ -79,8 +79,8 @@ f();
 ## const
 
 1. 修饰变量，说明该变量不可以被改变。
-2. 修饰指针，分为指向常量的指针和指针常量。
-3. 修饰引用，经常用于形参类型，即避免了拷贝，又避免了函数对值的修改。
+2. 修饰指针，指向常量的指针、指针常量。
+3. 修饰引用，常用于形参类型，即避免了拷贝和修改。
 4. 修饰成员函数，说明该成员函数内不能修改成员变量。
 
 ```cpp
@@ -288,7 +288,7 @@ STL六大组件的交互关系：
 
 vector通过一个连续数组存放元素，使用的是堆内存。如果集合已满，再新增数据时，就要分配一块更大的内存，将原来的数据复制过来，释放之前的内存，再插入新增的元素。不同的编译器实现的扩容方式不一样，VS2015中以1.5倍扩容，GCC以2倍扩容。
 
-对vector的任何操作，一旦引起空间重新配置，指向原vector的所有迭代器就都失效了。初始时刻vector的capacity为0，插入第一个元素后capacity增加为1。
+vector的任何操作，一旦引起空间重新配置，指向原vector的所有迭代器就都失效了。初始vector的capacity为0，插入第一个元素后capacity增加为1。
 
 ## map原理
 
@@ -432,7 +432,9 @@ void main()
 
 ## Lambda表达式
 
-C++11的一大亮点就是引入了Lambda表达式，利用Lambda表达式可以方便地定义和创建匿名函数。Lambda表达式完整的声明格式：`[capture list] (params list) mutable exception-> return type { function body }`
+C++11的一大亮点就是引入了Lambda表达式，利用Lambda表达式可以方便地定义和创建匿名函数。
+
+Lambda表达式完整的声明格式：`[capture list] (params list) mutable exception-> return type { function body }`
 
 1. capture list：捕获外部变量列表
 2. params list：形参列表
@@ -443,15 +445,15 @@ C++11的一大亮点就是引入了Lambda表达式，利用Lambda表达式可以
 
 此外，我们还可以省略其中的某些成分来声明“不完整”的Lambda表达式，常见的有以下几种：
 
-- `[capture list] (params list) -> return type {function body}`  声明了const类型的表达式，这种类型的表达式不能修改捕获列表中的值。
+1. `[capture list] (params list) -> return type {function body}`  声明了const类型的表达式，这种类型的表达式不能修改捕获列表中的值。
 
-- `[capture list] (params list) {function body}` 省略了返回值类型，编译器可以根据规则推断出Lambda表达式的返回类型。
+2. `[capture list] (params list) {function body}` 省略了返回值类型，编译器可以根据规则推断出Lambda表达式的返回类型。
 
-  （1）如果function body中存在return语句，则该Lambda表达式的返回类型由return语句的返回类型确定。
+   - 如果function body中存在return语句，则该Lambda表达式的返回类型由return语句的返回类型确定。
 
-  （2）如果function body中没有return语句，则返回值为void类型。
+   - 如果function body中没有return语句，则返回值为void类型。
 
-- `[capture list] {function body}`省略了参数列表，类似普通函数中的无参函数。
+3. `[capture list] {function body}`省略了参数列表，类似普通函数中的无参函数。
 
 
 
