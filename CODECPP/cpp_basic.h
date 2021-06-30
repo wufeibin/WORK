@@ -22,6 +22,8 @@ void MapDemo();
 
 void QueueDemo();
 
+void PtrDemo();
+
 void LambdaDemo();
 
 #endif

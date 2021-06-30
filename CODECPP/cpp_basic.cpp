@@ -274,6 +274,23 @@ void SetDemo()
     }
 }
 
+void PtrDemo()
+{
+/*     
+    shared_ptr<char[]> p(new char[len]);
+    shared_ptr<A> p(new A(构造参数));
+    shared_ptr<char[]> p = make_shared<char[]>(len);
+    shared_ptr<A> p = make_shared<A>();
+    shared_ptr<A> p = make_shared<A>(构造参数);
+
+    unique_ptr<char[]> p(new char[len]);
+    unique_ptr<A> p(new A(构造参数));
+    unique_ptr<char[]> p = make_unique<char[]>(len);
+    unique_ptr<A> p = make_unique<A>();
+    unique_ptr<A> p = make_unique<A>(构造参数);
+ */
+}
+
 void LambdaDemo()
 {
     vector<int> myvec{ 3, 2, 5, 7, 3, 2};
