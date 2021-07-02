@@ -245,6 +245,19 @@ TypeName b = (TypeName)a;
 
 
 
+```
+std::copy
+std::fill
+std::advance
+
+原子操作
+
+```
+
+
+
+
+
 # 二、[STL](https://github.com/steveLauwh/SGI-STL)
 
 C++ 标准模板库（STL）是一套功能强大的 C++ 模板类，提供了通用的模板类和函数，这些模板类和函数可以实现多种流行和常用的算法和数据结构。

@@ -2,7 +2,7 @@
 #define __COMMON_H
 
 // C常用头文件
-#include <stdio.h> 
+#include <stdio.h>
 #include <stdlib.h>
 #include <stddef.h> 
 #include <stdint.h>
@@ -12,6 +12,10 @@
 #include <time.h>
 #include <assert.h>
 #include <signal.h>
+#include <ctype.h>
+#include <errno.h>
+#include <float.h>
+#include <limits.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
@@ -19,6 +23,7 @@
 #include <sys/wait.h>
 #include <sys/syscall.h>
 #include <pthread.h>
+
 
 // C++常用头文件
 #include <iostream>
