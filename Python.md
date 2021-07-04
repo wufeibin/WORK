@@ -16,7 +16,7 @@ wufeibindeMacBook-Pro:practice wufeibin$ python3
 Python 3.9.5 (default, May  4 2021, 03:36:27) 
 [Clang 12.0.0 (clang-1200.0.32.29)] on darwin
 Type "help", "copyright", "credits" or "license" for more information.
->>> print ("Hello, Python!")
+>>> print("Hello, Python!")
 Hello, Python!
 ```
 
@@ -26,7 +26,7 @@ Hello, Python!
 
 ```
 wufeibindeMacBook-Pro:practice wufeibin$ cat 1.py 
-print ("Hello, Python!")       
+print("Hello, Python!")       
 wufeibindeMacBook-Pro:practice wufeibin$ python3 1.py 
 Hello, Python!
 ```
@@ -34,7 +34,7 @@ Hello, Python!
 ```
 wufeibindeMacBook-Pro:practice wufeibin$ cat 1.py 
 #!/usr/bin/python3
-print ("Hello, Python!")
+print("Hello, Python!")
 wufeibindeMacBook-Pro:practice wufeibin$ chmod +x 1.py 
 wufeibindeMacBook-Pro:practice wufeibin$ ./1.py 
 Hello, Python!
@@ -93,7 +93,6 @@ Python中单行注释采用 # 开头，多行注释使用三个单引号(''')或
 
 ```python
 #!/usr/bin/python3
-# 文件名：test.py
 
 '''
 这是多行注释，使用单引号。
@@ -127,10 +126,10 @@ int（整型）、long（长整型）、float（浮点型）、complex（复数�
  
 str1 = 'Hello World!'
 str2 = "Runoob"
-print ("var1[0]: ", str1[0])
-print ("var2[1:5]: ", str2[1:5])
-print ("已更新字符串 : ", str1[:6] + 'Runoob!')
-print ("我叫 %s 今年 %d 岁!" % ('小明', 10)) # 字符串格式化
+print("var1[0]: ", str1[0])
+print("var2[1:5]: ", str2[1:5])
+print("已更新字符串 : ", str1[:6] + 'Runoob!')
+print("我叫 %s 今年 %d 岁!" % ('小明', 10)) # 字符串格式化
 ```
 
 ## 列表
@@ -141,12 +140,12 @@ print ("我叫 %s 今年 %d 岁!" % ('小明', 10)) # 字符串格式化
 #!/usr/bin/python3
 
 list = ['red', 'green', 'blue', 'yellow', 'white']
-print (list[0])
-print (list[1])
-print (list[-1])
+print(list[0])
+print(list[1])
+print(list[-1])
 list[2] = 'black'
 list.append('black')
-print ("更新后的列表 : ", list)
+print("更新后的列表 : ", list)
 ```
 
 ## 元组
@@ -158,10 +157,10 @@ print ("更新后的列表 : ", list)
 
 tup1 = ('Google', 'Runoob', 1997, 2000)
 tup2 = (1, 2, 3, 4, 5, 6, 7)
-print ("tup1[0]: ", tup1[0])
-print ("tup2[1:5]: ", tup2[1:5])
+print("tup1[0]: ", tup1[0])
+print("tup2[1:5]: ", tup2[1:5])
 tup3 = tup1 + tup2
-print (tup3)
+print(tup3)
 ```
 
 ## 字典
@@ -172,8 +171,8 @@ print (tup3)
 #!/usr/bin/python3
 
 dict = {'Name': 'Runoob', 'Age': 7, 'Class': 'First'}
-print ("dict['Name']: ", dict['Name'])
-print ("dict['Age']: ", dict['Age'])
+print("dict['Name']: ", dict['Name'])
+print("dict['Age']: ", dict['Age'])
 dict['Age'] = 8 # 更新
 dict['School'] = "菜鸟教程" # 添加
 del dict['Name'] # 删除
@@ -188,10 +187,10 @@ del dict # 删除字典
 ```python
 #!/usr/bin/python3
 
-s1 = set(("Google", "Runoob", "Taobao"))
-s1.add("Facebook")
-s1.remove("Taobao") # 不存在会发生错误
-s1.discard("Facebook") # 不存在不会发生错误
+s = set(("Google", "Runoob", "Taobao"))
+s.add("Facebook")
+s.remove("Taobao") # 不存在会发生错误
+s.discard("Facebook") # 不存在不会发生错误
 s.clear()
 ```
 
@@ -200,14 +199,15 @@ s.clear()
 # 四、条件&循环
 
 ```python
-run = False or True # 布尔值用and、or和not运算
+#!/usr/bin/python3
+
 # while 循环
-while run:
+while True:
     guess = int(input('Enter an integer : '))
-    if guess < 9:
+    if guess < 9 :
         print('guess < 9')
         continue
-    elif guess > 9:
+    elif guess > 9 :
         pass # pass语句不做任何事情
     else:
         print('guess = 9')
@@ -216,7 +216,7 @@ else:
     print('The while loop over')
 
 # for 循环
-for i in range(1, 9, 2):	# range()函数生成整数序列
+for i in range(1, 9, 2): # range()函数生成整数序列
     print(i)
 else:
     print('The for loop over')
@@ -224,9 +224,15 @@ else:
 
 
 
+# 迭代器与生成器
+
+
+
 # 五、函数&模块
 
 ```python
+#!/usr/bin/python3
+
 g_num = 0
 def add_func(a, b = 1):
     print('sum is', a+b)
@@ -289,7 +295,7 @@ __version__ = '0.1'
 # 六、文件
 
 ```python
-f = open('1.txt', 'a+')  # 如果没有特别指定，启用默认的阅读(r)模式
+f = open('1.txt', 'a+') # 如果没有特别指定，启用默认的阅读(r)模式
 f.write('this is test1 \nthis is test2')
 while True:
     line = f.readline()
@@ -301,9 +307,9 @@ f.close()
 
 
 import os
-os.uname()  # 详细系统信息
-os.environ  # 环境变量
-os.environ.get('PATH')   # 某个环境变量
+os.uname() # 详细系统信息
+os.environ # 环境变量
+os.environ.get('PATH') # 某个环境变量
 # 操作文件和目录的函数一部分放在os模块中，一部分放在os.path模块中
 os.path.abspath('.')
 os.mkdir('/Users/wufeibin/Documents/WORK/testdir')
@@ -318,7 +324,7 @@ for x in os.listdir('/Users/wufeibin/Documents/WORK'):
 
 import pickle
 d = dict(name='Bob', age=20, score=88)
-print(pickle.dumps(d))  # 对象序列化
+print(pickle.dumps(d)) # 对象序列化
 f = open('1.txt', 'wb')
 pickle.dump(d, f)
 f.close()

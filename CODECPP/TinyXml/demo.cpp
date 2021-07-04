@@ -3,6 +3,7 @@
 #include <cstring>
 #include "tinyxml.h"
 using namespace std;
+
 /* 
 TinyXML是一个开源的解析XML的解析库，能够用于C++，能够在Windows或Linux中编译。这个解析库的模型通过解析XML文件，然后在内存中生成DOM模型，从而让我们很方便的遍历这棵XML树。
 DOM模型即文档对象模型，是将整个文档分成多个元素（如书、章、节、段等），并利用树型结构表示这些元素之间的顺序关系以及嵌套包含关系。
@@ -14,7 +15,6 @@ TiXmlElement：元素类，它是文件的主要部分，并且支持嵌套结�
 TiXmlAttribute/TiXmlAttributeSet：元素属性，它一般嵌套在元素中，用于记录此元素的一些属性
 TiXmlText：文本对象，它嵌套在某个元素内部
  */
-
 
 // 创建xml文件
 int writeXmlFile()
@@ -100,6 +100,8 @@ int main(int argc, char *argv[])
 
 /* 
 g++ -fPIC -shared tiny*.cpp -o libtinyxml.so
-g++ -c demo.cpp -ltinyxml
-g++ demo.o libtinyxml.so -o demo
+g++ -o main.o -c demo.cpp -I./src
+g++ -o demo -L./src -ltinyxml demo.o
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./src/
+./demo
  */
