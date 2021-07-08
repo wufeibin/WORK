@@ -60,7 +60,7 @@ int writeXmlFile()
     return 1;
 }
  
-//解析xml文件
+// 解析xml文件
 int readXmlFile()
 {
     TiXmlDocument mydoc("demo.xml"); // xml文档对象

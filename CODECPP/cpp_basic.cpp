@@ -225,9 +225,11 @@ void QueueDemo()
     }
 }
 
-// map类型通常被称为关联数组，map容器是键值对（key-value）的容器。与正常数组不同之处在于其下标不是整数，而是一个关键字key值。对于迭代器，可以修改value值，不能修改key值。
-// map会根据key值自动排序。key值需要支持<操作符。
-// map与multimap差别仅仅在于multiple允许一个键对应多个值。
+/* 
+map类型通常被称为关联数组，map是键值对（key-value）的容器。与正常数组不同之处在于其下标不是整数，而是一个关键字key值。对于迭代器，可以修改value值，不能修改key值。
+map会根据key值自动排序。key值需要支持<操作符。
+map与multimap差别仅仅在于multiple允许一个键对应多个值。
+ */
 void MapDemo()
 {
     // 1、定义与初始化
@@ -312,5 +314,3 @@ void LambdaDemo()
     cout << res << endl;
 
 }
-
-

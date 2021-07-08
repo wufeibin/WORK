@@ -104,5 +104,6 @@ int main(int argc, char *argv[])
 }
 
 /* 
-g++ -I./ demo.cpp ./json_src/*.cpp
+g++ -o demo -I./ demo.cpp ./json_src/*.cpp
+./demo
  */

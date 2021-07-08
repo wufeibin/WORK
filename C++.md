@@ -468,7 +468,73 @@ Lambda表达式完整的声明格式：`[capture list] (params list) mutable exc
 
 3. `[capture list] {function body}`省略了参数列表，类似普通函数中的无参函数。
 
+## 其他特性
 
+- **unordered_map、unordered_set**
+
+    map与unordered_map的用法是一样的。map底层通过红黑树实现；unordered_map底层通过哈希表实现，适用于快速查找，不需要排序的场景。
+
+- **emplace_front、emplace、emplace_back**
+
+    对于顺序容器，C++11引入emplace_front、emplace和emplace_back，分别对应push_front、insert和push_back。
+
+    对于关联容器，也有对应emplace相关函数，map：emplace、emplace_hint；set：emplace、emplace_hint。
+
+    当调用insert成员函数时，我们将元素对象传递给它们，这些对象被拷贝到容器中。而当调用一个emplace成员函数时，则是将参数传递给元素类型的构造函数，emplace在容器管理的内存空间中直接构造元素。emplace相关函数可以**减少内存拷贝和移动**。
+
+    ```c++
+    std::vector<President> v1;
+    v1.push_back(President("Franklin Delano Roosevelt", "the USA", 1936));
+    
+    std::vector<President> v2;
+    v2.emplace_back("Nelson Mandela", "South Africa", 1994);
+    ```
+
+- **std::function、std::bind**
+
+    通过std::function对C++中各种可调用实体（普通函数、Lambda表达式、仿函数、类成员函数以及类静态函数等）的封装，形成一个新的可调用的std::function对象。绑定成员函数时须借助std::bind，或者传入*this指针。
+
+    std::bind可以预先把指定可调用实体的某些参数绑定到已有的变量，产生一个新的可调用实体，在回调函数的使用中颇为有用。
+
+    ```C++
+    #include <functional>
+    
+    class Test {
+    public:
+        int Sum(int x, int y) {
+            return x + y;
+        }
+    };
+    
+    std::function<int(int, int)> Functional1;
+    std::function<int(Test, int, int)> Functional2;
+    
+    int main()
+    {
+        Test testObj;
+        Functional1 = std::bind(&Test::Sum, testObj, 
+                                std::placeholders::_1, std::placeholders::_2); // std::placeholders::_1是一个占位符
+        int result = Functional1(1, 2);
+    
+        Functional2 = &Test::Sum;
+        result = Functional2(testObj, 1, 2);
+        return 0;
+    }
+    ```
+
+- **constexpr**
+
+    常量表达式constexpr必须在编译期间计算出它的值并且不可被改变。常量表达式主要是允许一些计算发生在编译时，而不是运行时，得到一定优化。
+
+    定义为constexpr类型的函数都隐式为内联函数。
+
+    ```c++
+    constexpr int mf = 20; // 常量表达式
+    constexpr int limit = mf + 1; // 常量表达式
+    constexpr int sz = size(); // 如果size()是常量表达式则编译通过，否则报错
+    ```
+
+    
 
 # 四、Effective C++
 
