@@ -8,7 +8,7 @@
 
 * 如果一个类没有显式地定义构造函数，编译器会隐式地合成一个默认构造函数，合成的默认构造函数只适合简单的类。如`Base b`调用了默认构造函数。
 
-* 类对象的数据成员是在析构函数执行体之后的隐含阶段被销毁的
+* 类对象的数据成员是在析构函数执行体之后的隐含阶段被销毁的。
 
 * 非内部数据类型的成员对象（类对象），应采用初始化表方式初始化，提高效率。
 
@@ -154,7 +154,7 @@ int i = 0; // 声明并定义
 ```
 
 
-3. extern "C"  链接指示符：如果要在一个cpp源文件中要使用一个C的函数，需要告诉编译器使用C语言的方式进行编译和链接。 `gcc -c 1.c -o 1.o ; g++ main.cpp 1.o`
+3. extern "C"  链接指示符：如果要在一个cpp源文件中要使用一个C的函数，需要告诉编译器使用C语言的方式进行编译和链接。 
 
 ```c
 //1.h
@@ -176,8 +176,7 @@ void func2(){};
 ```c
 //main.cpp
 #include "1.h"
-int main()
-{
+int main() {
     func1();
     func2();
 }
@@ -245,19 +244,6 @@ TypeName b = (TypeName)a;
 
 
 
-```
-std::copy
-std::fill
-std::advance
-
-原子操作
-
-```
-
-
-
-
-
 # 二、[STL](https://github.com/steveLauwh/SGI-STL)
 
 C++ 标准模板库（STL）是一套功能强大的 C++ 模板类，提供了通用的模板类和函数，这些模板类和函数可以实现多种流行和常用的算法和数据结构。
@@ -266,10 +252,10 @@ C++ 标准模板库（STL）是一套功能强大的 C++ 模板类，提供了�
 
 STL六大组件的交互关系：
 
-- [Container](https://github.com/steveLauwh/SGI-STL/tree/master/The%20Annotated%20STL%20Sources%20V3.3/container) 通过 [Allocator](https://github.com/steveLauwh/SGI-STL/tree/master/The%20Annotated%20STL%20Sources%20V3.3/allocator) 取得数据储存空间
-- [Algorithm](https://github.com/steveLauwh/SGI-STL/tree/master/The%20Annotated%20STL%20Sources%20V3.3/algorithm) 通过 [Iterator](https://github.com/steveLauwh/SGI-STL/tree/master/The%20Annotated%20STL%20Sources%20V3.3/iterator) 存取 [Container](https://github.com/steveLauwh/SGI-STL/tree/master/The%20Annotated%20STL%20Sources%20V3.3/container) 内容
-- [Functor](https://github.com/steveLauwh/SGI-STL/tree/master/The%20Annotated%20STL%20Sources%20V3.3/functor-function%20object) 可以协助 [Algorithm](https://github.com/steveLauwh/SGI-STL/tree/master/The%20Annotated%20STL%20Sources%20V3.3/algorithm) 完成不同的策略变化
-- [Adapter](https://github.com/steveLauwh/SGI-STL/tree/master/The%20Annotated%20STL%20Sources%20V3.3/adapter) 可以修饰或套接 [Functor](https://github.com/steveLauwh/SGI-STL/tree/master/The%20Annotated%20STL%20Sources%20V3.3/functor-function%20object)、[Iterator](https://github.com/steveLauwh/SGI-STL/tree/master/The%20Annotated%20STL%20Sources%20V3.3/iterator)
+- Container 通过 Allocator 取得数据储存空间
+- Algorithm 通过 Iterator 存取 Container 内容
+- Functor 可以协助 Algorithm 完成不同的策略变化
+- Adapter 可以修饰或套接 Functor、Iterator
 
 ![STL 六大组件](https://img-blog.csdn.net/20160320180158788)
 
@@ -305,7 +291,73 @@ vector的任何操作，一旦引起空间重新配置，指向原vector的所�
 
 ## map原理
 
+map 的底层机制是红黑树，红黑树本质是一个二叉搜索树，每个节点要么是红色，要么是黑色，加上一些特性，变成平衡二叉搜索树。
 
+红黑树的插入、删除、查找操作的时间复杂度是 O(logN)。红黑树的高度在 [logN, logN+1]。
+
+- 规则 1：每个节点不是红色，就是黑色；
+- 规则 2：根节点必须是黑色；
+- 规则 3：如果一个节点是红色，那么它的孩子必须是黑色；
+- 规则 4：任何一个节点向下遍历到其叶子节点，所经过的黑色节点必须相等；
+- 规则 5：空节点必须是黑色；
+
+```c++
+typedef bool _Rb_tree_Color_type;
+const _Rb_tree_Color_type _S_rb_tree_red = false;
+const _Rb_tree_Color_type _S_rb_tree_black = true;
+
+struct _Rb_tree_node_base
+{
+    typedef _Rb_tree_Color_type _Color_type;
+    typedef _Rb_tree_node_base* _Base_ptr;
+    
+    _Color_type _M_color;  // 颜色
+    _Base_ptr _M_parent;   // 父亲节点
+    _Base_ptr _M_left;     // 左孩子节点
+    _Base_ptr _M_right;    // 右孩子节点
+    
+    // 找值最小节点
+    static _Base_ptr _S_minimum(_Base_ptr __x)
+    {
+        while (__x->_M_left != 0) __x = __x->_M_left;
+        return __x;
+    }
+    
+    // 找值最大节点
+    static _Base_ptr _S_maximum(_Base_ptr __x)
+    {
+        while (__x->_M_right != 0) __x = __x->_M_right;
+        return __x;
+    }
+}
+
+template <class _Value>
+struct _Rb_tree_node : public _Rb_tree_node_base
+{
+    typedef _Rb_tree_node<_Value>* _Link_type;
+    _Value _M_value_field;  // 键值
+};
+```
+
+```C++
+template <class _Key, class _Tp, class _Compare, class _Alloc>
+class map {
+public:
+    typedef _Key                  key_type; // 键值类型
+    typedef _Tp                   data_type; // 实值类型
+    typedef _Tp                   mapped_type;
+    typedef pair<const _Key, _Tp> value_type;  // 元素类型(键值/实值)
+    typedef _Compare              key_compare; // 键值比较函数
+
+private:
+    typedef _Rb_tree<key_type, value_type, 
+                   _Select1st<value_type>, key_compare, _Alloc> _Rep_type; // map 的底层机制 RB-tree 
+    _Rep_type _M_t;  // red-black tree representing map 以红黑树(RB-tree) 表现 map
+    
+public:
+    typedef typename _Rep_type::iterator iterator;  // map 迭代器
+};
+```
 
 
 
@@ -335,22 +387,12 @@ STL提供的智能指针：shared_ptr、unique_ptr、weak_ptr、auto_ptr（被�
 
    unique_ptr独占所指对象。当程序试图将一个unique_ptr赋值给另一个时，如果源unique_ptr是个临时右值，编译器允许这么做；如果源unique_ptr将存在一段时间，编译器将禁止这么做。
 
-   ```cpp
-   auto_ptr<string> p1(new string("auto"));
-   auto_ptr<string> p2;
-   p2 = p1; // p2接管string对象的所有权后，p1是空指针，再使用p1会崩溃。
-   unique_ptr<string> pu1(new string("hello world"));
-   unique_ptr<string> pu2;
-   pu2 = pu1; // 编译器会禁止报错
-   unique_ptr<string> pu3;
-   pu3 = unique_ptr<string>(new string("you")); // 允许
-   ```
 
 ## 移动语义
 
 C++ 程序的一个特点就是需要程序员管理内存，需要的时候申请内存，在合适的时候释放申请的内存。如果没有释放掉申请的内存会造成内存泄漏，多次释放同一块内存会造成程序异常，所以对于指针的操作需要特别小心。如果类中包含指针成员，就需要特别小心拷贝构造函数的编写。
 
-- **浅拷贝**：增加一个指针，指向一个已经存在的内存，实现了逻辑上的拷贝。
+**1、浅拷贝**：增加一个指针，指向一个已经存在的内存，实现了逻辑上的拷贝。
 
 ```c++
 class HasPtrMem {
@@ -371,7 +413,7 @@ void main()
 }
 ```
 
-- **深拷贝**：申请一块内存，并把数据拷贝到新的内存，实现逻辑和物理上的拷贝。
+**2、深拷贝**：申请一块内存，并把数据拷贝到新的内存，实现逻辑和物理上的拷贝。
 
 ```c++
 class HasPtrMem {
@@ -391,12 +433,12 @@ void main()
 }
 ```
 
-- **左值与右值**：可以取地址，有名字的是左值；不可以取地址，没有名字的是右值。
+**3、左值与右值**：可以取地址，有名字的是左值；不可以取地址，没有名字的是右值。
 
-  `T &&a = returnValue();`，returnValue函数返回一个临时变量，申明一个右值引用，其值等于临时变量的值。returnValue返回的右值在表达式结束后就终结了，但是右值引用让其重获新生，它的生命周期将和右值引用变量一样，直到右值引用变量消亡。如果不使用右值引用：`T b = returnValue(); `，那么就会多一次对象构造和析构开销。
+`T &&a = returnValue();`，returnValue函数返回一个临时变量，申明一个右值引用，其值等于临时变量的值。returnValue返回的右值在表达式结束后就终结了，但是右值引用让其重获新生，它的生命周期将和右值引用变量一样，直到右值引用变量消亡。如果不使用右值引用：`T b = returnValue(); `，那么就会多一次对象构造和析构开销。
 
-  - 右值引用不能绑定到任何左值。`int n = 0; int &&m = n; // 编译错误`
-  - 左值引用通常不能绑定到右值。`T &e = returnValue(); // 编译错误`
+- 右值引用不能绑定到任何左值。`int n = 0; int &&m = n; // 编译错误`
+- 左值引用通常不能绑定到右值。`T &e = returnValue(); // 编译错误`
 
 - **移动构造**：如果使用一个右值去初始化对象，并且对象类实现了以右值为参数的移动构造函数，那么就会触发移动构造。移动构造可以有效的减少无用的拷贝，但是滥用移动构造也会造成问题，在使用移动构造后，就代表不再使用原对象，否则就不应该使用。
 ```c++

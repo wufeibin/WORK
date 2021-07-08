@@ -1,4 +1,4 @@
-# 一、Linux介绍
+# 一、Linux系统
 
 ## 计算机系统
 
@@ -99,24 +99,17 @@ awk是一个强大的文本分析工具，相对于grep查找，sed编辑，awk�
 
 进程是程序执行时的一个实例，即它是程序已经执行到何种程度的数据结构的汇集。从内核的观点看，进程的目的就是担当分配系统资源（CPU时间、内存等）的基本单位。
 
-线程是进程的一个执行流，是CPU调度和分派的基本单位，它是比进程更小的能独立运行的基本单位。一个进程由几个线程组成（拥有很多相对独立的执行流的用户程序共享应用程序的大部分数据结构），线程与同属一个进程的其他的线程共享进程所拥有的全部资源。
+线程是进程的一个执行流，是CPU调度和分派的基本单位，它是比进程更小的能独立运行的基本单位。一个进程由几个线程组成（拥有很多相对独立的执行流的用户程序共享应用程序的大部分数据结构），同属一个进程的线程共享进程所拥有的全部资源。
 
 进程有独立的地址空间，一个进程崩溃后，在保护模式下不会对其它进程产生影响，而线程只是一个进程中的不同执行路径。线程有自己的堆栈和局部变量，但线程没有单独的地址空间，一个线程死掉就等于整个进程死掉，所以多进程的程序要比多线程的程序健壮，但在进程切换时，耗费资源较大，效率要差一些。但对于一些要求同时进行并且又要共享某些变量的并发操作，只能用线程，不能用进程。
 
 > "进程是资源分配的最小单位，线程是程序执行的最小单位"
 
-
-
-## [进程](https://github.com/CyC2018/CS-Notes/blob/master/notes/计算机操作系统%20-%20进程管理.md)
+## 进程
 
 正常情况下，子进程是通过父进程创建的，子进程的结束和父进程的运行是一个异步过程，即父进程永远无法预测子进程到底什么时候结束。 当一个进程完成它的工作终止之后，它的父进程需要调用wait()或者waitpid()系统调用取得子进程的终止状态。
 
 ```c
-1、fork/vfork // 创建子进程
-2、exec族函数 // 将当前进程替换为新进程
-3、wait/waitpid // 等待获取子进程状态的改变
-4、exit // 终止进程
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -124,18 +117,18 @@ awk是一个强大的文本分析工具，相对于grep查找，sed编辑，awk�
 #include <sys/wait.h>
 int main(int argc, char *argv[]) {
     pid_t pid;
-    pid = fork();
+    pid = fork(); // 创建子进程
     if (pid < 0) {
         perror("fork failed");
-        exit(1);
+        exit(1); // 终止进程
     } else if (pid == 0) {
         printf("This is in child progress\n");
         char *const argv[] = {"exec_call", NULL};
-        execv("./exec_call", argv);	// 执行exec_call新程序
+        execv("./exec_call", argv);	// 将当前进程替换为新进程exec_call
     } else {
         printf("This is in parent progress\n");
         int stat_val;
-        waitpid(pid, &stat_val, 0);
+        waitpid(pid, &stat_val, 0); // 等待获取子进程状态的改变
         if (WIFEXITED(stat_val)) {
             printf("Child exited with code %d\n", WEXITSTATUS(stat_val));		
         }
@@ -178,9 +171,60 @@ Linux Daemon（守护进程）是运行在后台的一种特殊进程。它独�
 
 ### 进程间通信
 
-进程之间的通信方式：管道（PIPE）、信号量（Semaphore）、信号（Signal）、消息队列（Message Queue）、共享内存（Shared Memory）、套接字（Socket）
+进程通信是一种手段，而进程同步是一种目的。也可以说，为了能够达到进程同步的目的，需要让进程进行通信，传输一些进程同步所需要的信息。
 
+进程同步：控制多个进程按一定顺序执行；进程通信：进程间传输信息。
 
+1. **管道**
+
+    管道是通过调用 pipe 函数创建的，fd[0] 用于读，fd[1] 用于写。
+
+    ```c
+    #include <unistd.h>
+    int pipe(int fd[2]);
+    ```
+    
+    它具有以下限制：只支持半双工通信（单向交替传输）；只能在父子进程或者兄弟进程中使用。
+
+<div align="center"> <img src="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/53cd9ade-b0a6-4399-b4de-7f1fbd06cdfb.png"/> </div><br>
+
+2. **FIFO**
+
+    也称为命名管道，去除了管道只能在父子进程中使用的限制。
+
+    ```c
+    #include <sys/stat.h>
+    int mkfifo(const char *path, mode_t mode);
+    int mkfifoat(int fd, const char *path, mode_t mode);
+    ```
+    
+    FIFO 常用于客户-服务器应用程序中，FIFO 用作汇聚点，在客户进程和服务器进程之间传递数据。
+
+<div align="center"> <img src="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/2ac50b81-d92a-4401-b9ec-f2113ecc3076.png"/> </div><br>
+
+3. **消息队列**
+
+    相比于 FIFO，消息队列具有以下优点：
+
+    消息队列可以独立于读写进程存在，从而避免了 FIFO 中同步管道的打开和关闭时可能产生的困难；
+
+    避免了 FIFO 的同步阻塞问题，不需要进程自己提供同步方法；
+
+    读进程可以根据消息类型有选择地接收消息，而不像 FIFO 那样只能默认地接收。
+
+4. **信号量**
+
+    它是一个计数器，用于为多个进程提供对共享数据对象的访问。
+
+5. **共享存储**
+
+    允许多个进程共享一个给定的存储区。因为数据不需要在进程之间复制，所以这是最快的一种 IPC。需要使用信号量用来同步对共享存储的访问。
+
+    多个进程可以将同一个文件映射到它们的地址空间从而实现共享内存。另外 XSI 共享内存不是使用文件，而是使用内存的匿名段。
+
+6. **套接字**
+
+    与其它通信机制不同的是，它可用于不同机器间的进程通信。
 
 ## 线程
 
@@ -278,7 +322,7 @@ int pthread_cond_destroy(pthread_cond_t *cond);
 死锁指的是，两个以上线程在执行过程中，因争夺资源而造成一种互相等待的现象，若无外部处理，将会无限等待下去。死锁本质上就是一个线程在请求锁的时候，永远也请求不到。死锁的危险始终存在，应该在程序编写的时候尽量减少死锁存在的范围。
 
 - 死锁发生的情况： 忘记释放锁；单线程重复申请锁；多线程申请多把锁，造成相互等待。
-- [死锁问题排查](http://senlinzhan.github.io/2018/01/01/gdb-on-multithreaded/)：通过gdb pstack命令可查看进程的栈跟踪，多次对比线程堆栈，查看哪些线程一直处于等锁状态，进一步查看栈帧相关变量，结合代码推断确认哪些线程死锁。coredump文件，依据堆栈可同样分析。
+- [死锁问题排查](http://senlinzhan.github.io/2018/01/01/gdb-on-multithreaded/)：通过gdb pstack命令可查看对比线程的堆栈信息，查看哪些线程一直处于等锁状态，进一步查看栈帧相关变量，结合代码推断确认哪些线程死锁。coredump文件，依据堆栈可同样分析。
 
 
 
@@ -293,8 +337,6 @@ int pthread_cond_destroy(pthread_cond_t *cond);
 > [SocketServer.cpp](CODECPP/Socket/SocketServer.cpp)
 >
 > [SocketClient.cpp](CODECPP/Socket/SocketClient.cpp)
-
-
 
 
 ## I/O 模型
@@ -358,8 +400,6 @@ ssize_t recvfrom(int sockfd, void *buf, size_t len, int flags, struct sockaddr *
 同步 I/O 包括阻塞式 I/O、非阻塞式 I/O、I/O 复用和信号驱动 I/O ，它们的主要区别在第一个阶段。非阻塞式 I/O 、信号驱动 I/O 和异步 I/O 在第一阶段不会阻塞。
 
 <div align="center"> <img src="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/1492928105791_3.png"/> </div><br>
-
-
 
 ## I/O 复用
 
@@ -465,7 +505,6 @@ Linux虚拟内存分布（内核空间：1G、用户空间：3G）
 >
 > 线程栈：其他线程栈是在主线程的堆中通过mmap分配的，大小固定，默认为8M，可通过pthread_attr_setstacksize接口来设置线程栈的大小。所以每个线程栈空间都是独立的。
 >
-> Linux较Windows的内存管理区别：在linux中程序被关闭，占用的内存不会归还物理内存，而是用来做缓存。当物理内存有空闲时，优先使用物理内存（所以当使用一段时间后，即使有很大内存也会被占用）。这样做的好处是，启动那些刚启动的程序，或是存取刚存取的数据，效率速度会比较快，适用于服务器的场景。
 
 ## 虚拟内存
 
