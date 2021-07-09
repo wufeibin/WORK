@@ -16,30 +16,42 @@ void readStrJson()
     Json::Value root;
 
     const char* str = "{\"praenomen\":\"Gaius\",\"nomen\":\"Julius\",\"cognomen\":\"Caezar\",\"born\":-100,\"died\":-44}";
-    if (reader.parse(str, root)) { // 从字符串中读取数据
+    if (reader.parse(str, root)) { // 从字符串中解析数据，反序列化
         string praenomen = root["praenomen"].asString();
         string nomen = root["nomen"].asString();
         string cognomen = root["cognomen"].asString();
         int born = root["born"].asInt();
         int died = root["died"].asInt();
     }
+    std::string out = root.toStyledString(); // 序列化
 
-    string str2 = "{\"name\":\"json\",\"array\":[{\"cpp\":\"jsoncpp\"},{\"java\":\"jsoninjava\"},{\"php\":\"support\"}]}";
+    string str2 = "{\"name\":\"json\",\"array\":[{\"cpp\":\"jsoncpp\"},{\"java\":\"jsonjava\"},{\"php\":\"support\"}]}";
     if (reader.parse(str2, root)) {
         string out = root["name"].asString();
         const Json::Value arrayObj = root["array"];
-        for (unsigned int i = 0; i < arrayObj.size(); i++) {
+        
+        for (size_t i = 0; i < arrayObj.size(); i++) {
             if (arrayObj[i].isMember("cpp")) {
                 out = arrayObj[i]["cpp"].asString();
             }
         }
+        
+        /*
+        const Json::Value::Members memberNames = arrayObj.getMemberNames();
+        for (size_t i = 0; i < memberNames.size(); i++) {
+            std::string strKey = memberNames[i];
+            std::string strVal = arrayObj[strKey];
+        }
+        for(Json::Value::const_iterator iter = input.begin(); iter != input.end(); iter++)
+        Json::Value::Members member=(*iter).getMemberNames();
+        *(member.begin()); // 输出 key1,key2
+        (*iter)[*(member.begin())]; //输出 value1,value2*/
     }
 }
 
 // 从文件中读取JSON
 void readFileJson()
 {
-    // 从文件中读取
     ifstream in("read.json", ios::binary);
     if (!in.is_open()) { 
         cout << "Error open read.json\n"; 
@@ -127,9 +139,9 @@ Value(bool value);
 Value(const Value &other);
     
 // 获取满足相应条件的Value
-Value get( Uint index, const Value &defaultValue ) const;
-Value get( const char *key, const Value &defaultValue) const;
-Value get( const std::string &key, const Value &defaultValue ) const;
+Value get(Uint index, const Value &defaultValue) const;
+Value get(const char *key, const Value &defaultValue) const;
+Value get(const std::string &key, const Value &defaultValue) const;
 
 // Value转基本格式
 Int asInt() const;
@@ -151,17 +163,29 @@ bool isBool() const;
 bool isDouble() const;
 bool isInt() const;
 bool isString() const;
-bool isArrar() const;
+bool isArrary() const;
 bool isObject() const;
-bool isMember (const char *key) const
-bool isMember (const std::string &key) const
+bool isMember(const char *key) const;
+bool isMember(const std::string &key) const;
 
 
+enum ValueType {
+    nullValue = 0,
+    intValue,
+    uintValue,
+    realValue,
+    stringValue,
+    booleanValue,
+    arrayValue,
+    objectValue
+};
 
 
 Json::Reader
 
 // 串或者输入流转换为JSON的Value对象
-bool parse( const std::string &document, Value &root, bool collectComments = true );
-bool parse( const char *beginDoc, const char *endDoc, Value &root,bool collectComments = true );
-bool parse( std::istream &is, Value &root, bool collectComments = true ); // 从文件流中读取
+bool parse(const std::string &document, Value &root, bool collectComments = true);
+bool parse(const char *beginDoc, const char *endDoc, Value &root,bool collectComments = true);
+bool parse(std::istream &is, Value &root, bool collectComments = true);
+
+https://www.cnblogs.com/mydomain/archive/2011/11/08/2241654.html
