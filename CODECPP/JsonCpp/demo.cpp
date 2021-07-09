@@ -107,3 +107,61 @@ int main(int argc, char *argv[])
 g++ -o demo -I./ demo.cpp ./json_src/*.cpp
 ./demo
  */
+
+
+
+Json::Value
+
+// 勾造函数
+Value(ValueType type=nullValue);
+Value(Int value);
+Value(UInt value);
+Value(Int64 value);
+Value(UInt64 value);
+Value(double value);
+Value(const char *value);
+Value(const char *beginValue, const char *endValue);
+Value(const StaticString &value);
+Value(const std::string &value);
+Value(bool value);
+Value(const Value &other);
+    
+// 获取满足相应条件的Value
+Value get( Uint index, const Value &defaultValue ) const;
+Value get( const char *key, const Value &defaultValue) const;
+Value get( const std::string &key, const Value &defaultValue ) const;
+
+// Value转基本格式
+Int asInt() const;
+UInt asUInt() const;
+Int64 asInt64() const;
+LargestInt asLargesInt() const;
+LargestUInt asLargestUInt() const;
+float asFloat() const;
+double asDouble() const;
+bool asBool() const;
+std::string asString() const;
+const char* asCString() const;
+std::string toStyledString() const;
+
+
+// 判断Value格式
+bool isNull() const;
+bool isBool() const;
+bool isDouble() const;
+bool isInt() const;
+bool isString() const;
+bool isArrar() const;
+bool isObject() const;
+bool isMember (const char *key) const
+bool isMember (const std::string &key) const
+
+
+
+
+Json::Reader
+
+// 串或者输入流转换为JSON的Value对象
+bool parse( const std::string &document, Value &root, bool collectComments = true );
+bool parse( const char *beginDoc, const char *endDoc, Value &root,bool collectComments = true );
+bool parse( std::istream &is, Value &root, bool collectComments = true ); // 从文件流中读取
