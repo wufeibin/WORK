@@ -26,4 +26,6 @@ void PtrDemo();
 
 void LambdaDemo();
 
+void AlgorithmDemos();
+
 #endif

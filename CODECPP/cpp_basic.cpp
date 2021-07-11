@@ -87,6 +87,8 @@ void StringDemo()
     if (str == str2) LOGINFO("str and str2 is equal");
     str + str2;
     str = str2;
+    int i = 123;
+    str = to_string(i); // 将数值转化为字符串
     str.substr(0,3); // abcd（返回一个子string）
     str.substr(4); // efg
     str.insert(5, 6, '!'); // 在str的第5个字符后插入6个'!'
@@ -299,18 +301,31 @@ void LambdaDemo()
     sort(myvec.begin(), myvec.end(), [](int a, int b) -> bool { return a < b; }); // Lambda表达式
 
     int a = 123;
-    auto f_a = [a] { cout << a << endl; }; // 捕获外部变量 - 值捕获
+    auto f_a = [a] {  // 捕获外部变量 - 值捕获
+        cout << a << endl;
+    };
     // auto f_a = [=] { cout << a << endl; }; // 捕获外部变量 - 隐式值捕获
     a = 321;
     f_a(); // 输出：123
 
     int b = 123;
-    auto f_b = [&b] { cout << b << endl; }; // 捕获外部变量 - 引用捕获
+    auto f_b = [&b] { // 捕获外部变量 - 引用捕获
+        cout << b << endl;
+    };
     // auto f_b = [&] { cout << b << endl; }; // 捕获外部变量 - 隐式引用捕获
     b = 321;
     f_b(); // 输出：321
 
     int res = [](int x, int y) { return x + y; }(5, 4); // Lambda表达式的参数
     cout << res << endl;
+}
 
+// 算法库
+void AlgorithmDemo()
+{
+    // std::copy, std::copy_if
+    // 将某一范围的元素复制到一个新的位置
+
+    // fill
+    // 将一个给定值复制赋值给一个范围内的每个元素
 }

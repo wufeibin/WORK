@@ -518,7 +518,7 @@ Lambda表达式完整的声明格式：`[capture list] (params list) mutable exc
 
 - **emplace_front、emplace、emplace_back**
 
-    对于顺序容器，C++11引入emplace_front、emplace和emplace_back，分别对应push_front、insert和push_back。
+    对于顺序容器，C++11引入emplace_front、emplace、emplace_back，分别对应push_front、insert、push_back。
 
     对于关联容器，也有对应emplace相关函数，map：emplace、emplace_hint；set：emplace、emplace_hint。
 

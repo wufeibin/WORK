@@ -1,4 +1,4 @@
-#include "file.h"
+#include "../common.h" 
 
 /* 
 1. 打开文件
@@ -136,3 +136,13 @@ void WriteFileCpp()
     writefile.close();
 }
 
+int main(int argc, char *argv[])
+{
+    ReadFile();
+    WriteFile();
+    ReadFileCpp();
+    WriteFileCpp();
+    return 0;
+}
+
+/* g++ -std=c++11 File.cpp */

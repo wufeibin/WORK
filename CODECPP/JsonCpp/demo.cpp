@@ -1,4 +1,5 @@
 #include <string>
+#include <vector>
 #include <iostream>
 #include <fstream>
 #include <json/json.h>
@@ -22,8 +23,15 @@ void readStrJson()
         string cognomen = root["cognomen"].asString();
         int born = root["born"].asInt();
         int died = root["died"].asInt();
+
+        // typedef vector<string> Members
+        Json::Value::Members memberNames = root.getMemberNames();
+        for (Json::Value::Members::iterator iter = memberNames.begin(); iter != memberNames.end(); iter++) {
+            std::string strKey = *iter;
+            cout << "memberNames : " << strKey << endl;
+        }
+
     }
-    std::string out = root.toStyledString(); // 序列化
 
     string str2 = "{\"name\":\"json\",\"array\":[{\"cpp\":\"jsoncpp\"},{\"java\":\"jsonjava\"},{\"php\":\"support\"}]}";
     if (reader.parse(str2, root)) {
@@ -35,17 +43,12 @@ void readStrJson()
                 out = arrayObj[i]["cpp"].asString();
             }
         }
-        
-        /*
-        const Json::Value::Members memberNames = arrayObj.getMemberNames();
-        for (size_t i = 0; i < memberNames.size(); i++) {
-            std::string strKey = memberNames[i];
-            std::string strVal = arrayObj[strKey];
+
+        for (Json::Value::const_iterator iter = arrayObj.begin(); iter != arrayObj.end(); iter++) {
+            if ((*iter).isMember("cpp")) {
+                out = (*iter)["cpp"].asString();
+            }
         }
-        for(Json::Value::const_iterator iter = input.begin(); iter != input.end(); iter++)
-        Json::Value::Members member=(*iter).getMemberNames();
-        *(member.begin()); // 输出 key1,key2
-        (*iter)[*(member.begin())]; //输出 value1,value2*/
     }
 }
 
@@ -95,8 +98,11 @@ void writeFileJson()
     root["achievement"].append("ach2");
     root["achievement"].append("ach3");
 
+    std::string out = root.toStyledString(); // 序列化
+    cout << "toStyledString : " << out << endl;
+
     Json::FastWriter fw;
-    cout << "FastWriter : " << endl << fw.write(root) << endl; // 直接输出
+    cout << "FastWriter : " << fw.write(root) << endl; // 直接输出
 
     Json::StyledWriter sw;
     cout << "StyledWriter : " << endl << sw.write(root) << endl; // 缩进输出
@@ -116,16 +122,30 @@ int main(int argc, char *argv[])
 }
 
 /* 
+
 g++ -o demo -I./ demo.cpp ./json_src/*.cpp
 ./demo
+
  */
 
 
+/* 
 
-Json::Value
+1、Json::Value
 
-// 勾造函数
-Value(ValueType type=nullValue);
+enum ValueType {
+    nullValue = 0,
+    intValue,
+    uintValue,
+    realValue,
+    stringValue,
+    booleanValue,
+    arrayValue,
+    objectValue
+};
+
+// 构造函数
+Value(ValueType type = nullValue);
 Value(Int value);
 Value(UInt value);
 Value(Int64 value);
@@ -156,7 +176,6 @@ std::string asString() const;
 const char* asCString() const;
 std::string toStyledString() const;
 
-
 // 判断Value格式
 bool isNull() const;
 bool isBool() const;
@@ -169,23 +188,10 @@ bool isMember(const char *key) const;
 bool isMember(const std::string &key) const;
 
 
-enum ValueType {
-    nullValue = 0,
-    intValue,
-    uintValue,
-    realValue,
-    stringValue,
-    booleanValue,
-    arrayValue,
-    objectValue
-};
+2、Json::Reader
 
-
-Json::Reader
-
-// 串或者输入流转换为JSON的Value对象
 bool parse(const std::string &document, Value &root, bool collectComments = true);
 bool parse(const char *beginDoc, const char *endDoc, Value &root,bool collectComments = true);
 bool parse(std::istream &is, Value &root, bool collectComments = true);
 
-https://www.cnblogs.com/mydomain/archive/2011/11/08/2241654.html
+ */

@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
 /* 
 wufeibindeMacBook-Pro:System wufeibin$ g++ Daemon.cpp
 wufeibindeMacBook-Pro:System wufeibin$ ./a.out
-wufeibindeMacBook-Pro:System wufeibin$ ps -ef  |grep a.out
+wufeibindeMacBook-Pro:System wufeibin$ ps -ef  | grep a.out
   501 54270     1   0  9:24下午 ??         0:00.00 ./a.out
 wufeibindeMacBook-Pro:System wufeibin$ cat /tmp/daemon.log
 This is a daemon:  Sat Jun  5 21:24:36 2021
