@@ -97,11 +97,9 @@ Python中单行注释采用 # 开头，多行注释使用三个单引号(''')或
 '''
 这是多行注释，使用单引号。
 这是多行注释，使用单引号。
-这是多行注释，使用单引号。
 '''
 
 """
-这是多行注释，使用双引号。
 这是多行注释，使用双引号。
 这是多行注释，使用双引号。
 """
@@ -224,10 +222,6 @@ else:
 
 
 
-# 迭代器与生成器
-
-
-
 # 五、函数&模块
 
 ```python
@@ -261,7 +255,11 @@ person('Michael', 30)
 person('Adam', 45, gender = 'M', job = 'Engineer')
 ```
 
+模块是一个包含所有你定义的函数和变量的文件，其后缀名是.py。模块可以被别的程序引入，以使用该模块中的函数等功能。这也是使用 python 标准库的方法。
 
+模块是一种可重用的程序
+
+包是指一个包含模块与一个特殊的 `__init__.py` 文件的文件夹，用以组织模块的另一种层次结构。
 
 ```python
 import sys	# 导入sys模块后，变量sys指向该模块，就可以访问sys模块
@@ -323,7 +321,7 @@ for x in os.listdir('/Users/wufeibin/Documents/WORK'):
 
 
 import pickle
-d = dict(name='Bob', age=20, score=88)
+d = dict(name = 'Bob', age = 20, score = 88)
 print(pickle.dumps(d)) # 对象序列化
 f = open('1.txt', 'wb')
 pickle.dump(d, f)
@@ -338,14 +336,14 @@ f.close()
 class SchoolMember:
     totalNum = 0;  # 类变量，不属于某个对象
     def __init__(self, name, age):
-        self.name = name    # 对象变量
+        self.name = name # 对象变量
         self.age = age
         print('Initialized SchoolMember: {}'.format(self.name))
         SchoolMember.totalNum +=1
     def tell(self):
         '''告诉我有关我的细节。'''
         print('Name:"{}" Age:"{}"'.format(self.name, self.age), end=" ")
-    @classmethod    # 属于类而非属于对象的方法，可以将它定义为一个 classmethod(类方法) 或 staticmethod(静态方法)
+    @classmethod # 属于类而非属于对象的方法，可以将它定义为一个 classmethod(类方法) 或 staticmethod(静态方法)
     def get_toalNum(cls):
         print("totalNum is {:d}".format(cls.totalNum))
 
@@ -390,9 +388,7 @@ SchoolMember.get_toalNum()
 
 
 
-
-
-# 进程&线程
+# 八、进程&线程
 
 ```python
 import os
@@ -426,48 +422,83 @@ print('thread %s ended.' % threading.current_thread().name)
 
 
 
-# 网络编程
+# 九、网络编程
 
+Python 提供了两个级别访问的网络服务：
 
+- 低级别的网络服务支持基本的 Socket，它提供了标准的 BSD Sockets API，可以访问底层操作系统Socket接口的全部方法。
+- 高级别的网络服务模块 SocketServer，它提供了服务器中心类，可以简化网络服务器的开发。
 
+```python
+#!/usr/bin/python3
+# 文件名：server.py
 
+# 导入 socket、sys 模块
+import socket
+import sys
 
+# 创建 socket 对象
+serversocket = socket.socket(
+            socket.AF_INET, socket.SOCK_STREAM) 
 
+# 获取本地主机名
+host = socket.gethostname()
 
-- 包是指一个包含模块与一个特殊的 `__init__.py` 文件的文件夹
-- 模块是一种可重用的程序；包是用以组织模块的另一种层次结构；
-- 异常处理
+port = 9999
 
+# 绑定端口号
+serversocket.bind((host, port))
+
+# 设置最大连接数，超过后排队
+serversocket.listen(5)
+
+while True:
+    # 建立客户端连接
+    clientsocket,addr = serversocket.accept()      
+
+    print("连接地址: %s" % str(addr))
+    
+    msg='欢迎访问菜鸟教程！'+ "\r\n"
+    clientsocket.send(msg.encode('utf-8'))
+    clientsocket.close()
 ```
-try...
-except: 处理异常
-finally...
-当我们认为某些代码可能会出错时，就可以用try来运行这段代码，如果执行出错，则后续代码不会继续执行，而是直接跳转至错误处理代码，即except语句块，执行完except后，如果有finally语句块，则执行finally语句块，至此执行完毕。
+
+```python
+#!/usr/bin/python3
+# 文件名：client.py
+
+# 导入 socket、sys 模块
+import socket
+import sys
+
+# 创建 socket 对象
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
+
+# 获取本地主机名
+host = socket.gethostname() 
+
+# 设置端口号
+port = 9999
+
+# 连接服务，指定主机和端口
+s.connect((host, port))
+
+# 接收小于 1024 字节的数据
+msg = s.recv(1024)
+
+s.close()
+
+print (msg.decode('utf-8'))
 ```
 
 
 
-
-
-[Python编程：从入门到实践 项目《外星人入侵》完整代码](https://www.cnblogs.com/qbdj/p/11004744.html)
-
-[Python tutorial 2.7.13](https://www.runoob.com/manual/pythontutorial/docs/html/index.html#)
+> [Python编程：从入门到实践 项目《外星人入侵》完整代码](https://www.cnblogs.com/qbdj/p/11004744.html)
 
 
 
-![这里写图片描述](https://img-blog.csdn.net/20180823164259854?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2FucXVhbm5pdQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
-
-
-
-
-
-什么是防火墙？防火墙的作用是什么？
-
-- 在互联网上防火墙是一种非常有效的网络安全模型，通过它可以隔离风险区域(即Internet或有一定风险的网络)与安全区域(局域网)的连接，同时不会妨碍人们对风险区域的访问。所以它一般连接在核心交换机与外网之间。
-- 防火墙的作用：
-    1. 过滤进出网络的数据 
-    2. 管理进出访问网络的行为 
-    3. 封堵某些禁止业务 
-    4. 记录通过防火墙信息内容和活动 
-    5. 对网络攻击检测和告警
-
+> 🌈 ToDoList
+>
+> - C++11特性学习（使用、原理）
+> - 泛型编程-模版
+> - 设计模式理解应用

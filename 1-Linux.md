@@ -19,24 +19,63 @@
 
 ![img](https://images2018.cnblogs.com/blog/1142140/201806/1142140-20180607223821520-1164156678.png)
 
-1. 内存管理
-2. 进程管理
-3. 设备驱动程序
-4. 系统调用和安全防护
+根据进程访问资源的特点，可以把进程在系统上的运行分为两个级别：
+
+1. 用户态：用户态运行的进程可以直接读取用户程序的数据。
+2. 系统态：系统态运行的进程几乎可以访问计算机的任何资源，不受限制。
+
+我们运行的程序基本都是运行在用户态，如果我们调用操作系统提供的系统态级别的子功能，那就需要系统调用了。也就是说在我们运行的用户程序中，凡是与系统态级别的资源有关的操作（如文件管理、进程控制、内存管理等)，都必须通过系统调用方式向操作系统提出服务请求，并由操作系统代为完成。
+
+系统调用按功能可分为如下几类：
+
+- 设备管理：完成设备的请求或释放，以及设备启动等功能。
+- 文件管理：完成文件的读、写、创建及删除等功能。
+- 进程控制：完成进程的创建、撤销、阻塞及唤醒等功能。
+- 进程通信：完成进程之间的消息传递或信号传递等功能。
+- 内存管理：完成内存的分配、回收以及获取作业占用内存区大小及地址等功能。
 
 ## Linux目录
 
 - bin：binaries，存放二进制可执行文件
+
 - sbin：super user binaries，存放二进制可执行文件，只有root才能访问
+
 - etc ：etcetera，存放系统配置文件
+
+    - /etc/passwd：每个用户都在/etc/passwd文件中有一个对应的记录行，它记录了这个用户的一些基本属性。
+
+        `用户名:口令:用户标识号:组标识号:注释性描述:主目录:登录Shell`
+
+    - /etc/shadow：Linux系统都把加密后的口令字分离出来，单独存放在/etc/shadow文件，超级用户才拥有该文件读权限，保证了用户密码的安全性。/etc/shadow中的记录行与/etc/passwd中的一一对应，它由pwconv命令根据/etc/passwd中的数据自动产生。
+
+        `登录名:加密口令:最后一次修改时间:最小时间间隔:最大时间间隔:警告时间:不活动时间:失效时间:标志`
+
+    - /etc/group：存放用户组的所有信息。每个用户都属于某个用户组，一个组中可以有多个用户，一个用户也可以属于不同的组。
+
+        `组名:口令:组标识号:组内用户列表`
+        
+    - /etc/profile：系统的每个用户设置环境信息，当用户登录时该文件被执行，并从/etc/profile.d目录的配置文件中搜集shell的设置。如果对/etc/profile有修改的话需要重启才生效，对每个用户都生效，也可以通过命令source /etc/profile立即生效。
+    
+    - /etc/bashrc 或 /etc/bash.bashrc：每一个运行bash shell的用户执行此文件，当bash shell被打开时该文件被读取。如果想对所有使用bash的用户修改某个配置，可以修改这个文件。
+    
+    - ~/.bash_profile 或 ~/.profile：每个用户都可使用该文件设置用于当前用户使用的shell信息，当用户登录时该文件执行一次。修改后需要重启才生效，只对当前用户生效，也可以通过命令source立即生效。
+
 - usr：unix shared resources，用于存放共享的系统资源
+
 - home：存放用户文件的根目录
+
 - root：超级用户目录
+
 - dev ：devices，用于存放设备文件
+
 - lib ：library，存放跟文件系统中的程序运行所需要的共享库及内核模块
+
 - mnt：mount，系统管理员安装临时文件系统的安装点
+
 - boot：存放用于系统引导时使用的各种文件
+
 - tmp：temporary，用于存放各种临时文件
+
 - var：variable，用于存放运行时需要改变数据的文件
 
 ## CPU架构
@@ -64,12 +103,12 @@
 | readelf<br />查看elf目标文件信息          | readelf -sD xxx.so 【查看elf文件的动态符号表】               |
 | nm<br />查看目标文件的符号表              | nm file                                                      |
 | objdump<br />查看目标文件的构成           | objdump file                                                 |
-| su/sudo<br />切换用户                     | su user 【切换用户，默认切换到root用户】<br />su - 【切换为root用户】<br />sudo 【跳过root用户执行命令，通过配置/etc/sudoers，设置提权用户】 |
-| chmod/chown<br />修改文件权限             | drwxr-x--- 1 va ivs 4096 Dec 16 04:10 VA2<br/>d : 目录<br/>rwx : 文件属主权限(va)<br/>r-x : 属组成员权限(ivs)<br/>--- : 其他用户权限 |
 | top<br />查看系统实时进程情况             | top -H -p 1234                                               |
 | mount/umount<br />挂载存储媒体            | mount -t type device directory<br />umount device            |
 | df<br />查看挂载设备磁盘使用              | df -h                                                        |
 | du<br />查看目录的硬盘使用                | du -ch path<br />du -sh *                                    |
+| su/sudo<br />切换用户                     | su user 【切换用户，默认切换到root用户】<br />su - 【切换为root用户】<br />sudo 【跳过root用户执行命令，通过配置/etc/sudoers，设置提权用户】 |
+| chmod/chown<br />修改文件权限             | <img src="https://snailclimb.gitee.io/javaguide/docs/operating-system/images/Linux%E6%9D%83%E9%99%90%E8%A7%A3%E8%AF%BB.png" alt="img" style="zoom:50%;" /> |
 | 文件查看                                  | cat -n file 【按行号查看文件】<br />tail -f file 【循环显示文件末尾内容】<br />tail -n 10 file 【显示文件末尾10行内容】<br />head -n 10 file 【显示文件头部10行内容】<br />more file 【按页查看文件内容，适合大文件】<br />less file 【与more类似，多了个向前翻页的功能】 |
 
 ## vim
@@ -109,11 +148,11 @@ awk是一个强大的文本分析工具，相对于grep查找，sed编辑，awk�
 
 进程有独立的地址空间，一个进程崩溃后，在保护模式下不会对其它进程产生影响，而线程只是一个进程中的不同执行路径。线程有自己的堆栈和局部变量，但线程没有单独的地址空间，一个线程死掉就等于整个进程死掉，所以多进程的程序要比多线程的程序健壮，但在进程切换时，耗费资源较大，效率要差一些。
 
-> "进程是资源分配的最小单位，线程是程序执行的最小单位"
+> "进程是资源分配的最小单位，线程是程序执行的最小单位"。
 
 ## 进程
 
-正常情况下，子进程是通过父进程创建的，子进程的结束和父进程的运行是一个异步过程，即父进程永远无法预测子进程到底什么时候结束。 当一个进程完成它的工作终止之后，它的父进程需要调用wait()或者waitpid()系统调用取得子进程的终止状态。
+正常情况下，子进程是通过父进程创建的，子进程的结束和父进程的运行是一个异步过程，父进程永远无法预测子进程到底什么时候结束。 当一个进程完成它的工作终止之后，它的父进程需要调用wait()或者waitpid()系统调用取得子进程的终止状态。
 
 ```c
 #include <stdio.h>
@@ -136,7 +175,7 @@ int main(int argc, char *argv[]) {
         int stat_val;
         waitpid(pid, &stat_val, 0); // 等待获取子进程状态的改变
         if (WIFEXITED(stat_val)) {
-            printf("Child exited with code %d\n", WEXITSTATUS(stat_val));		
+            printf("Child exited with code %d\n", WEXITSTATUS(stat_val));
         }
     }
     return 0;
@@ -255,9 +294,9 @@ Linux Daemon（守护进程）是运行在后台的一种特殊进程。它独�
 // 二元信号量：一个线程独占访问的资源。
 // 多元信号量：一个初始值为N的信号量允许被N个线程并发访问。
 int sem_init(sem_t *sem, int pshared, unsigned int value);
-int sem_wait(sem_t *sem);	// 阻塞等待信号量，当信号量值大于0时，信号量减1，向下执行。
+int sem_wait(sem_t *sem); // 阻塞等待信号量，当信号量值大于0时，信号量减1，向下执行。
 int sem_trywait(sem_t *sem);
-int sem_post(sem_t *sem);	// 释放信号量，信号量值加1。
+int sem_post(sem_t *sem); // 释放信号量，信号量值加1。
 int sem_getvalue(sem_t *sem, int *sval);
 int sem_destroy(sem_t *sem);
 ```
@@ -510,7 +549,6 @@ Linux虚拟内存分布（内核空间：1G、用户空间：3G）
 > 进程栈：也可叫主线程栈，就是虚拟地址空间中的栈区。进程栈大小是执行时增长的，系统默认的最大值8M，可通过ulimit查看和设置。
 >
 > 线程栈：其他线程栈是在主线程的堆中通过mmap分配的，大小固定，默认为8M，可通过pthread_attr_setstacksize接口来设置线程栈的大小。所以每个线程栈空间都是独立的。
->
 
 ## 虚拟内存
 
