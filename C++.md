@@ -90,7 +90,8 @@ private:
     const int a; // 常对象成员，只能在初始化列表赋值
 };
 
-void function() {
+void function()
+{
     // 对象（不允许将普通引用或指针绑定到const对象，防止通过引用修改对象）
     A b; // 普通对象，可以调用全部成员函数、更新常成员变量
     const A a; // 常对象，只能调用常成员函数
@@ -435,14 +436,17 @@ C++ 程序的一个特点就是需要程序员管理内存，需要的时候申�
 ```c++
 class HugeMem {
 public:
-    HugeMem(int size) : sz( size > 0 ? size : 1 ) {
+    HugeMem(int size) : sz( size > 0 ? size : 1 )
+    {
         c = new int[sz];
     }
-    HugeMem(HugeMem &hm) : sz(hm.sz) {
+    HugeMem(HugeMem &hm) : sz(hm.sz)
+    {
         c = new int[sz];
         memcpy(c, hm.c, sz * sizeof(int));
     }
-    HugeMem(HugeMem &&hm) : sz(hm.sz), c(hm.c) {
+    HugeMem(HugeMem &&hm) : sz(hm.sz), c(hm.c)
+    {
         hm.c = nullptr;
     }
     ~HugeMem() { delete[] c; }
@@ -478,38 +482,116 @@ void main()
 
 ## std::move & std::forward
 
+std::move将左值引用转换为右值引用，用于移动语义。
 
+std::forward可以保存参数的左值或右值特性，用于完美转发。
+
+完美转发：需要将一组参数原封不动的传递给另一个函数。原封不动不仅仅是参数的值不变，还有两组属性：左值/右值、const/non-const。完美转发就是在参数传递过程中，所有这些属性和参数值都不能改变，同时不产生额外的开销，就好像转发者不存在一样。
+
+```c++
+template <typename T> void process_value(T & val)
+{
+    cout << "T &" << endl;
+}
+
+template <typename T> void process_value(T && val)
+{
+    cout << "T &&" << endl;
+}
+
+template <typename T> void process_value(const T & val)
+{
+    cout << "const T &" << endl;
+}
+
+template <typename T> void process_value(const T && val)
+{
+    cout << "const T &&" << endl;
+}
+
+// 函数forward_value是一个泛型函数，它将一个参数传递给另一个函数process_value
+template <typename T> void forward_value(T && val) // 参数为右值引用
+{
+    process_value(std::forward<T>(val)); // std::forward可以保存参数的左值或右值特性
+}
+
+int main()
+{
+    int a = 0;
+    const int &b = 1;
+    forward_value(a); // T &
+    forward_value(2); // T &&
+    forward_value(b); // const T &
+    forward_value(std::move(b)); // const T &&
+    return 0;
+}
+```
 
 ## std::function & std::bind
 
-通过std::function对C++中各种可调用实体（普通函数、Lambda表达式、仿函数、类成员函数以及类静态函数等）的封装，形成一个新的可调用的std::function对象。绑定成员函数时须借助std::bind，或者传入*this指针。
+std::function对各种可调用实体（普通函数、Lambda表达式、仿函数、类成员函数以及类静态函数等）封装，形成一个新的可调用的std::function对象，是对现有的可调用实体的一种类型安全的包。
 
-std::bind可以预先把指定可调用实体的某些参数绑定到已有的变量，产生一个新的可调用实体，在回调函数的使用中颇为有用。
+std::bind可以把指定可调用实体的某些参数绑定到已有的变量，产生一个新的可调用实体，在回调函数使用中颇为有用。
 
 ```C++
 #include <functional>
 
 class Test {
 public:
-    int Sum(int x, int y) {
+    int Sum(int x, int y)
+    {
         return x + y;
     }
 };
 
-std::function<int(int, int)> Functional1;
-std::function<int(Test, int, int)> Functional2;
+int TestFunc(int a, char c, float f)
+{
+    cout << a << endl;
+    cout << c << endl;
+    cout << f << endl;
+    return a;
+}
 
 int main()
 {
-    Test testObj;
-    Functional1 = std::bind(&Test::Sum, testObj, 
+    Test obj;
+    // function<T>，T是ret(args)。
+    // bind（&调用函数, &对象, 调用函数参数1, 调用函数参数2..., _1(bind函数的参数1), _2(bind函数的参数2)...)
+    std::function<int(int, int)> Function1 = std::bind(&Test::Sum, obj, 
                             std::placeholders::_1, std::placeholders::_2); // std::placeholders::_1是一个占位符
-    int result = Functional1(1, 2);
+    int result = Function1(1, 2);
 
-    Functional2 = &Test::Sum;
-    result = Functional2(testObj, 1, 2);
+    std::function<int(Test, int, int)> Function2 = &Test::Sum;
+    result = Function2(testObj, 1, 2);
+    
+    float f = 100.1;
+    auto bindFunc1 = bind(TestFunc, std::placeholders::_1, 'A', f);
+    bindFunc1(10);
+
+    auto bindFunc2 = bind(TestFunc, std::placeholders::_2, std::placeholders::_1, 100.1);
+    bindFunc2('B', 10);
+
+    auto bindFunc3 = bind(TestFunc, std::placeholders::_3, std::placeholders::_1, std::placeholders::_2);
+    bindFunc3(100.1, 30, 'C');
+    
     return 0;
 }
+```
+
+## std::lock_guard & std::unique_lock
+
+lock_guard是一个互斥量包装器，它提供了一种方便的RAII风格的机制来在作用域块的持续时间内拥有一个互斥量。创建lock_guard对象时，它将尝试获取提供给它的互斥锁的所有权。当控制流离开lock_guard对象的作用域时，lock_guard析构并释放互斥量。
+
+```c++
+std::mutex mtx;
+std::lock_guard<std::mutex> lock(mtx);
+```
+
+unique_lock是一个通用的互斥量锁定包装器，它允许延迟锁定，限时深度锁定，递归锁定，锁定所有权的转移以及与条件变量一起使用。简单地讲，unique_lock 是 lock_guard 的升级加强版，它具有 lock_guard 的所有功能，同时又具有其他很多方法，使用起来更强灵活方便，能够应对更复杂的锁定需要。
+
+```c++
+std::mutex mtx;
+std::unique_lock<std::mutex> lock(mtx);
 ```
 
 ## 类型转换
