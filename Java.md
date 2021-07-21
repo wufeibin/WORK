@@ -1,3 +1,46 @@
+lock_guard是一个互斥量包装程序，它提供了一种方便的RAII风格的机制来在作用域块的持续时间内拥有一个互斥量。创建lock_guard对象时，它将尝试获取提供给它的互斥锁的所有权。当控制流离开lock_guard对象的作用域时，lock_guard析构并释放互斥量。
+
+    std::lock_guard<std::mutex> lock(mtx);
+
+unique_lock是一个通用的互斥量锁定包装器，它允许延迟锁定，限时深度锁定，递归锁定，锁定所有权的转移以及与条件变量一起使用。简单地讲，unique_lock 是 lock_guard 的升级加强版，它具有 lock_guard 的所有功能，同时又具有其他很多方法，使用起来更强灵活方便，能够应对更复杂的锁定需要。
+
+    std::unique_lock<std::mutex> lock(mtx);
+
+
+
+互斥锁、条件锁、自旋锁、读写锁、递归锁
+
+
+
+定义
+
+- 类模板 std::function 是通用多态函数封装器。
+- std::function 的实例能存储、复制及调用任何可调用 (Callable) 目标——函数、 lambda 表达式、 bind 表达式或其他函数对象，还有指向成员函数指针和指向数据成员指针。
+- 它也是对 C++ 中现有的可调用实体的一种类型安全的包裹（相对来说，函数指针的调用不是类型安全的）
+操作
+
+
+
+function<T> f f是用来存储可调用对象的空function,这些可调用对象的调用形式应该与函数类型T相同（即T是 retType(args) ）
+
+
+
+
+
+
+
+https://blog.csdn.net/smstong/article/details/44958833
+
+https://blog.csdn.net/qq_38410730/article/details/103637778
+
+https://blog.csdn.net/xyblog/article/details/50314515
+
+
+
+zookeeper
+
+https://blog.csdn.net/u013536232/article/details/85038336
+
 # 一、基础概念
 
 Java 是由 Sun Microsystems 公司于 1995 年 5 月推出的 Java 面向对象程序设计语言和 Java 平台的总称。由 James Gosling和同事们共同研发，并在 1995 年正式推出。后来 Sun 公司被 Oracle （甲骨文）公司收购，Java 也随之成为 Oracle 公司的产品。
